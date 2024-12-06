@@ -2,7 +2,7 @@
 
 ## Documents
 
-<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">ingestRemote</a>({ ...params }) -> EyeLevel.IngestResponse</code></summary>
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">ingestRemote</a>({ ...params }) -> GroundX.IngestResponse</code></summary>
 <dl>
 <dd>
 
@@ -55,7 +55,7 @@ await client.documents.ingestRemote({
 <dl>
 <dd>
 
-**request:** `EyeLevel.DocumentRemoteIngestRequest`
+**request:** `GroundX.DocumentRemoteIngestRequest`
 
 </dd>
 </dl>
@@ -74,7 +74,7 @@ await client.documents.ingestRemote({
 </dl>
 </details>
 
-<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">ingestLocal</a>() -> EyeLevel.IngestResponse</code></summary>
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">ingestLocal</a>() -> GroundX.IngestResponse</code></summary>
 <dl>
 <dd>
 
@@ -131,7 +131,7 @@ await client.documents.ingestLocal();
 </dl>
 </details>
 
-<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">crawlWebsite</a>({ ...params }) -> EyeLevel.IngestResponse</code></summary>
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">crawlWebsite</a>({ ...params }) -> GroundX.IngestResponse</code></summary>
 <dl>
 <dd>
 
@@ -184,7 +184,7 @@ await client.documents.crawlWebsite({
 <dl>
 <dd>
 
-**request:** `EyeLevel.WebsiteCrawlRequest`
+**request:** `GroundX.WebsiteCrawlRequest`
 
 </dd>
 </dl>
@@ -203,7 +203,7 @@ await client.documents.crawlWebsite({
 </dl>
 </details>
 
-<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">getProcessingStatusById</a>(processId) -> EyeLevel.ProcessStatusResponse</code></summary>
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">getProcessingStatusById</a>(processId) -> GroundX.ProcessStatusResponse</code></summary>
 <dl>
 <dd>
 
@@ -268,7 +268,7 @@ await client.documents.getProcessingStatusById("processId");
 </dl>
 </details>
 
-<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">lookup</a>(id, { ...params }) -> EyeLevel.DocumentLookupResponse</code></summary>
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">lookup</a>(id, { ...params }) -> GroundX.DocumentLookupResponse</code></summary>
 <dl>
 <dd>
 
@@ -322,7 +322,7 @@ await client.documents.lookup(1);
 <dl>
 <dd>
 
-**request:** `EyeLevel.DocumentsLookupRequest`
+**request:** `GroundX.DocumentsLookupRequest`
 
 </dd>
 </dl>
@@ -341,7 +341,7 @@ await client.documents.lookup(1);
 </dl>
 </details>
 
-<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">list</a>({ ...params }) -> EyeLevel.DocumentListResponse</code></summary>
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">list</a>({ ...params }) -> GroundX.DocumentListResponse</code></summary>
 <dl>
 <dd>
 
@@ -387,7 +387,7 @@ await client.documents.list();
 <dl>
 <dd>
 
-**request:** `EyeLevel.DocumentsListRequest`
+**request:** `GroundX.DocumentsListRequest`
 
 </dd>
 </dl>
@@ -406,7 +406,7 @@ await client.documents.list();
 </dl>
 </details>
 
-<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">delete</a>({ ...params }) -> EyeLevel.IngestResponse</code></summary>
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">delete</a>({ ...params }) -> GroundX.IngestResponse</code></summary>
 <dl>
 <dd>
 
@@ -452,7 +452,7 @@ await client.documents.delete();
 <dl>
 <dd>
 
-**request:** `EyeLevel.DocumentsDeleteRequest`
+**request:** `GroundX.DocumentsDeleteRequest`
 
 </dd>
 </dl>
@@ -471,7 +471,7 @@ await client.documents.delete();
 </dl>
 </details>
 
-<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">get</a>(documentId) -> EyeLevel.DocumentResponse</code></summary>
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">get</a>(documentId) -> GroundX.DocumentResponse</code></summary>
 <dl>
 <dd>
 
@@ -536,7 +536,7 @@ await client.documents.get("documentId");
 </dl>
 </details>
 
-<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">deleteById</a>(documentId) -> EyeLevel.IngestResponse</code></summary>
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">deleteById</a>(documentId) -> GroundX.IngestResponse</code></summary>
 <dl>
 <dd>
 
@@ -603,7 +603,7 @@ await client.documents.deleteById("documentId");
 
 ## Search
 
-<details><summary><code>client.search.<a href="/src/api/resources/search/client/Client.ts">content</a>(id, { ...params }) -> EyeLevel.SearchResponse</code></summary>
+<details><summary><code>client.search.<a href="/src/api/resources/search/client/Client.ts">content</a>(id, { ...params }) -> GroundX.SearchResponse</code></summary>
 <dl>
 <dd>
 
@@ -654,7 +654,7 @@ await client.search.content(1, {
 <dl>
 <dd>
 
-**id:** `EyeLevel.SearchContentRequestId` — The bucketId, groupId, projectId, or documentId to be searched. The document or documents within the specified container will be compared to the query, and relevant information will be extracted.
+**id:** `GroundX.SearchContentRequestId` — The bucketId, groupId, projectId, or documentId to be searched. The document or documents within the specified container will be compared to the query, and relevant information will be extracted.
 
 </dd>
 </dl>
@@ -662,7 +662,7 @@ await client.search.content(1, {
 <dl>
 <dd>
 
-**request:** `EyeLevel.SearchRequest`
+**request:** `GroundX.SearchRequest`
 
 </dd>
 </dl>
@@ -681,7 +681,7 @@ await client.search.content(1, {
 </dl>
 </details>
 
-<details><summary><code>client.search.<a href="/src/api/resources/search/client/Client.ts">documents</a>({ ...params }) -> EyeLevel.SearchResponse</code></summary>
+<details><summary><code>client.search.<a href="/src/api/resources/search/client/Client.ts">documents</a>({ ...params }) -> GroundX.SearchResponse</code></summary>
 <dl>
 <dd>
 
@@ -733,7 +733,7 @@ await client.search.documents({
 <dl>
 <dd>
 
-**request:** `EyeLevel.SearchDocumentsRequest`
+**request:** `GroundX.SearchDocumentsRequest`
 
 </dd>
 </dl>
@@ -754,7 +754,7 @@ await client.search.documents({
 
 ## Buckets
 
-<details><summary><code>client.buckets.<a href="/src/api/resources/buckets/client/Client.ts">list</a>({ ...params }) -> EyeLevel.BucketListResponse</code></summary>
+<details><summary><code>client.buckets.<a href="/src/api/resources/buckets/client/Client.ts">list</a>({ ...params }) -> GroundX.BucketListResponse</code></summary>
 <dl>
 <dd>
 
@@ -800,7 +800,7 @@ await client.buckets.list();
 <dl>
 <dd>
 
-**request:** `EyeLevel.BucketsListRequest`
+**request:** `GroundX.BucketsListRequest`
 
 </dd>
 </dl>
@@ -819,7 +819,7 @@ await client.buckets.list();
 </dl>
 </details>
 
-<details><summary><code>client.buckets.<a href="/src/api/resources/buckets/client/Client.ts">create</a>({ ...params }) -> EyeLevel.BucketResponse</code></summary>
+<details><summary><code>client.buckets.<a href="/src/api/resources/buckets/client/Client.ts">create</a>({ ...params }) -> GroundX.BucketResponse</code></summary>
 <dl>
 <dd>
 
@@ -867,7 +867,7 @@ await client.buckets.create({
 <dl>
 <dd>
 
-**request:** `EyeLevel.BucketCreateRequest`
+**request:** `GroundX.BucketCreateRequest`
 
 </dd>
 </dl>
@@ -886,7 +886,7 @@ await client.buckets.create({
 </dl>
 </details>
 
-<details><summary><code>client.buckets.<a href="/src/api/resources/buckets/client/Client.ts">get</a>(bucketId) -> EyeLevel.BucketResponse</code></summary>
+<details><summary><code>client.buckets.<a href="/src/api/resources/buckets/client/Client.ts">get</a>(bucketId) -> GroundX.BucketResponse</code></summary>
 <dl>
 <dd>
 
@@ -951,7 +951,7 @@ await client.buckets.get(1);
 </dl>
 </details>
 
-<details><summary><code>client.buckets.<a href="/src/api/resources/buckets/client/Client.ts">update</a>(bucketId, { ...params }) -> EyeLevel.BucketUpdateResponse</code></summary>
+<details><summary><code>client.buckets.<a href="/src/api/resources/buckets/client/Client.ts">update</a>(bucketId, { ...params }) -> GroundX.BucketUpdateResponse</code></summary>
 <dl>
 <dd>
 
@@ -1007,7 +1007,7 @@ await client.buckets.update(1, {
 <dl>
 <dd>
 
-**request:** `EyeLevel.BucketUpdateRequest`
+**request:** `GroundX.BucketUpdateRequest`
 
 </dd>
 </dl>
@@ -1026,7 +1026,7 @@ await client.buckets.update(1, {
 </dl>
 </details>
 
-<details><summary><code>client.buckets.<a href="/src/api/resources/buckets/client/Client.ts">delete</a>(bucketId) -> EyeLevel.MessageResponse</code></summary>
+<details><summary><code>client.buckets.<a href="/src/api/resources/buckets/client/Client.ts">delete</a>(bucketId) -> GroundX.MessageResponse</code></summary>
 <dl>
 <dd>
 
@@ -1093,7 +1093,7 @@ await client.buckets.delete(1);
 
 ## Groups
 
-<details><summary><code>client.groups.<a href="/src/api/resources/groups/client/Client.ts">list</a>({ ...params }) -> EyeLevel.GroupListResponse</code></summary>
+<details><summary><code>client.groups.<a href="/src/api/resources/groups/client/Client.ts">list</a>({ ...params }) -> GroundX.GroupListResponse</code></summary>
 <dl>
 <dd>
 
@@ -1139,7 +1139,7 @@ await client.groups.list();
 <dl>
 <dd>
 
-**request:** `EyeLevel.GroupsListRequest`
+**request:** `GroundX.GroupsListRequest`
 
 </dd>
 </dl>
@@ -1158,7 +1158,7 @@ await client.groups.list();
 </dl>
 </details>
 
-<details><summary><code>client.groups.<a href="/src/api/resources/groups/client/Client.ts">create</a>({ ...params }) -> EyeLevel.GroupResponse</code></summary>
+<details><summary><code>client.groups.<a href="/src/api/resources/groups/client/Client.ts">create</a>({ ...params }) -> GroundX.GroupResponse</code></summary>
 <dl>
 <dd>
 
@@ -1206,7 +1206,7 @@ await client.groups.create({
 <dl>
 <dd>
 
-**request:** `EyeLevel.GroupCreateRequest`
+**request:** `GroundX.GroupCreateRequest`
 
 </dd>
 </dl>
@@ -1225,7 +1225,7 @@ await client.groups.create({
 </dl>
 </details>
 
-<details><summary><code>client.groups.<a href="/src/api/resources/groups/client/Client.ts">get</a>(groupId) -> EyeLevel.GroupResponse</code></summary>
+<details><summary><code>client.groups.<a href="/src/api/resources/groups/client/Client.ts">get</a>(groupId) -> GroundX.GroupResponse</code></summary>
 <dl>
 <dd>
 
@@ -1290,7 +1290,7 @@ await client.groups.get(1);
 </dl>
 </details>
 
-<details><summary><code>client.groups.<a href="/src/api/resources/groups/client/Client.ts">update</a>(groupId, { ...params }) -> EyeLevel.GroupResponse</code></summary>
+<details><summary><code>client.groups.<a href="/src/api/resources/groups/client/Client.ts">update</a>(groupId, { ...params }) -> GroundX.GroupResponse</code></summary>
 <dl>
 <dd>
 
@@ -1346,7 +1346,7 @@ await client.groups.update(1, {
 <dl>
 <dd>
 
-**request:** `EyeLevel.GroupUpdateRequest`
+**request:** `GroundX.GroupUpdateRequest`
 
 </dd>
 </dl>
@@ -1365,7 +1365,7 @@ await client.groups.update(1, {
 </dl>
 </details>
 
-<details><summary><code>client.groups.<a href="/src/api/resources/groups/client/Client.ts">delete</a>(groupId) -> EyeLevel.MessageResponse</code></summary>
+<details><summary><code>client.groups.<a href="/src/api/resources/groups/client/Client.ts">delete</a>(groupId) -> GroundX.MessageResponse</code></summary>
 <dl>
 <dd>
 
@@ -1430,7 +1430,7 @@ await client.groups.delete(1);
 </dl>
 </details>
 
-<details><summary><code>client.groups.<a href="/src/api/resources/groups/client/Client.ts">addBucket</a>(groupId, bucketId) -> EyeLevel.MessageResponse</code></summary>
+<details><summary><code>client.groups.<a href="/src/api/resources/groups/client/Client.ts">addBucket</a>(groupId, bucketId) -> GroundX.MessageResponse</code></summary>
 <dl>
 <dd>
 
@@ -1503,7 +1503,7 @@ await client.groups.addBucket(1, 1);
 </dl>
 </details>
 
-<details><summary><code>client.groups.<a href="/src/api/resources/groups/client/Client.ts">removeBucket</a>(groupId, bucketId) -> EyeLevel.MessageResponse</code></summary>
+<details><summary><code>client.groups.<a href="/src/api/resources/groups/client/Client.ts">removeBucket</a>(groupId, bucketId) -> GroundX.MessageResponse</code></summary>
 <dl>
 <dd>
 
@@ -1578,7 +1578,7 @@ await client.groups.removeBucket(1, 1);
 
 ## Customer
 
-<details><summary><code>client.customer.<a href="/src/api/resources/customer/client/Client.ts">get</a>() -> EyeLevel.CustomerResponse</code></summary>
+<details><summary><code>client.customer.<a href="/src/api/resources/customer/client/Client.ts">get</a>() -> GroundX.CustomerResponse</code></summary>
 <dl>
 <dd>
 
@@ -1635,7 +1635,7 @@ await client.customer.get();
 
 ## Health
 
-<details><summary><code>client.health.<a href="/src/api/resources/health/client/Client.ts">list</a>() -> EyeLevel.HealthResponse</code></summary>
+<details><summary><code>client.health.<a href="/src/api/resources/health/client/Client.ts">list</a>() -> GroundX.HealthResponse</code></summary>
 <dl>
 <dd>
 
@@ -1690,7 +1690,7 @@ await client.health.list();
 </dl>
 </details>
 
-<details><summary><code>client.health.<a href="/src/api/resources/health/client/Client.ts">get</a>(service) -> EyeLevel.HealthResponse</code></summary>
+<details><summary><code>client.health.<a href="/src/api/resources/health/client/Client.ts">get</a>(service) -> GroundX.HealthResponse</code></summary>
 <dl>
 <dd>
 

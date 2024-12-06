@@ -4,13 +4,13 @@
 
 import * as environments from "../../../../environments";
 import * as core from "../../../../core";
-import * as EyeLevel from "../../../index";
+import * as GroundX from "../../../index";
 import urlJoin from "url-join";
 import * as errors from "../../../../errors/index";
 
 export declare namespace Health {
     interface Options {
-        environment?: core.Supplier<environments.EyeLevelEnvironment | string>;
+        environment?: core.Supplier<environments.GroundXEnvironment | string>;
         apiKey: core.Supplier<string>;
         fetcher?: core.FetchFunction;
     }
@@ -38,20 +38,20 @@ export class Health {
      * @example
      *     await client.health.list()
      */
-    public list(requestOptions?: Health.RequestOptions): core.APIPromise<EyeLevel.HealthResponse> {
+    public list(requestOptions?: Health.RequestOptions): core.APIPromise<GroundX.HealthResponse> {
         return core.APIPromise.from(
             (async () => {
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ??
-                            environments.EyeLevelEnvironment.Default,
+                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
                         "v1/health"
                     ),
                     method: "GET",
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "eyelevel",
-                        "X-Fern-SDK-Version": "0.0.2",
+                        "X-Fern-SDK-Version": "2.0.0",
+                        "User-Agent": "eyelevel/2.0.0",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -67,26 +67,26 @@ export class Health {
                 if (_response.ok) {
                     return {
                         ok: _response.ok,
-                        body: _response.body as EyeLevel.HealthResponse,
+                        body: _response.body as GroundX.HealthResponse,
                         headers: _response.headers,
                     };
                 }
                 if (_response.error.reason === "status-code") {
-                    throw new errors.EyeLevelError({
+                    throw new errors.GroundXError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                     });
                 }
                 switch (_response.error.reason) {
                     case "non-json":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             statusCode: _response.error.statusCode,
                             body: _response.error.rawBody,
                         });
                     case "timeout":
-                        throw new errors.EyeLevelTimeoutError("Timeout exceeded when calling GET /v1/health.");
+                        throw new errors.GroundXTimeoutError("Timeout exceeded when calling GET /v1/health.");
                     case "unknown":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             message: _response.error.errorMessage,
                         });
                 }
@@ -100,25 +100,25 @@ export class Health {
      * @param {string} service - The name of the service to look up.
      * @param {Health.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link EyeLevel.BadRequestError}
+     * @throws {@link GroundX.BadRequestError}
      *
      * @example
      *     await client.health.get("search")
      */
-    public get(service: string, requestOptions?: Health.RequestOptions): core.APIPromise<EyeLevel.HealthResponse> {
+    public get(service: string, requestOptions?: Health.RequestOptions): core.APIPromise<GroundX.HealthResponse> {
         return core.APIPromise.from(
             (async () => {
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ??
-                            environments.EyeLevelEnvironment.Default,
+                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
                         `v1/health/${encodeURIComponent(service)}`
                     ),
                     method: "GET",
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "eyelevel",
-                        "X-Fern-SDK-Version": "0.0.2",
+                        "X-Fern-SDK-Version": "2.0.0",
+                        "User-Agent": "eyelevel/2.0.0",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -134,16 +134,16 @@ export class Health {
                 if (_response.ok) {
                     return {
                         ok: _response.ok,
-                        body: _response.body as EyeLevel.HealthResponse,
+                        body: _response.body as GroundX.HealthResponse,
                         headers: _response.headers,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new EyeLevel.BadRequestError(_response.error.body as unknown);
+                            throw new GroundX.BadRequestError(_response.error.body as unknown);
                         default:
-                            throw new errors.EyeLevelError({
+                            throw new errors.GroundXError({
                                 statusCode: _response.error.statusCode,
                                 body: _response.error.body,
                             });
@@ -151,16 +151,14 @@ export class Health {
                 }
                 switch (_response.error.reason) {
                     case "non-json":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             statusCode: _response.error.statusCode,
                             body: _response.error.rawBody,
                         });
                     case "timeout":
-                        throw new errors.EyeLevelTimeoutError(
-                            "Timeout exceeded when calling GET /v1/health/{service}."
-                        );
+                        throw new errors.GroundXTimeoutError("Timeout exceeded when calling GET /v1/health/{service}.");
                     case "unknown":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             message: _response.error.errorMessage,
                         });
                 }

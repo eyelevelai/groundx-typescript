@@ -1,4 +1,4 @@
-export * as EyeLevel from "./api";
-export { EyeLevelClient } from "./Client";
-export { EyeLevelEnvironment } from "./environments";
-export { EyeLevelError, EyeLevelTimeoutError } from "./errors";
+export * as GroundX from "./api";
+export { GroundXClient } from "./Client";
+export { GroundXEnvironment } from "./environments";
+export { GroundXError, GroundXTimeoutError } from "./errors";

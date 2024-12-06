@@ -4,13 +4,13 @@
 
 import * as environments from "../../../../environments";
 import * as core from "../../../../core";
-import * as EyeLevel from "../../../index";
+import * as GroundX from "../../../index";
 import urlJoin from "url-join";
 import * as errors from "../../../../errors/index";
 
 export declare namespace Groups {
     interface Options {
-        environment?: core.Supplier<environments.EyeLevelEnvironment | string>;
+        environment?: core.Supplier<environments.GroundXEnvironment | string>;
         apiKey: core.Supplier<string>;
         fetcher?: core.FetchFunction;
     }
@@ -35,16 +35,16 @@ export class Groups {
      *
      * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
      *
-     * @param {EyeLevel.GroupsListRequest} request
+     * @param {GroundX.GroupsListRequest} request
      * @param {Groups.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @example
      *     await client.groups.list()
      */
     public list(
-        request: EyeLevel.GroupsListRequest = {},
+        request: GroundX.GroupsListRequest = {},
         requestOptions?: Groups.RequestOptions
-    ): core.APIPromise<EyeLevel.GroupListResponse> {
+    ): core.APIPromise<GroundX.GroupListResponse> {
         return core.APIPromise.from(
             (async () => {
                 const { n, nextToken } = request;
@@ -57,15 +57,15 @@ export class Groups {
                 }
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ??
-                            environments.EyeLevelEnvironment.Default,
+                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
                         "v1/group"
                     ),
                     method: "GET",
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "eyelevel",
-                        "X-Fern-SDK-Version": "0.0.2",
+                        "X-Fern-SDK-Version": "2.0.0",
+                        "User-Agent": "eyelevel/2.0.0",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -82,26 +82,26 @@ export class Groups {
                 if (_response.ok) {
                     return {
                         ok: _response.ok,
-                        body: _response.body as EyeLevel.GroupListResponse,
+                        body: _response.body as GroundX.GroupListResponse,
                         headers: _response.headers,
                     };
                 }
                 if (_response.error.reason === "status-code") {
-                    throw new errors.EyeLevelError({
+                    throw new errors.GroundXError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                     });
                 }
                 switch (_response.error.reason) {
                     case "non-json":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             statusCode: _response.error.statusCode,
                             body: _response.error.rawBody,
                         });
                     case "timeout":
-                        throw new errors.EyeLevelTimeoutError("Timeout exceeded when calling GET /v1/group.");
+                        throw new errors.GroundXTimeoutError("Timeout exceeded when calling GET /v1/group.");
                     case "unknown":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             message: _response.error.errorMessage,
                         });
                 }
@@ -114,10 +114,10 @@ export class Groups {
      *
      * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
      *
-     * @param {EyeLevel.GroupCreateRequest} request
+     * @param {GroundX.GroupCreateRequest} request
      * @param {Groups.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link EyeLevel.BadRequestError}
+     * @throws {@link GroundX.BadRequestError}
      *
      * @example
      *     await client.groups.create({
@@ -125,22 +125,22 @@ export class Groups {
      *     })
      */
     public create(
-        request: EyeLevel.GroupCreateRequest,
+        request: GroundX.GroupCreateRequest,
         requestOptions?: Groups.RequestOptions
-    ): core.APIPromise<EyeLevel.GroupResponse> {
+    ): core.APIPromise<GroundX.GroupResponse> {
         return core.APIPromise.from(
             (async () => {
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ??
-                            environments.EyeLevelEnvironment.Default,
+                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
                         "v1/group"
                     ),
                     method: "POST",
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "eyelevel",
-                        "X-Fern-SDK-Version": "0.0.2",
+                        "X-Fern-SDK-Version": "2.0.0",
+                        "User-Agent": "eyelevel/2.0.0",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -157,16 +157,16 @@ export class Groups {
                 if (_response.ok) {
                     return {
                         ok: _response.ok,
-                        body: _response.body as EyeLevel.GroupResponse,
+                        body: _response.body as GroundX.GroupResponse,
                         headers: _response.headers,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new EyeLevel.BadRequestError(_response.error.body as unknown);
+                            throw new GroundX.BadRequestError(_response.error.body as unknown);
                         default:
-                            throw new errors.EyeLevelError({
+                            throw new errors.GroundXError({
                                 statusCode: _response.error.statusCode,
                                 body: _response.error.body,
                             });
@@ -174,14 +174,14 @@ export class Groups {
                 }
                 switch (_response.error.reason) {
                     case "non-json":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             statusCode: _response.error.statusCode,
                             body: _response.error.rawBody,
                         });
                     case "timeout":
-                        throw new errors.EyeLevelTimeoutError("Timeout exceeded when calling POST /v1/group.");
+                        throw new errors.GroundXTimeoutError("Timeout exceeded when calling POST /v1/group.");
                     case "unknown":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             message: _response.error.errorMessage,
                         });
                 }
@@ -197,26 +197,26 @@ export class Groups {
      * @param {number} groupId - The groupId of the group to look up.
      * @param {Groups.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link EyeLevel.BadRequestError}
-     * @throws {@link EyeLevel.UnauthorizedError}
+     * @throws {@link GroundX.BadRequestError}
+     * @throws {@link GroundX.UnauthorizedError}
      *
      * @example
      *     await client.groups.get(1)
      */
-    public get(groupId: number, requestOptions?: Groups.RequestOptions): core.APIPromise<EyeLevel.GroupResponse> {
+    public get(groupId: number, requestOptions?: Groups.RequestOptions): core.APIPromise<GroundX.GroupResponse> {
         return core.APIPromise.from(
             (async () => {
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ??
-                            environments.EyeLevelEnvironment.Default,
+                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
                         `v1/group/${encodeURIComponent(groupId)}`
                     ),
                     method: "GET",
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "eyelevel",
-                        "X-Fern-SDK-Version": "0.0.2",
+                        "X-Fern-SDK-Version": "2.0.0",
+                        "User-Agent": "eyelevel/2.0.0",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -232,18 +232,18 @@ export class Groups {
                 if (_response.ok) {
                     return {
                         ok: _response.ok,
-                        body: _response.body as EyeLevel.GroupResponse,
+                        body: _response.body as GroundX.GroupResponse,
                         headers: _response.headers,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new EyeLevel.BadRequestError(_response.error.body as unknown);
+                            throw new GroundX.BadRequestError(_response.error.body as unknown);
                         case 401:
-                            throw new EyeLevel.UnauthorizedError(_response.error.body as unknown);
+                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
                         default:
-                            throw new errors.EyeLevelError({
+                            throw new errors.GroundXError({
                                 statusCode: _response.error.statusCode,
                                 body: _response.error.body,
                             });
@@ -251,14 +251,14 @@ export class Groups {
                 }
                 switch (_response.error.reason) {
                     case "non-json":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             statusCode: _response.error.statusCode,
                             body: _response.error.rawBody,
                         });
                     case "timeout":
-                        throw new errors.EyeLevelTimeoutError("Timeout exceeded when calling GET /v1/group/{groupId}.");
+                        throw new errors.GroundXTimeoutError("Timeout exceeded when calling GET /v1/group/{groupId}.");
                     case "unknown":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             message: _response.error.errorMessage,
                         });
                 }
@@ -272,11 +272,11 @@ export class Groups {
      * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
      *
      * @param {number} groupId - The groupId of the group to update.
-     * @param {EyeLevel.GroupUpdateRequest} request
+     * @param {GroundX.GroupUpdateRequest} request
      * @param {Groups.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link EyeLevel.BadRequestError}
-     * @throws {@link EyeLevel.UnauthorizedError}
+     * @throws {@link GroundX.BadRequestError}
+     * @throws {@link GroundX.UnauthorizedError}
      *
      * @example
      *     await client.groups.update(1, {
@@ -285,22 +285,22 @@ export class Groups {
      */
     public update(
         groupId: number,
-        request: EyeLevel.GroupUpdateRequest,
+        request: GroundX.GroupUpdateRequest,
         requestOptions?: Groups.RequestOptions
-    ): core.APIPromise<EyeLevel.GroupResponse> {
+    ): core.APIPromise<GroundX.GroupResponse> {
         return core.APIPromise.from(
             (async () => {
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ??
-                            environments.EyeLevelEnvironment.Default,
+                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
                         `v1/group/${encodeURIComponent(groupId)}`
                     ),
                     method: "PUT",
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "eyelevel",
-                        "X-Fern-SDK-Version": "0.0.2",
+                        "X-Fern-SDK-Version": "2.0.0",
+                        "User-Agent": "eyelevel/2.0.0",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -317,18 +317,18 @@ export class Groups {
                 if (_response.ok) {
                     return {
                         ok: _response.ok,
-                        body: _response.body as EyeLevel.GroupResponse,
+                        body: _response.body as GroundX.GroupResponse,
                         headers: _response.headers,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new EyeLevel.BadRequestError(_response.error.body as unknown);
+                            throw new GroundX.BadRequestError(_response.error.body as unknown);
                         case 401:
-                            throw new EyeLevel.UnauthorizedError(_response.error.body as unknown);
+                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
                         default:
-                            throw new errors.EyeLevelError({
+                            throw new errors.GroundXError({
                                 statusCode: _response.error.statusCode,
                                 body: _response.error.body,
                             });
@@ -336,14 +336,14 @@ export class Groups {
                 }
                 switch (_response.error.reason) {
                     case "non-json":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             statusCode: _response.error.statusCode,
                             body: _response.error.rawBody,
                         });
                     case "timeout":
-                        throw new errors.EyeLevelTimeoutError("Timeout exceeded when calling PUT /v1/group/{groupId}.");
+                        throw new errors.GroundXTimeoutError("Timeout exceeded when calling PUT /v1/group/{groupId}.");
                     case "unknown":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             message: _response.error.errorMessage,
                         });
                 }
@@ -359,26 +359,26 @@ export class Groups {
      * @param {number} groupId - The groupId of the group to be deleted.
      * @param {Groups.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link EyeLevel.BadRequestError}
-     * @throws {@link EyeLevel.UnauthorizedError}
+     * @throws {@link GroundX.BadRequestError}
+     * @throws {@link GroundX.UnauthorizedError}
      *
      * @example
      *     await client.groups.delete(1)
      */
-    public delete(groupId: number, requestOptions?: Groups.RequestOptions): core.APIPromise<EyeLevel.MessageResponse> {
+    public delete(groupId: number, requestOptions?: Groups.RequestOptions): core.APIPromise<GroundX.MessageResponse> {
         return core.APIPromise.from(
             (async () => {
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ??
-                            environments.EyeLevelEnvironment.Default,
+                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
                         `v1/group/${encodeURIComponent(groupId)}`
                     ),
                     method: "DELETE",
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "eyelevel",
-                        "X-Fern-SDK-Version": "0.0.2",
+                        "X-Fern-SDK-Version": "2.0.0",
+                        "User-Agent": "eyelevel/2.0.0",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -394,18 +394,18 @@ export class Groups {
                 if (_response.ok) {
                     return {
                         ok: _response.ok,
-                        body: _response.body as EyeLevel.MessageResponse,
+                        body: _response.body as GroundX.MessageResponse,
                         headers: _response.headers,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new EyeLevel.BadRequestError(_response.error.body as unknown);
+                            throw new GroundX.BadRequestError(_response.error.body as unknown);
                         case 401:
-                            throw new EyeLevel.UnauthorizedError(_response.error.body as unknown);
+                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
                         default:
-                            throw new errors.EyeLevelError({
+                            throw new errors.GroundXError({
                                 statusCode: _response.error.statusCode,
                                 body: _response.error.body,
                             });
@@ -413,16 +413,16 @@ export class Groups {
                 }
                 switch (_response.error.reason) {
                     case "non-json":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             statusCode: _response.error.statusCode,
                             body: _response.error.rawBody,
                         });
                     case "timeout":
-                        throw new errors.EyeLevelTimeoutError(
+                        throw new errors.GroundXTimeoutError(
                             "Timeout exceeded when calling DELETE /v1/group/{groupId}."
                         );
                     case "unknown":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             message: _response.error.errorMessage,
                         });
                 }
@@ -439,8 +439,8 @@ export class Groups {
      * @param {number} bucketId - The bucketId of the bucket being added to the group.
      * @param {Groups.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link EyeLevel.BadRequestError}
-     * @throws {@link EyeLevel.UnauthorizedError}
+     * @throws {@link GroundX.BadRequestError}
+     * @throws {@link GroundX.UnauthorizedError}
      *
      * @example
      *     await client.groups.addBucket(1, 1)
@@ -449,20 +449,20 @@ export class Groups {
         groupId: number,
         bucketId: number,
         requestOptions?: Groups.RequestOptions
-    ): core.APIPromise<EyeLevel.MessageResponse> {
+    ): core.APIPromise<GroundX.MessageResponse> {
         return core.APIPromise.from(
             (async () => {
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ??
-                            environments.EyeLevelEnvironment.Default,
+                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
                         `v1/group/${encodeURIComponent(groupId)}/bucket/${encodeURIComponent(bucketId)}`
                     ),
                     method: "POST",
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "eyelevel",
-                        "X-Fern-SDK-Version": "0.0.2",
+                        "X-Fern-SDK-Version": "2.0.0",
+                        "User-Agent": "eyelevel/2.0.0",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -478,18 +478,18 @@ export class Groups {
                 if (_response.ok) {
                     return {
                         ok: _response.ok,
-                        body: _response.body as EyeLevel.MessageResponse,
+                        body: _response.body as GroundX.MessageResponse,
                         headers: _response.headers,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new EyeLevel.BadRequestError(_response.error.body as unknown);
+                            throw new GroundX.BadRequestError(_response.error.body as unknown);
                         case 401:
-                            throw new EyeLevel.UnauthorizedError(_response.error.body as unknown);
+                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
                         default:
-                            throw new errors.EyeLevelError({
+                            throw new errors.GroundXError({
                                 statusCode: _response.error.statusCode,
                                 body: _response.error.body,
                             });
@@ -497,16 +497,16 @@ export class Groups {
                 }
                 switch (_response.error.reason) {
                     case "non-json":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             statusCode: _response.error.statusCode,
                             body: _response.error.rawBody,
                         });
                     case "timeout":
-                        throw new errors.EyeLevelTimeoutError(
+                        throw new errors.GroundXTimeoutError(
                             "Timeout exceeded when calling POST /v1/group/{groupId}/bucket/{bucketId}."
                         );
                     case "unknown":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             message: _response.error.errorMessage,
                         });
                 }
@@ -523,8 +523,8 @@ export class Groups {
      * @param {number} bucketId - The bucketId of the bucket which will be removed from the group.
      * @param {Groups.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link EyeLevel.BadRequestError}
-     * @throws {@link EyeLevel.UnauthorizedError}
+     * @throws {@link GroundX.BadRequestError}
+     * @throws {@link GroundX.UnauthorizedError}
      *
      * @example
      *     await client.groups.removeBucket(1, 1)
@@ -533,20 +533,20 @@ export class Groups {
         groupId: number,
         bucketId: number,
         requestOptions?: Groups.RequestOptions
-    ): core.APIPromise<EyeLevel.MessageResponse> {
+    ): core.APIPromise<GroundX.MessageResponse> {
         return core.APIPromise.from(
             (async () => {
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ??
-                            environments.EyeLevelEnvironment.Default,
+                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
                         `v1/group/${encodeURIComponent(groupId)}/bucket/${encodeURIComponent(bucketId)}`
                     ),
                     method: "DELETE",
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "eyelevel",
-                        "X-Fern-SDK-Version": "0.0.2",
+                        "X-Fern-SDK-Version": "2.0.0",
+                        "User-Agent": "eyelevel/2.0.0",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -562,18 +562,18 @@ export class Groups {
                 if (_response.ok) {
                     return {
                         ok: _response.ok,
-                        body: _response.body as EyeLevel.MessageResponse,
+                        body: _response.body as GroundX.MessageResponse,
                         headers: _response.headers,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new EyeLevel.BadRequestError(_response.error.body as unknown);
+                            throw new GroundX.BadRequestError(_response.error.body as unknown);
                         case 401:
-                            throw new EyeLevel.UnauthorizedError(_response.error.body as unknown);
+                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
                         default:
-                            throw new errors.EyeLevelError({
+                            throw new errors.GroundXError({
                                 statusCode: _response.error.statusCode,
                                 body: _response.error.body,
                             });
@@ -581,16 +581,16 @@ export class Groups {
                 }
                 switch (_response.error.reason) {
                     case "non-json":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             statusCode: _response.error.statusCode,
                             body: _response.error.rawBody,
                         });
                     case "timeout":
-                        throw new errors.EyeLevelTimeoutError(
+                        throw new errors.GroundXTimeoutError(
                             "Timeout exceeded when calling DELETE /v1/group/{groupId}/bucket/{bucketId}."
                         );
                     case "unknown":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             message: _response.error.errorMessage,
                         });
                 }

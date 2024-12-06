@@ -4,13 +4,13 @@
 
 import * as environments from "../../../../environments";
 import * as core from "../../../../core";
-import * as EyeLevel from "../../../index";
+import * as GroundX from "../../../index";
 import urlJoin from "url-join";
 import * as errors from "../../../../errors/index";
 
 export declare namespace Documents {
     interface Options {
-        environment?: core.Supplier<environments.EyeLevelEnvironment | string>;
+        environment?: core.Supplier<environments.GroundXEnvironment | string>;
         apiKey: core.Supplier<string>;
         fetcher?: core.FetchFunction;
     }
@@ -35,11 +35,11 @@ export class Documents {
      *
      * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
      *
-     * @param {EyeLevel.DocumentRemoteIngestRequest} request
+     * @param {GroundX.DocumentRemoteIngestRequest} request
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link EyeLevel.BadRequestError}
-     * @throws {@link EyeLevel.UnauthorizedError}
+     * @throws {@link GroundX.BadRequestError}
+     * @throws {@link GroundX.UnauthorizedError}
      *
      * @example
      *     await client.documents.ingestRemote({
@@ -50,22 +50,22 @@ export class Documents {
      *     })
      */
     public ingestRemote(
-        request: EyeLevel.DocumentRemoteIngestRequest,
+        request: GroundX.DocumentRemoteIngestRequest,
         requestOptions?: Documents.RequestOptions
-    ): core.APIPromise<EyeLevel.IngestResponse> {
+    ): core.APIPromise<GroundX.IngestResponse> {
         return core.APIPromise.from(
             (async () => {
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ??
-                            environments.EyeLevelEnvironment.Default,
+                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
                         "v1/ingest/documents/remote"
                     ),
                     method: "POST",
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "eyelevel",
-                        "X-Fern-SDK-Version": "0.0.2",
+                        "X-Fern-SDK-Version": "2.0.0",
+                        "User-Agent": "eyelevel/2.0.0",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -82,18 +82,18 @@ export class Documents {
                 if (_response.ok) {
                     return {
                         ok: _response.ok,
-                        body: _response.body as EyeLevel.IngestResponse,
+                        body: _response.body as GroundX.IngestResponse,
                         headers: _response.headers,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new EyeLevel.BadRequestError(_response.error.body as unknown);
+                            throw new GroundX.BadRequestError(_response.error.body as unknown);
                         case 401:
-                            throw new EyeLevel.UnauthorizedError(_response.error.body as unknown);
+                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
                         default:
-                            throw new errors.EyeLevelError({
+                            throw new errors.GroundXError({
                                 statusCode: _response.error.statusCode,
                                 body: _response.error.body,
                             });
@@ -101,16 +101,16 @@ export class Documents {
                 }
                 switch (_response.error.reason) {
                     case "non-json":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             statusCode: _response.error.statusCode,
                             body: _response.error.rawBody,
                         });
                     case "timeout":
-                        throw new errors.EyeLevelTimeoutError(
+                        throw new errors.GroundXTimeoutError(
                             "Timeout exceeded when calling POST /v1/ingest/documents/remote."
                         );
                     case "unknown":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             message: _response.error.errorMessage,
                         });
                 }
@@ -125,28 +125,28 @@ export class Documents {
      *
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link EyeLevel.BadRequestError}
-     * @throws {@link EyeLevel.UnauthorizedError}
+     * @throws {@link GroundX.BadRequestError}
+     * @throws {@link GroundX.UnauthorizedError}
      *
      * @example
      *     await client.documents.ingestLocal()
      */
-    public ingestLocal(requestOptions?: Documents.RequestOptions): core.APIPromise<EyeLevel.IngestResponse> {
+    public ingestLocal(requestOptions?: Documents.RequestOptions): core.APIPromise<GroundX.IngestResponse> {
         return core.APIPromise.from(
             (async () => {
                 const _request = await core.newFormData();
                 const _maybeEncodedRequest = await _request.getRequest();
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ??
-                            environments.EyeLevelEnvironment.Default,
+                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
                         "v1/ingest/documents/local"
                     ),
                     method: "POST",
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "eyelevel",
-                        "X-Fern-SDK-Version": "0.0.2",
+                        "X-Fern-SDK-Version": "2.0.0",
+                        "User-Agent": "eyelevel/2.0.0",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -164,18 +164,18 @@ export class Documents {
                 if (_response.ok) {
                     return {
                         ok: _response.ok,
-                        body: _response.body as EyeLevel.IngestResponse,
+                        body: _response.body as GroundX.IngestResponse,
                         headers: _response.headers,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new EyeLevel.BadRequestError(_response.error.body as unknown);
+                            throw new GroundX.BadRequestError(_response.error.body as unknown);
                         case 401:
-                            throw new EyeLevel.UnauthorizedError(_response.error.body as unknown);
+                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
                         default:
-                            throw new errors.EyeLevelError({
+                            throw new errors.GroundXError({
                                 statusCode: _response.error.statusCode,
                                 body: _response.error.body,
                             });
@@ -183,16 +183,16 @@ export class Documents {
                 }
                 switch (_response.error.reason) {
                     case "non-json":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             statusCode: _response.error.statusCode,
                             body: _response.error.rawBody,
                         });
                     case "timeout":
-                        throw new errors.EyeLevelTimeoutError(
+                        throw new errors.GroundXTimeoutError(
                             "Timeout exceeded when calling POST /v1/ingest/documents/local."
                         );
                     case "unknown":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             message: _response.error.errorMessage,
                         });
                 }
@@ -205,11 +205,11 @@ export class Documents {
      *
      * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
      *
-     * @param {EyeLevel.WebsiteCrawlRequest} request
+     * @param {GroundX.WebsiteCrawlRequest} request
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link EyeLevel.BadRequestError}
-     * @throws {@link EyeLevel.UnauthorizedError}
+     * @throws {@link GroundX.BadRequestError}
+     * @throws {@link GroundX.UnauthorizedError}
      *
      * @example
      *     await client.documents.crawlWebsite({
@@ -220,22 +220,22 @@ export class Documents {
      *     })
      */
     public crawlWebsite(
-        request: EyeLevel.WebsiteCrawlRequest,
+        request: GroundX.WebsiteCrawlRequest,
         requestOptions?: Documents.RequestOptions
-    ): core.APIPromise<EyeLevel.IngestResponse> {
+    ): core.APIPromise<GroundX.IngestResponse> {
         return core.APIPromise.from(
             (async () => {
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ??
-                            environments.EyeLevelEnvironment.Default,
+                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
                         "v1/ingest/documents/website"
                     ),
                     method: "POST",
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "eyelevel",
-                        "X-Fern-SDK-Version": "0.0.2",
+                        "X-Fern-SDK-Version": "2.0.0",
+                        "User-Agent": "eyelevel/2.0.0",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -252,18 +252,18 @@ export class Documents {
                 if (_response.ok) {
                     return {
                         ok: _response.ok,
-                        body: _response.body as EyeLevel.IngestResponse,
+                        body: _response.body as GroundX.IngestResponse,
                         headers: _response.headers,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new EyeLevel.BadRequestError(_response.error.body as unknown);
+                            throw new GroundX.BadRequestError(_response.error.body as unknown);
                         case 401:
-                            throw new EyeLevel.UnauthorizedError(_response.error.body as unknown);
+                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
                         default:
-                            throw new errors.EyeLevelError({
+                            throw new errors.GroundXError({
                                 statusCode: _response.error.statusCode,
                                 body: _response.error.body,
                             });
@@ -271,16 +271,16 @@ export class Documents {
                 }
                 switch (_response.error.reason) {
                     case "non-json":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             statusCode: _response.error.statusCode,
                             body: _response.error.rawBody,
                         });
                     case "timeout":
-                        throw new errors.EyeLevelTimeoutError(
+                        throw new errors.GroundXTimeoutError(
                             "Timeout exceeded when calling POST /v1/ingest/documents/website."
                         );
                     case "unknown":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             message: _response.error.errorMessage,
                         });
                 }
@@ -296,8 +296,8 @@ export class Documents {
      * @param {string} processId - the processId for the ingest process being checked
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link EyeLevel.BadRequestError}
-     * @throws {@link EyeLevel.UnauthorizedError}
+     * @throws {@link GroundX.BadRequestError}
+     * @throws {@link GroundX.UnauthorizedError}
      *
      * @example
      *     await client.documents.getProcessingStatusById("processId")
@@ -305,20 +305,20 @@ export class Documents {
     public getProcessingStatusById(
         processId: string,
         requestOptions?: Documents.RequestOptions
-    ): core.APIPromise<EyeLevel.ProcessStatusResponse> {
+    ): core.APIPromise<GroundX.ProcessStatusResponse> {
         return core.APIPromise.from(
             (async () => {
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ??
-                            environments.EyeLevelEnvironment.Default,
+                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
                         `v1/ingest/${encodeURIComponent(processId)}`
                     ),
                     method: "GET",
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "eyelevel",
-                        "X-Fern-SDK-Version": "0.0.2",
+                        "X-Fern-SDK-Version": "2.0.0",
+                        "User-Agent": "eyelevel/2.0.0",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -334,18 +334,18 @@ export class Documents {
                 if (_response.ok) {
                     return {
                         ok: _response.ok,
-                        body: _response.body as EyeLevel.ProcessStatusResponse,
+                        body: _response.body as GroundX.ProcessStatusResponse,
                         headers: _response.headers,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new EyeLevel.BadRequestError(_response.error.body as unknown);
+                            throw new GroundX.BadRequestError(_response.error.body as unknown);
                         case 401:
-                            throw new EyeLevel.UnauthorizedError(_response.error.body as unknown);
+                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
                         default:
-                            throw new errors.EyeLevelError({
+                            throw new errors.GroundXError({
                                 statusCode: _response.error.statusCode,
                                 body: _response.error.body,
                             });
@@ -353,16 +353,16 @@ export class Documents {
                 }
                 switch (_response.error.reason) {
                     case "non-json":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             statusCode: _response.error.statusCode,
                             body: _response.error.rawBody,
                         });
                     case "timeout":
-                        throw new errors.EyeLevelTimeoutError(
+                        throw new errors.GroundXTimeoutError(
                             "Timeout exceeded when calling GET /v1/ingest/{processId}."
                         );
                     case "unknown":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             message: _response.error.errorMessage,
                         });
                 }
@@ -376,20 +376,20 @@ export class Documents {
      * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
      *
      * @param {number} id - a processId, bucketId, groupId, or projectId
-     * @param {EyeLevel.DocumentsLookupRequest} request
+     * @param {GroundX.DocumentsLookupRequest} request
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link EyeLevel.BadRequestError}
-     * @throws {@link EyeLevel.UnauthorizedError}
+     * @throws {@link GroundX.BadRequestError}
+     * @throws {@link GroundX.UnauthorizedError}
      *
      * @example
      *     await client.documents.lookup(1)
      */
     public lookup(
         id: number,
-        request: EyeLevel.DocumentsLookupRequest = {},
+        request: GroundX.DocumentsLookupRequest = {},
         requestOptions?: Documents.RequestOptions
-    ): core.APIPromise<EyeLevel.DocumentLookupResponse> {
+    ): core.APIPromise<GroundX.DocumentLookupResponse> {
         return core.APIPromise.from(
             (async () => {
                 const { n, filter, sort, sortOrder, status, nextToken } = request;
@@ -414,15 +414,15 @@ export class Documents {
                 }
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ??
-                            environments.EyeLevelEnvironment.Default,
+                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
                         `v1/ingest/documents/${encodeURIComponent(id)}`
                     ),
                     method: "GET",
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "eyelevel",
-                        "X-Fern-SDK-Version": "0.0.2",
+                        "X-Fern-SDK-Version": "2.0.0",
+                        "User-Agent": "eyelevel/2.0.0",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -439,18 +439,18 @@ export class Documents {
                 if (_response.ok) {
                     return {
                         ok: _response.ok,
-                        body: _response.body as EyeLevel.DocumentLookupResponse,
+                        body: _response.body as GroundX.DocumentLookupResponse,
                         headers: _response.headers,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new EyeLevel.BadRequestError(_response.error.body as unknown);
+                            throw new GroundX.BadRequestError(_response.error.body as unknown);
                         case 401:
-                            throw new EyeLevel.UnauthorizedError(_response.error.body as unknown);
+                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
                         default:
-                            throw new errors.EyeLevelError({
+                            throw new errors.GroundXError({
                                 statusCode: _response.error.statusCode,
                                 body: _response.error.body,
                             });
@@ -458,16 +458,16 @@ export class Documents {
                 }
                 switch (_response.error.reason) {
                     case "non-json":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             statusCode: _response.error.statusCode,
                             body: _response.error.rawBody,
                         });
                     case "timeout":
-                        throw new errors.EyeLevelTimeoutError(
+                        throw new errors.GroundXTimeoutError(
                             "Timeout exceeded when calling GET /v1/ingest/documents/{id}."
                         );
                     case "unknown":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             message: _response.error.errorMessage,
                         });
                 }
@@ -480,16 +480,16 @@ export class Documents {
      *
      * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
      *
-     * @param {EyeLevel.DocumentsListRequest} request
+     * @param {GroundX.DocumentsListRequest} request
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @example
      *     await client.documents.list()
      */
     public list(
-        request: EyeLevel.DocumentsListRequest = {},
+        request: GroundX.DocumentsListRequest = {},
         requestOptions?: Documents.RequestOptions
-    ): core.APIPromise<EyeLevel.DocumentListResponse> {
+    ): core.APIPromise<GroundX.DocumentListResponse> {
         return core.APIPromise.from(
             (async () => {
                 const { n, filter, sort, sortOrder, status, nextToken } = request;
@@ -514,15 +514,15 @@ export class Documents {
                 }
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ??
-                            environments.EyeLevelEnvironment.Default,
+                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
                         "v1/ingest/documents"
                     ),
                     method: "GET",
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "eyelevel",
-                        "X-Fern-SDK-Version": "0.0.2",
+                        "X-Fern-SDK-Version": "2.0.0",
+                        "User-Agent": "eyelevel/2.0.0",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -539,28 +539,26 @@ export class Documents {
                 if (_response.ok) {
                     return {
                         ok: _response.ok,
-                        body: _response.body as EyeLevel.DocumentListResponse,
+                        body: _response.body as GroundX.DocumentListResponse,
                         headers: _response.headers,
                     };
                 }
                 if (_response.error.reason === "status-code") {
-                    throw new errors.EyeLevelError({
+                    throw new errors.GroundXError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                     });
                 }
                 switch (_response.error.reason) {
                     case "non-json":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             statusCode: _response.error.statusCode,
                             body: _response.error.rawBody,
                         });
                     case "timeout":
-                        throw new errors.EyeLevelTimeoutError(
-                            "Timeout exceeded when calling GET /v1/ingest/documents."
-                        );
+                        throw new errors.GroundXTimeoutError("Timeout exceeded when calling GET /v1/ingest/documents.");
                     case "unknown":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             message: _response.error.errorMessage,
                         });
                 }
@@ -573,19 +571,19 @@ export class Documents {
      *
      * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
      *
-     * @param {EyeLevel.DocumentsDeleteRequest} request
+     * @param {GroundX.DocumentsDeleteRequest} request
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link EyeLevel.BadRequestError}
-     * @throws {@link EyeLevel.UnauthorizedError}
+     * @throws {@link GroundX.BadRequestError}
+     * @throws {@link GroundX.UnauthorizedError}
      *
      * @example
      *     await client.documents.delete()
      */
     public delete(
-        request: EyeLevel.DocumentsDeleteRequest = {},
+        request: GroundX.DocumentsDeleteRequest = {},
         requestOptions?: Documents.RequestOptions
-    ): core.APIPromise<EyeLevel.IngestResponse> {
+    ): core.APIPromise<GroundX.IngestResponse> {
         return core.APIPromise.from(
             (async () => {
                 const { documentIds } = request;
@@ -599,15 +597,15 @@ export class Documents {
                 }
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ??
-                            environments.EyeLevelEnvironment.Default,
+                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
                         "v1/ingest/documents"
                     ),
                     method: "DELETE",
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "eyelevel",
-                        "X-Fern-SDK-Version": "0.0.2",
+                        "X-Fern-SDK-Version": "2.0.0",
+                        "User-Agent": "eyelevel/2.0.0",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -624,18 +622,18 @@ export class Documents {
                 if (_response.ok) {
                     return {
                         ok: _response.ok,
-                        body: _response.body as EyeLevel.IngestResponse,
+                        body: _response.body as GroundX.IngestResponse,
                         headers: _response.headers,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new EyeLevel.BadRequestError(_response.error.body as unknown);
+                            throw new GroundX.BadRequestError(_response.error.body as unknown);
                         case 401:
-                            throw new EyeLevel.UnauthorizedError(_response.error.body as unknown);
+                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
                         default:
-                            throw new errors.EyeLevelError({
+                            throw new errors.GroundXError({
                                 statusCode: _response.error.statusCode,
                                 body: _response.error.body,
                             });
@@ -643,16 +641,16 @@ export class Documents {
                 }
                 switch (_response.error.reason) {
                     case "non-json":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             statusCode: _response.error.statusCode,
                             body: _response.error.rawBody,
                         });
                     case "timeout":
-                        throw new errors.EyeLevelTimeoutError(
+                        throw new errors.GroundXTimeoutError(
                             "Timeout exceeded when calling DELETE /v1/ingest/documents."
                         );
                     case "unknown":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             message: _response.error.errorMessage,
                         });
                 }
@@ -668,8 +666,8 @@ export class Documents {
      * @param {string} documentId - The documentId of the document for which GroundX information will be provided.
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link EyeLevel.BadRequestError}
-     * @throws {@link EyeLevel.UnauthorizedError}
+     * @throws {@link GroundX.BadRequestError}
+     * @throws {@link GroundX.UnauthorizedError}
      *
      * @example
      *     await client.documents.get("documentId")
@@ -677,20 +675,20 @@ export class Documents {
     public get(
         documentId: string,
         requestOptions?: Documents.RequestOptions
-    ): core.APIPromise<EyeLevel.DocumentResponse> {
+    ): core.APIPromise<GroundX.DocumentResponse> {
         return core.APIPromise.from(
             (async () => {
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ??
-                            environments.EyeLevelEnvironment.Default,
+                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
                         `v1/ingest/document/${encodeURIComponent(documentId)}`
                     ),
                     method: "GET",
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "eyelevel",
-                        "X-Fern-SDK-Version": "0.0.2",
+                        "X-Fern-SDK-Version": "2.0.0",
+                        "User-Agent": "eyelevel/2.0.0",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -706,18 +704,18 @@ export class Documents {
                 if (_response.ok) {
                     return {
                         ok: _response.ok,
-                        body: _response.body as EyeLevel.DocumentResponse,
+                        body: _response.body as GroundX.DocumentResponse,
                         headers: _response.headers,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new EyeLevel.BadRequestError(_response.error.body as unknown);
+                            throw new GroundX.BadRequestError(_response.error.body as unknown);
                         case 401:
-                            throw new EyeLevel.UnauthorizedError(_response.error.body as unknown);
+                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
                         default:
-                            throw new errors.EyeLevelError({
+                            throw new errors.GroundXError({
                                 statusCode: _response.error.statusCode,
                                 body: _response.error.body,
                             });
@@ -725,16 +723,16 @@ export class Documents {
                 }
                 switch (_response.error.reason) {
                     case "non-json":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             statusCode: _response.error.statusCode,
                             body: _response.error.rawBody,
                         });
                     case "timeout":
-                        throw new errors.EyeLevelTimeoutError(
+                        throw new errors.GroundXTimeoutError(
                             "Timeout exceeded when calling GET /v1/ingest/document/{documentId}."
                         );
                     case "unknown":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             message: _response.error.errorMessage,
                         });
                 }
@@ -750,8 +748,8 @@ export class Documents {
      * @param {string} documentId - A documentId which correspond to a document ingested by GroundX
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link EyeLevel.BadRequestError}
-     * @throws {@link EyeLevel.UnauthorizedError}
+     * @throws {@link GroundX.BadRequestError}
+     * @throws {@link GroundX.UnauthorizedError}
      *
      * @example
      *     await client.documents.deleteById("documentId")
@@ -759,20 +757,20 @@ export class Documents {
     public deleteById(
         documentId: string,
         requestOptions?: Documents.RequestOptions
-    ): core.APIPromise<EyeLevel.IngestResponse> {
+    ): core.APIPromise<GroundX.IngestResponse> {
         return core.APIPromise.from(
             (async () => {
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ??
-                            environments.EyeLevelEnvironment.Default,
+                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
                         `v1/ingest/document/${encodeURIComponent(documentId)}`
                     ),
                     method: "DELETE",
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "eyelevel",
-                        "X-Fern-SDK-Version": "0.0.2",
+                        "X-Fern-SDK-Version": "2.0.0",
+                        "User-Agent": "eyelevel/2.0.0",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -788,18 +786,18 @@ export class Documents {
                 if (_response.ok) {
                     return {
                         ok: _response.ok,
-                        body: _response.body as EyeLevel.IngestResponse,
+                        body: _response.body as GroundX.IngestResponse,
                         headers: _response.headers,
                     };
                 }
                 if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new EyeLevel.BadRequestError(_response.error.body as unknown);
+                            throw new GroundX.BadRequestError(_response.error.body as unknown);
                         case 401:
-                            throw new EyeLevel.UnauthorizedError(_response.error.body as unknown);
+                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
                         default:
-                            throw new errors.EyeLevelError({
+                            throw new errors.GroundXError({
                                 statusCode: _response.error.statusCode,
                                 body: _response.error.body,
                             });
@@ -807,16 +805,16 @@ export class Documents {
                 }
                 switch (_response.error.reason) {
                     case "non-json":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             statusCode: _response.error.statusCode,
                             body: _response.error.rawBody,
                         });
                     case "timeout":
-                        throw new errors.EyeLevelTimeoutError(
+                        throw new errors.GroundXTimeoutError(
                             "Timeout exceeded when calling DELETE /v1/ingest/document/{documentId}."
                         );
                     case "unknown":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             message: _response.error.errorMessage,
                         });
                 }

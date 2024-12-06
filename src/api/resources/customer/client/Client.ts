@@ -4,13 +4,13 @@
 
 import * as environments from "../../../../environments";
 import * as core from "../../../../core";
-import * as EyeLevel from "../../../index";
+import * as GroundX from "../../../index";
 import urlJoin from "url-join";
 import * as errors from "../../../../errors/index";
 
 export declare namespace Customer {
     interface Options {
-        environment?: core.Supplier<environments.EyeLevelEnvironment | string>;
+        environment?: core.Supplier<environments.GroundXEnvironment | string>;
         apiKey: core.Supplier<string>;
         fetcher?: core.FetchFunction;
     }
@@ -38,20 +38,20 @@ export class Customer {
      * @example
      *     await client.customer.get()
      */
-    public get(requestOptions?: Customer.RequestOptions): core.APIPromise<EyeLevel.CustomerResponse> {
+    public get(requestOptions?: Customer.RequestOptions): core.APIPromise<GroundX.CustomerResponse> {
         return core.APIPromise.from(
             (async () => {
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ??
-                            environments.EyeLevelEnvironment.Default,
+                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
                         "v1/customer"
                     ),
                     method: "GET",
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "eyelevel",
-                        "X-Fern-SDK-Version": "0.0.2",
+                        "X-Fern-SDK-Version": "2.0.0",
+                        "User-Agent": "eyelevel/2.0.0",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -67,26 +67,26 @@ export class Customer {
                 if (_response.ok) {
                     return {
                         ok: _response.ok,
-                        body: _response.body as EyeLevel.CustomerResponse,
+                        body: _response.body as GroundX.CustomerResponse,
                         headers: _response.headers,
                     };
                 }
                 if (_response.error.reason === "status-code") {
-                    throw new errors.EyeLevelError({
+                    throw new errors.GroundXError({
                         statusCode: _response.error.statusCode,
                         body: _response.error.body,
                     });
                 }
                 switch (_response.error.reason) {
                     case "non-json":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             statusCode: _response.error.statusCode,
                             body: _response.error.rawBody,
                         });
                     case "timeout":
-                        throw new errors.EyeLevelTimeoutError("Timeout exceeded when calling GET /v1/customer.");
+                        throw new errors.GroundXTimeoutError("Timeout exceeded when calling GET /v1/customer.");
                     case "unknown":
-                        throw new errors.EyeLevelError({
+                        throw new errors.GroundXError({
                             message: _response.error.errorMessage,
                         });
                 }

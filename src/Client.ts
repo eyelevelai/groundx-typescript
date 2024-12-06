@@ -11,9 +11,9 @@ import { Groups } from "./api/resources/groups/client/Client";
 import { Customer } from "./api/resources/customer/client/Client";
 import { Health } from "./api/resources/health/client/Client";
 
-export declare namespace EyeLevelClient {
+export declare namespace GroundXClient {
     interface Options {
-        environment?: core.Supplier<environments.EyeLevelEnvironment | string>;
+        environment?: core.Supplier<environments.GroundXEnvironment | string>;
         apiKey: core.Supplier<string>;
         fetcher?: core.FetchFunction;
     }
@@ -30,8 +30,8 @@ export declare namespace EyeLevelClient {
     }
 }
 
-export class EyeLevelClient {
-    constructor(protected readonly _options: EyeLevelClient.Options) {}
+export class GroundXClient {
+    constructor(protected readonly _options: GroundXClient.Options) {}
 
     protected _documents: Documents | undefined;
 

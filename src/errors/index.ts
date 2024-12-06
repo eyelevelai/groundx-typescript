@@ -1,2 +1,2 @@
-export { EyeLevelError } from "./EyeLevelError";
-export { EyeLevelTimeoutError } from "./EyeLevelTimeoutError";
+export { GroundXError } from "./GroundXError";
+export { GroundXTimeoutError } from "./GroundXTimeoutError";

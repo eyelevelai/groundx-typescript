@@ -1,8 +1,8 @@
 {
     "name": "eyelevel",
-    "version": "0.0.2",
+    "version": "2.0.0",
     "private": false,
-    "repository": "https://github.com/fern-demo/eyelevel-typescript-sdk",
+    "repository": "https://github.com/fern-demo/groundx-typescript",
     "main": "./index.js",
     "types": "./index.d.ts",
     "scripts": {

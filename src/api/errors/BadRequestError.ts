@@ -4,7 +4,7 @@
 
 import * as errors from "../../errors/index";
 
-export class BadRequestError extends errors.EyeLevelError {
+export class BadRequestError extends errors.GroundXError {
     constructor(body?: unknown) {
         super({
             message: "BadRequestError",

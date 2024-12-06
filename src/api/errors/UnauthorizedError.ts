@@ -4,7 +4,7 @@
 
 import * as errors from "../../errors/index";
 
-export class UnauthorizedError extends errors.EyeLevelError {
+export class UnauthorizedError extends errors.GroundXError {
     constructor(body?: unknown) {
         super({
             message: "UnauthorizedError",
