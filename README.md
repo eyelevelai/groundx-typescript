@@ -1,14 +1,14 @@
 # Eyelevel TypeScript Library
 
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2Ffern-demo%2Fgroundx-typescript)
-[![npm shield](https://img.shields.io/npm/v/eyelevel)](https://www.npmjs.com/package/eyelevel)
+[![npm shield](https://img.shields.io/npm/v/groundx-typescript-sdk)](https://www.npmjs.com/package/groundx-typescript-sdk)
 
 The Eyelevel TypeScript library provides convenient access to the Eyelevel API from TypeScript.
 
 ## Installation
 
 ```sh
-npm i -s eyelevel
+npm i -s groundx-typescript-sdk
 ```
 
 ## Reference
@@ -20,7 +20,7 @@ A full reference for this library is available [here](./reference.md).
 Instantiate and use the client with the following:
 
 ```typescript
-import { GroundXClient } from "eyelevel";
+import { GroundXClient } from "groundx-typescript-sdk";
 
 const client = new GroundXClient({ apiKey: "YOUR_API_KEY" });
 await client.documents.ingestRemote({
@@ -39,7 +39,7 @@ The SDK exports all request and response types as TypeScript interfaces. Simply 
 following namespace:
 
 ```typescript
-import { GroundX } from "eyelevel";
+import { GroundX } from "groundx-typescript-sdk";
 
 const request: GroundX.DocumentRemoteIngestRequest = {
     ...
@@ -52,7 +52,7 @@ When the API returns a non-success status code (4xx or 5xx response), a subclass
 will be thrown.
 
 ```typescript
-import { GroundXError } from "eyelevel";
+import { GroundXError } from "groundx-typescript-sdk";
 
 try {
     await client.documents.ingestRemote(...);
@@ -151,7 +151,7 @@ The SDK provides a way for your to customize the underlying HTTP client / Fetch 
 unsupported environment, this provides a way for you to break glass and ensure the SDK works.
 
 ```typescript
-import { GroundXClient } from "eyelevel";
+import { GroundXClient } from "groundx-typescript-sdk";
 
 const client = new GroundXClient({
     ...

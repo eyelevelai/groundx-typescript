@@ -49,9 +49,9 @@ export class Customer {
                     method: "GET",
                     headers: {
                         "X-Fern-Language": "JavaScript",
-                        "X-Fern-SDK-Name": "eyelevel",
-                        "X-Fern-SDK-Version": "2.0.0",
-                        "User-Agent": "eyelevel/2.0.0",
+                        "X-Fern-SDK-Name": "groundx-typescript-sdk",
+                        "X-Fern-SDK-Version": "2.0.1",
+                        "User-Agent": "groundx-typescript-sdk/2.0.1",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
