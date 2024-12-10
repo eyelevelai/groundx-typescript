@@ -1,8 +1,8 @@
 {
-    "name": "groundx-typescript-sdk",
-    "version": "2.0.2",
+    "name": "groundx",
+    "version": "2.0.3",
     "private": false,
-    "repository": "https://github.com/fern-demo/groundx-typescript",
+    "repository": "https://github.com/eyelevelai/groundx-typescript",
     "main": "./index.js",
     "types": "./index.d.ts",
     "scripts": {
