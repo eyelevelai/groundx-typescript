@@ -1,8 +1,9 @@
 {
     "name": "groundx",
-    "version": "2.0.3",
+    "version": "2.0.4",
     "private": false,
     "repository": "https://github.com/eyelevelai/groundx-typescript",
+    "license": "MIT",
     "main": "./index.js",
     "types": "./index.d.ts",
     "scripts": {
