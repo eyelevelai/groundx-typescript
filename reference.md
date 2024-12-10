@@ -110,12 +110,15 @@ Interact with the "Request Body" below to explore the arguments of this function
 
 ```typescript
 await client.documents.ingestLocal({
-    files: [
+    documents: [
         {
             bucketId: 1234,
-            fileData: "binary data here",
+            fileData: "binary data",
             fileName: "my_file.txt",
             fileType: "txt",
+            searchData: {
+                key: "value",
+            },
         },
     ],
 });
@@ -186,7 +189,12 @@ Interact with the "Request Body" below to explore the arguments of this function
 await client.documents.crawlWebsite({
     websites: [
         {
-            bucketId: 123,
+            bucketId: 1234,
+            cap: 100,
+            depth: 3,
+            searchData: {
+                key: "value",
+            },
             sourceUrl: "https://my.website.com",
         },
     ],

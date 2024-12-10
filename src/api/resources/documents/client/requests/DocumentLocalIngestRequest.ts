@@ -7,14 +7,17 @@ import * as GroundX from "../../../../index";
 /**
  * @example
  *     {
- *         files: [{
+ *         documents: [{
  *                 bucketId: 1234,
- *                 fileData: "binary data here",
+ *                 fileData: "binary data",
  *                 fileName: "my_file.txt",
- *                 fileType: "txt"
+ *                 fileType: "txt",
+ *                 searchData: {
+ *                     "key": "value"
+ *                 }
  *             }]
  *     }
  */
 export interface DocumentLocalIngestRequest {
-    files: GroundX.IngestLocalDocument[];
+    documents?: GroundX.IngestLocalDocument[];
 }

@@ -8,7 +8,12 @@ import * as GroundX from "../../../../index";
  * @example
  *     {
  *         websites: [{
- *                 bucketId: 123,
+ *                 bucketId: 1234,
+ *                 cap: 100,
+ *                 depth: 3,
+ *                 searchData: {
+ *                     "key": "value"
+ *                 },
  *                 sourceUrl: "https://my.website.com"
  *             }]
  *     }
