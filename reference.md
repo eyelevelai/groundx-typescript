@@ -36,6 +36,11 @@ await client.documents.ingestRemote({
     documents: [
         {
             bucketId: 1234,
+            fileName: "my_file.txt",
+            fileType: "txt",
+            searchData: {
+                key: "value",
+            },
             sourceUrl: "https://my.source.url.com/file.txt",
         },
     ],
@@ -74,7 +79,7 @@ await client.documents.ingestRemote({
 </dl>
 </details>
 
-<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">ingestLocal</a>() -> GroundX.IngestResponse</code></summary>
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">ingestLocal</a>({ ...params }) -> GroundX.IngestResponse</code></summary>
 <dl>
 <dd>
 
@@ -104,7 +109,16 @@ Interact with the "Request Body" below to explore the arguments of this function
 <dd>
 
 ```typescript
-await client.documents.ingestLocal();
+await client.documents.ingestLocal({
+    files: [
+        {
+            bucketId: 1234,
+            fileData: "binary data here",
+            fileName: "my_file.txt",
+            fileType: "txt",
+        },
+    ],
+});
 ```
 
 </dd>
@@ -116,6 +130,14 @@ await client.documents.ingestLocal();
 
 <dl>
 <dd>
+
+<dl>
+<dd>
+
+**request:** `GroundX.DocumentLocalIngestRequest`
+
+</dd>
+</dl>
 
 <dl>
 <dd>

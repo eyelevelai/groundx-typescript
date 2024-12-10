@@ -9,10 +9,15 @@ import * as GroundX from "../../../../index";
  *     {
  *         documents: [{
  *                 bucketId: 1234,
+ *                 fileName: "my_file.txt",
+ *                 fileType: "txt",
+ *                 searchData: {
+ *                     "key": "value"
+ *                 },
  *                 sourceUrl: "https://my.source.url.com/file.txt"
  *             }]
  *     }
  */
 export interface DocumentRemoteIngestRequest {
-    documents: GroundX.DocumentRemoteIngestRequestDocumentsItem[];
+    documents: GroundX.IngestRemoteDocument[];
 }
