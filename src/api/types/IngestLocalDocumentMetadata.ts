@@ -4,14 +4,12 @@
 
 import * as GroundX from "../index";
 
-export interface IngestRemoteDocument {
-    /** The bucketId of the bucket which this remote file will be ingested into. */
-    bucketId: number;
+export interface IngestLocalDocumentMetadata {
+    /** The bucketId of the bucket which this local file will be ingested into. */
+    bucketId?: number;
     /** The name of the file being ingested */
     fileName?: string;
     fileType?: GroundX.DocumentType;
     /** Custom metadata which can be used to influence GroundX's search functionality. This data can be used to further hone GroundX search. */
     searchData?: Record<string, unknown>;
-    /** The URL of the document being ingested by GroundX. */
-    sourceUrl: string;
 }

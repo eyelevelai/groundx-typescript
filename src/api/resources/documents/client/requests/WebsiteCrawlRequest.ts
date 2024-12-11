@@ -19,5 +19,5 @@ import * as GroundX from "../../../../index";
  *     }
  */
 export interface WebsiteCrawlRequest {
-    websites: GroundX.CrawlWebsiteSource[];
+    websites: GroundX.WebsiteSource[];
 }

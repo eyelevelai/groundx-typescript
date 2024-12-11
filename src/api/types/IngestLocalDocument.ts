@@ -5,13 +5,7 @@
 import * as GroundX from "../index";
 
 export interface IngestLocalDocument {
-    /** the bucketId of the bucket which this local file will be ingested to. */
-    bucketId: number;
-    /** Binary data for the file being ingested. */
-    fileData: string;
-    /** The name of the file being ingested */
-    fileName: string;
-    fileType: GroundX.DocumentType;
-    /** Custom metadata which can be used to influence GroundX's search functionality. This data can be used to further hone GroundX search. */
-    searchData?: Record<string, unknown>;
+    /** The binary file data being ingested. */
+    blob: string;
+    metadata: GroundX.IngestLocalDocumentMetadata;
 }

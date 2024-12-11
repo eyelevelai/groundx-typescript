@@ -77,8 +77,8 @@ export class Search {
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.0.6",
-                        "User-Agent": "groundx/2.0.6",
+                        "X-Fern-SDK-Version": "2.0.7",
+                        "User-Agent": "groundx/2.0.7",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -176,8 +176,8 @@ export class Search {
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.0.6",
-                        "User-Agent": "groundx/2.0.6",
+                        "X-Fern-SDK-Version": "2.0.7",
+                        "User-Agent": "groundx/2.0.7",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),

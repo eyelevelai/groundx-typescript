@@ -9,12 +9,9 @@ import * as GroundX from "../../../../index";
  *     {
  *         documents: [{
  *                 bucketId: 1234,
- *                 fileName: "my_file.txt",
+ *                 fileName: "my_file1.txt",
  *                 fileType: "txt",
- *                 searchData: {
- *                     "key": "value"
- *                 },
- *                 sourceUrl: "https://my.source.url.com/file.txt"
+ *                 sourceUrl: "https://my.source.url.com/file1.txt"
  *             }]
  *     }
  */

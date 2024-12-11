@@ -31,7 +31,7 @@ export class Documents {
     constructor(protected readonly _options: Documents.Options) {}
 
     /**
-     * Ingest documents hosted on public URLs to a GroundX bucket.
+     * Ingest documents hosted on public URLs into a GroundX bucket.
      *
      * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
      *
@@ -45,12 +45,9 @@ export class Documents {
      *     await client.documents.ingestRemote({
      *         documents: [{
      *                 bucketId: 1234,
-     *                 fileName: "my_file.txt",
+     *                 fileName: "my_file1.txt",
      *                 fileType: "txt",
-     *                 searchData: {
-     *                     "key": "value"
-     *                 },
-     *                 sourceUrl: "https://my.source.url.com/file.txt"
+     *                 sourceUrl: "https://my.source.url.com/file1.txt"
      *             }]
      *     })
      */
@@ -69,8 +66,8 @@ export class Documents {
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.0.6",
-                        "User-Agent": "groundx/2.0.6",
+                        "X-Fern-SDK-Version": "2.0.7",
+                        "User-Agent": "groundx/2.0.7",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -124,7 +121,7 @@ export class Documents {
     }
 
     /**
-     * Upload documents hosted on a local file system for ingestion into a GroundX bucket.
+     * Upload documents hosted on a local file system into a GroundX bucket.
      *
      * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
      *
@@ -135,17 +132,14 @@ export class Documents {
      * @throws {@link GroundX.UnauthorizedError}
      *
      * @example
-     *     await client.documents.ingestLocal({
-     *         documents: [{
+     *     await client.documents.ingestLocal([{
+     *             blob: "blob",
+     *             metadata: {
      *                 bucketId: 1234,
-     *                 fileData: "binary data",
-     *                 fileName: "my_file.txt",
-     *                 fileType: "txt",
-     *                 searchData: {
-     *                     "key": "value"
-     *                 }
-     *             }]
-     *     })
+     *                 fileName: "my_file1.txt",
+     *                 fileType: "txt"
+     *             }
+     *         }])
      */
     public ingestLocal(
         request: GroundX.DocumentLocalIngestRequest,
@@ -153,13 +147,6 @@ export class Documents {
     ): core.APIPromise<GroundX.IngestResponse> {
         return core.APIPromise.from(
             (async () => {
-                const _request = await core.newFormData();
-                if (request.documents != null) {
-                    for (const _item of request.documents) {
-                        await _request.append("documents", JSON.stringify(_item));
-                    }
-                }
-                const _maybeEncodedRequest = await _request.getRequest();
                 const _response = await (this._options.fetcher ?? core.fetcher)({
                     url: urlJoin(
                         (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
@@ -169,17 +156,16 @@ export class Documents {
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.0.6",
-                        "User-Agent": "groundx/2.0.6",
+                        "X-Fern-SDK-Version": "2.0.7",
+                        "User-Agent": "groundx/2.0.7",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
-                        ..._maybeEncodedRequest.headers,
                         ...requestOptions?.headers,
                     },
-                    requestType: "file",
-                    duplex: _maybeEncodedRequest.duplex,
-                    body: _maybeEncodedRequest.body,
+                    contentType: "application/json",
+                    requestType: "json",
+                    body: request,
                     timeoutMs:
                         requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                     maxRetries: requestOptions?.maxRetries,
@@ -263,8 +249,8 @@ export class Documents {
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.0.6",
-                        "User-Agent": "groundx/2.0.6",
+                        "X-Fern-SDK-Version": "2.0.7",
+                        "User-Agent": "groundx/2.0.7",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -318,6 +304,189 @@ export class Documents {
     }
 
     /**
+     * lookup all documents across all resources which are currently on GroundX
+     *
+     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+     *
+     * @param {GroundX.DocumentsListRequest} request
+     * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @example
+     *     await client.documents.list()
+     */
+    public list(
+        request: GroundX.DocumentsListRequest = {},
+        requestOptions?: Documents.RequestOptions
+    ): core.APIPromise<GroundX.DocumentListResponse> {
+        return core.APIPromise.from(
+            (async () => {
+                const { n, filter, sort, sortOrder, status, nextToken } = request;
+                const _queryParams: Record<string, string | string[] | object | object[]> = {};
+                if (n != null) {
+                    _queryParams["n"] = n.toString();
+                }
+                if (filter != null) {
+                    _queryParams["filter"] = filter;
+                }
+                if (sort != null) {
+                    _queryParams["sort"] = sort;
+                }
+                if (sortOrder != null) {
+                    _queryParams["sortOrder"] = sortOrder;
+                }
+                if (status != null) {
+                    _queryParams["status"] = status;
+                }
+                if (nextToken != null) {
+                    _queryParams["nextToken"] = nextToken;
+                }
+                const _response = await (this._options.fetcher ?? core.fetcher)({
+                    url: urlJoin(
+                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
+                        "v1/ingest/documents"
+                    ),
+                    method: "GET",
+                    headers: {
+                        "X-Fern-Language": "JavaScript",
+                        "X-Fern-SDK-Name": "groundx",
+                        "X-Fern-SDK-Version": "2.0.7",
+                        "User-Agent": "groundx/2.0.7",
+                        "X-Fern-Runtime": core.RUNTIME.type,
+                        "X-Fern-Runtime-Version": core.RUNTIME.version,
+                        ...(await this._getCustomAuthorizationHeaders()),
+                        ...requestOptions?.headers,
+                    },
+                    contentType: "application/json",
+                    queryParameters: _queryParams,
+                    requestType: "json",
+                    timeoutMs:
+                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+                    maxRetries: requestOptions?.maxRetries,
+                    abortSignal: requestOptions?.abortSignal,
+                });
+                if (_response.ok) {
+                    return {
+                        ok: _response.ok,
+                        body: _response.body as GroundX.DocumentListResponse,
+                        headers: _response.headers,
+                    };
+                }
+                if (_response.error.reason === "status-code") {
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+                }
+                switch (_response.error.reason) {
+                    case "non-json":
+                        throw new errors.GroundXError({
+                            statusCode: _response.error.statusCode,
+                            body: _response.error.rawBody,
+                        });
+                    case "timeout":
+                        throw new errors.GroundXTimeoutError("Timeout exceeded when calling GET /v1/ingest/documents.");
+                    case "unknown":
+                        throw new errors.GroundXError({
+                            message: _response.error.errorMessage,
+                        });
+                }
+            })()
+        );
+    }
+
+    /**
+     * Delete multiple documents hosted on GroundX
+     *
+     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+     *
+     * @param {GroundX.DocumentsDeleteRequest} request
+     * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link GroundX.BadRequestError}
+     * @throws {@link GroundX.UnauthorizedError}
+     *
+     * @example
+     *     await client.documents.delete()
+     */
+    public delete(
+        request: GroundX.DocumentsDeleteRequest = {},
+        requestOptions?: Documents.RequestOptions
+    ): core.APIPromise<GroundX.IngestResponse> {
+        return core.APIPromise.from(
+            (async () => {
+                const { documentIds } = request;
+                const _queryParams: Record<string, string | string[] | object | object[]> = {};
+                if (documentIds != null) {
+                    if (Array.isArray(documentIds)) {
+                        _queryParams["documentIds"] = documentIds.map((item) => item);
+                    } else {
+                        _queryParams["documentIds"] = documentIds;
+                    }
+                }
+                const _response = await (this._options.fetcher ?? core.fetcher)({
+                    url: urlJoin(
+                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
+                        "v1/ingest/documents"
+                    ),
+                    method: "DELETE",
+                    headers: {
+                        "X-Fern-Language": "JavaScript",
+                        "X-Fern-SDK-Name": "groundx",
+                        "X-Fern-SDK-Version": "2.0.7",
+                        "User-Agent": "groundx/2.0.7",
+                        "X-Fern-Runtime": core.RUNTIME.type,
+                        "X-Fern-Runtime-Version": core.RUNTIME.version,
+                        ...(await this._getCustomAuthorizationHeaders()),
+                        ...requestOptions?.headers,
+                    },
+                    contentType: "application/json",
+                    queryParameters: _queryParams,
+                    requestType: "json",
+                    timeoutMs:
+                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+                    maxRetries: requestOptions?.maxRetries,
+                    abortSignal: requestOptions?.abortSignal,
+                });
+                if (_response.ok) {
+                    return {
+                        ok: _response.ok,
+                        body: _response.body as GroundX.IngestResponse,
+                        headers: _response.headers,
+                    };
+                }
+                if (_response.error.reason === "status-code") {
+                    switch (_response.error.statusCode) {
+                        case 400:
+                            throw new GroundX.BadRequestError(_response.error.body as unknown);
+                        case 401:
+                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
+                        default:
+                            throw new errors.GroundXError({
+                                statusCode: _response.error.statusCode,
+                                body: _response.error.body,
+                            });
+                    }
+                }
+                switch (_response.error.reason) {
+                    case "non-json":
+                        throw new errors.GroundXError({
+                            statusCode: _response.error.statusCode,
+                            body: _response.error.rawBody,
+                        });
+                    case "timeout":
+                        throw new errors.GroundXTimeoutError(
+                            "Timeout exceeded when calling DELETE /v1/ingest/documents."
+                        );
+                    case "unknown":
+                        throw new errors.GroundXError({
+                            message: _response.error.errorMessage,
+                        });
+                }
+            })()
+        );
+    }
+
+    /**
      * Get the current status of an ingest, initiated with documents.ingest_remote, documents.ingest_local, or documents.crawl_website, by specifying the processId (the processId is included in the response of the documents.ingest functions).
      *
      * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
@@ -346,8 +515,8 @@ export class Documents {
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.0.6",
-                        "User-Agent": "groundx/2.0.6",
+                        "X-Fern-SDK-Version": "2.0.7",
+                        "User-Agent": "groundx/2.0.7",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -450,8 +619,8 @@ export class Documents {
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.0.6",
-                        "User-Agent": "groundx/2.0.6",
+                        "X-Fern-SDK-Version": "2.0.7",
+                        "User-Agent": "groundx/2.0.7",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -505,189 +674,6 @@ export class Documents {
     }
 
     /**
-     * lookup all documents across all resources which are currently on GroundX
-     *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-     *
-     * @param {GroundX.DocumentsListRequest} request
-     * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @example
-     *     await client.documents.list()
-     */
-    public list(
-        request: GroundX.DocumentsListRequest = {},
-        requestOptions?: Documents.RequestOptions
-    ): core.APIPromise<GroundX.DocumentListResponse> {
-        return core.APIPromise.from(
-            (async () => {
-                const { n, filter, sort, sortOrder, status, nextToken } = request;
-                const _queryParams: Record<string, string | string[] | object | object[]> = {};
-                if (n != null) {
-                    _queryParams["n"] = n.toString();
-                }
-                if (filter != null) {
-                    _queryParams["filter"] = filter;
-                }
-                if (sort != null) {
-                    _queryParams["sort"] = sort;
-                }
-                if (sortOrder != null) {
-                    _queryParams["sortOrder"] = sortOrder;
-                }
-                if (status != null) {
-                    _queryParams["status"] = status;
-                }
-                if (nextToken != null) {
-                    _queryParams["nextToken"] = nextToken;
-                }
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
-                        "v1/ingest/documents"
-                    ),
-                    method: "GET",
-                    headers: {
-                        "X-Fern-Language": "JavaScript",
-                        "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.0.6",
-                        "User-Agent": "groundx/2.0.6",
-                        "X-Fern-Runtime": core.RUNTIME.type,
-                        "X-Fern-Runtime-Version": core.RUNTIME.version,
-                        ...(await this._getCustomAuthorizationHeaders()),
-                        ...requestOptions?.headers,
-                    },
-                    contentType: "application/json",
-                    queryParameters: _queryParams,
-                    requestType: "json",
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
-                });
-                if (_response.ok) {
-                    return {
-                        ok: _response.ok,
-                        body: _response.body as GroundX.DocumentListResponse,
-                        headers: _response.headers,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    throw new errors.GroundXError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                    });
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.GroundXError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                        });
-                    case "timeout":
-                        throw new errors.GroundXTimeoutError("Timeout exceeded when calling GET /v1/ingest/documents.");
-                    case "unknown":
-                        throw new errors.GroundXError({
-                            message: _response.error.errorMessage,
-                        });
-                }
-            })()
-        );
-    }
-
-    /**
-     * Delete multiple documents hosted on GroundX
-     *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-     *
-     * @param {GroundX.DocumentsDeleteRequest} request
-     * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link GroundX.BadRequestError}
-     * @throws {@link GroundX.UnauthorizedError}
-     *
-     * @example
-     *     await client.documents.delete()
-     */
-    public delete(
-        request: GroundX.DocumentsDeleteRequest = {},
-        requestOptions?: Documents.RequestOptions
-    ): core.APIPromise<GroundX.IngestResponse> {
-        return core.APIPromise.from(
-            (async () => {
-                const { documentIds } = request;
-                const _queryParams: Record<string, string | string[] | object | object[]> = {};
-                if (documentIds != null) {
-                    if (Array.isArray(documentIds)) {
-                        _queryParams["documentIds"] = documentIds.map((item) => item);
-                    } else {
-                        _queryParams["documentIds"] = documentIds;
-                    }
-                }
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
-                        "v1/ingest/documents"
-                    ),
-                    method: "DELETE",
-                    headers: {
-                        "X-Fern-Language": "JavaScript",
-                        "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.0.6",
-                        "User-Agent": "groundx/2.0.6",
-                        "X-Fern-Runtime": core.RUNTIME.type,
-                        "X-Fern-Runtime-Version": core.RUNTIME.version,
-                        ...(await this._getCustomAuthorizationHeaders()),
-                        ...requestOptions?.headers,
-                    },
-                    contentType: "application/json",
-                    queryParameters: _queryParams,
-                    requestType: "json",
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
-                });
-                if (_response.ok) {
-                    return {
-                        ok: _response.ok,
-                        body: _response.body as GroundX.IngestResponse,
-                        headers: _response.headers,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    switch (_response.error.statusCode) {
-                        case 400:
-                            throw new GroundX.BadRequestError(_response.error.body as unknown);
-                        case 401:
-                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
-                        default:
-                            throw new errors.GroundXError({
-                                statusCode: _response.error.statusCode,
-                                body: _response.error.body,
-                            });
-                    }
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.GroundXError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                        });
-                    case "timeout":
-                        throw new errors.GroundXTimeoutError(
-                            "Timeout exceeded when calling DELETE /v1/ingest/documents."
-                        );
-                    case "unknown":
-                        throw new errors.GroundXError({
-                            message: _response.error.errorMessage,
-                        });
-                }
-            })()
-        );
-    }
-
-    /**
      * Look up an existing document by documentId.
      *
      * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
@@ -716,8 +702,8 @@ export class Documents {
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.0.6",
-                        "User-Agent": "groundx/2.0.6",
+                        "X-Fern-SDK-Version": "2.0.7",
+                        "User-Agent": "groundx/2.0.7",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),
@@ -798,8 +784,8 @@ export class Documents {
                     headers: {
                         "X-Fern-Language": "JavaScript",
                         "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.0.6",
-                        "User-Agent": "groundx/2.0.6",
+                        "X-Fern-SDK-Version": "2.0.7",
+                        "User-Agent": "groundx/2.0.7",
                         "X-Fern-Runtime": core.RUNTIME.type,
                         "X-Fern-Runtime-Version": core.RUNTIME.version,
                         ...(await this._getCustomAuthorizationHeaders()),

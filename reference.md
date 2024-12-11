@@ -14,7 +14,7 @@
 <dl>
 <dd>
 
-Ingest documents hosted on public URLs to a GroundX bucket.
+Ingest documents hosted on public URLs into a GroundX bucket.
 
 Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
 
@@ -36,12 +36,9 @@ await client.documents.ingestRemote({
     documents: [
         {
             bucketId: 1234,
-            fileName: "my_file.txt",
+            fileName: "my_file1.txt",
             fileType: "txt",
-            searchData: {
-                key: "value",
-            },
-            sourceUrl: "https://my.source.url.com/file.txt",
+            sourceUrl: "https://my.source.url.com/file1.txt",
         },
     ],
 });
@@ -91,7 +88,7 @@ await client.documents.ingestRemote({
 <dl>
 <dd>
 
-Upload documents hosted on a local file system for ingestion into a GroundX bucket.
+Upload documents hosted on a local file system into a GroundX bucket.
 
 Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
 
@@ -109,19 +106,16 @@ Interact with the "Request Body" below to explore the arguments of this function
 <dd>
 
 ```typescript
-await client.documents.ingestLocal({
-    documents: [
-        {
+await client.documents.ingestLocal([
+    {
+        blob: "blob",
+        metadata: {
             bucketId: 1234,
-            fileData: "binary data",
-            fileName: "my_file.txt",
+            fileName: "my_file1.txt",
             fileType: "txt",
-            searchData: {
-                key: "value",
-            },
         },
-    ],
-});
+    },
+]);
 ```
 
 </dd>
@@ -215,6 +209,136 @@ await client.documents.crawlWebsite({
 <dd>
 
 **request:** `GroundX.WebsiteCrawlRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Documents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">list</a>({ ...params }) -> GroundX.DocumentListResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+lookup all documents across all resources which are currently on GroundX
+
+Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.documents.list();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `GroundX.DocumentsListRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Documents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">delete</a>({ ...params }) -> GroundX.IngestResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete multiple documents hosted on GroundX
+
+Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.documents.delete();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `GroundX.DocumentsDeleteRequest`
 
 </dd>
 </dl>
@@ -353,136 +477,6 @@ await client.documents.lookup(1);
 <dd>
 
 **request:** `GroundX.DocumentsLookupRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Documents.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">list</a>({ ...params }) -> GroundX.DocumentListResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-lookup all documents across all resources which are currently on GroundX
-
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.documents.list();
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `GroundX.DocumentsListRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Documents.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">delete</a>({ ...params }) -> GroundX.IngestResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Delete multiple documents hosted on GroundX
-
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.documents.delete();
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `GroundX.DocumentsDeleteRequest`
 
 </dd>
 </dl>

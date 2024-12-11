@@ -1,6 +1,6 @@
 {
     "name": "groundx",
-    "version": "2.0.6",
+    "version": "2.0.7",
     "private": false,
     "repository": "https://github.com/eyelevelai/groundx-typescript",
     "license": "MIT",
@@ -18,8 +18,7 @@
         "formdata-node": "^6.0.3",
         "node-fetch": "2.7.0",
         "qs": "6.11.2",
-        "readable-stream": "^4.5.2",
-        "form-data-encoder": "^4.0.2"
+        "readable-stream": "^4.5.2"
     },
     "devDependencies": {
         "@types/url-join": "4.0.1",
