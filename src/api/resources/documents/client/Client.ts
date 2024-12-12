@@ -51,73 +51,64 @@ export class Documents {
      *             }]
      *     })
      */
-    public ingestRemote(
+    public async ingestRemote(
         request: GroundX.DocumentRemoteIngestRequest,
         requestOptions?: Documents.RequestOptions
-    ): core.APIPromise<GroundX.IngestResponse> {
-        return core.APIPromise.from(
-            (async () => {
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
-                        "v1/ingest/documents/remote"
-                    ),
-                    method: "POST",
-                    headers: {
-                        "X-Fern-Language": "JavaScript",
-                        "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.1.0",
-                        "User-Agent": "groundx/2.1.0",
-                        "X-Fern-Runtime": core.RUNTIME.type,
-                        "X-Fern-Runtime-Version": core.RUNTIME.version,
-                        ...(await this._getCustomAuthorizationHeaders()),
-                        ...requestOptions?.headers,
-                    },
-                    contentType: "application/json",
-                    requestType: "json",
-                    body: request,
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
+    ): Promise<GroundX.IngestResponse> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
+                "v1/ingest/documents/remote"
+            ),
+            method: "POST",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "groundx",
+                "X-Fern-SDK-Version": "2.1.1",
+                "User-Agent": "groundx/2.1.1",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            body: request,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return _response.body as GroundX.IngestResponse;
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new GroundX.BadRequestError(_response.error.body as unknown);
+                case 401:
+                    throw new GroundX.UnauthorizedError(_response.error.body as unknown);
+                default:
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.GroundXError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
                 });
-                if (_response.ok) {
-                    return {
-                        ok: _response.ok,
-                        body: _response.body as GroundX.IngestResponse,
-                        headers: _response.headers,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    switch (_response.error.statusCode) {
-                        case 400:
-                            throw new GroundX.BadRequestError(_response.error.body as unknown);
-                        case 401:
-                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
-                        default:
-                            throw new errors.GroundXError({
-                                statusCode: _response.error.statusCode,
-                                body: _response.error.body,
-                            });
-                    }
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.GroundXError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                        });
-                    case "timeout":
-                        throw new errors.GroundXTimeoutError(
-                            "Timeout exceeded when calling POST /v1/ingest/documents/remote."
-                        );
-                    case "unknown":
-                        throw new errors.GroundXError({
-                            message: _response.error.errorMessage,
-                        });
-                }
-            })()
-        );
+            case "timeout":
+                throw new errors.GroundXTimeoutError("Timeout exceeded when calling POST /v1/ingest/documents/remote.");
+            case "unknown":
+                throw new errors.GroundXError({
+                    message: _response.error.errorMessage,
+                });
+        }
     }
 
     /**
@@ -141,73 +132,64 @@ export class Documents {
      *             }
      *         }])
      */
-    public ingestLocal(
+    public async ingestLocal(
         request: GroundX.DocumentLocalIngestRequest,
         requestOptions?: Documents.RequestOptions
-    ): core.APIPromise<GroundX.IngestResponse> {
-        return core.APIPromise.from(
-            (async () => {
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
-                        "v1/ingest/documents/local"
-                    ),
-                    method: "POST",
-                    headers: {
-                        "X-Fern-Language": "JavaScript",
-                        "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.1.0",
-                        "User-Agent": "groundx/2.1.0",
-                        "X-Fern-Runtime": core.RUNTIME.type,
-                        "X-Fern-Runtime-Version": core.RUNTIME.version,
-                        ...(await this._getCustomAuthorizationHeaders()),
-                        ...requestOptions?.headers,
-                    },
-                    contentType: "application/json",
-                    requestType: "json",
-                    body: request,
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
+    ): Promise<GroundX.IngestResponse> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
+                "v1/ingest/documents/local"
+            ),
+            method: "POST",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "groundx",
+                "X-Fern-SDK-Version": "2.1.1",
+                "User-Agent": "groundx/2.1.1",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            body: request,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return _response.body as GroundX.IngestResponse;
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new GroundX.BadRequestError(_response.error.body as unknown);
+                case 401:
+                    throw new GroundX.UnauthorizedError(_response.error.body as unknown);
+                default:
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.GroundXError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
                 });
-                if (_response.ok) {
-                    return {
-                        ok: _response.ok,
-                        body: _response.body as GroundX.IngestResponse,
-                        headers: _response.headers,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    switch (_response.error.statusCode) {
-                        case 400:
-                            throw new GroundX.BadRequestError(_response.error.body as unknown);
-                        case 401:
-                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
-                        default:
-                            throw new errors.GroundXError({
-                                statusCode: _response.error.statusCode,
-                                body: _response.error.body,
-                            });
-                    }
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.GroundXError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                        });
-                    case "timeout":
-                        throw new errors.GroundXTimeoutError(
-                            "Timeout exceeded when calling POST /v1/ingest/documents/local."
-                        );
-                    case "unknown":
-                        throw new errors.GroundXError({
-                            message: _response.error.errorMessage,
-                        });
-                }
-            })()
-        );
+            case "timeout":
+                throw new errors.GroundXTimeoutError("Timeout exceeded when calling POST /v1/ingest/documents/local.");
+            case "unknown":
+                throw new errors.GroundXError({
+                    message: _response.error.errorMessage,
+                });
+        }
     }
 
     /**
@@ -234,73 +216,66 @@ export class Documents {
      *             }]
      *     })
      */
-    public crawlWebsite(
+    public async crawlWebsite(
         request: GroundX.WebsiteCrawlRequest,
         requestOptions?: Documents.RequestOptions
-    ): core.APIPromise<GroundX.IngestResponse> {
-        return core.APIPromise.from(
-            (async () => {
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
-                        "v1/ingest/documents/website"
-                    ),
-                    method: "POST",
-                    headers: {
-                        "X-Fern-Language": "JavaScript",
-                        "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.1.0",
-                        "User-Agent": "groundx/2.1.0",
-                        "X-Fern-Runtime": core.RUNTIME.type,
-                        "X-Fern-Runtime-Version": core.RUNTIME.version,
-                        ...(await this._getCustomAuthorizationHeaders()),
-                        ...requestOptions?.headers,
-                    },
-                    contentType: "application/json",
-                    requestType: "json",
-                    body: request,
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
+    ): Promise<GroundX.IngestResponse> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
+                "v1/ingest/documents/website"
+            ),
+            method: "POST",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "groundx",
+                "X-Fern-SDK-Version": "2.1.1",
+                "User-Agent": "groundx/2.1.1",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            body: request,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return _response.body as GroundX.IngestResponse;
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new GroundX.BadRequestError(_response.error.body as unknown);
+                case 401:
+                    throw new GroundX.UnauthorizedError(_response.error.body as unknown);
+                default:
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.GroundXError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
                 });
-                if (_response.ok) {
-                    return {
-                        ok: _response.ok,
-                        body: _response.body as GroundX.IngestResponse,
-                        headers: _response.headers,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    switch (_response.error.statusCode) {
-                        case 400:
-                            throw new GroundX.BadRequestError(_response.error.body as unknown);
-                        case 401:
-                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
-                        default:
-                            throw new errors.GroundXError({
-                                statusCode: _response.error.statusCode,
-                                body: _response.error.body,
-                            });
-                    }
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.GroundXError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                        });
-                    case "timeout":
-                        throw new errors.GroundXTimeoutError(
-                            "Timeout exceeded when calling POST /v1/ingest/documents/website."
-                        );
-                    case "unknown":
-                        throw new errors.GroundXError({
-                            message: _response.error.errorMessage,
-                        });
-                }
-            })()
-        );
+            case "timeout":
+                throw new errors.GroundXTimeoutError(
+                    "Timeout exceeded when calling POST /v1/ingest/documents/website."
+                );
+            case "unknown":
+                throw new errors.GroundXError({
+                    message: _response.error.errorMessage,
+                });
+        }
     }
 
     /**
@@ -314,84 +289,83 @@ export class Documents {
      * @example
      *     await client.documents.list()
      */
-    public list(
+    public async list(
         request: GroundX.DocumentsListRequest = {},
         requestOptions?: Documents.RequestOptions
-    ): core.APIPromise<GroundX.DocumentListResponse> {
-        return core.APIPromise.from(
-            (async () => {
-                const { n, filter, sort, sortOrder, status, nextToken } = request;
-                const _queryParams: Record<string, string | string[] | object | object[]> = {};
-                if (n != null) {
-                    _queryParams["n"] = n.toString();
-                }
-                if (filter != null) {
-                    _queryParams["filter"] = filter;
-                }
-                if (sort != null) {
-                    _queryParams["sort"] = sort;
-                }
-                if (sortOrder != null) {
-                    _queryParams["sortOrder"] = sortOrder;
-                }
-                if (status != null) {
-                    _queryParams["status"] = status;
-                }
-                if (nextToken != null) {
-                    _queryParams["nextToken"] = nextToken;
-                }
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
-                        "v1/ingest/documents"
-                    ),
-                    method: "GET",
-                    headers: {
-                        "X-Fern-Language": "JavaScript",
-                        "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.1.0",
-                        "User-Agent": "groundx/2.1.0",
-                        "X-Fern-Runtime": core.RUNTIME.type,
-                        "X-Fern-Runtime-Version": core.RUNTIME.version,
-                        ...(await this._getCustomAuthorizationHeaders()),
-                        ...requestOptions?.headers,
-                    },
-                    contentType: "application/json",
-                    queryParameters: _queryParams,
-                    requestType: "json",
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
+    ): Promise<GroundX.DocumentListResponse> {
+        const { n, filter, sort, sortOrder, status, nextToken } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        if (n != null) {
+            _queryParams["n"] = n.toString();
+        }
+
+        if (filter != null) {
+            _queryParams["filter"] = filter;
+        }
+
+        if (sort != null) {
+            _queryParams["sort"] = sort;
+        }
+
+        if (sortOrder != null) {
+            _queryParams["sortOrder"] = sortOrder;
+        }
+
+        if (status != null) {
+            _queryParams["status"] = status;
+        }
+
+        if (nextToken != null) {
+            _queryParams["nextToken"] = nextToken;
+        }
+
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
+                "v1/ingest/documents"
+            ),
+            method: "GET",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "groundx",
+                "X-Fern-SDK-Version": "2.1.1",
+                "User-Agent": "groundx/2.1.1",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            queryParameters: _queryParams,
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return _response.body as GroundX.DocumentListResponse;
+        }
+
+        if (_response.error.reason === "status-code") {
+            throw new errors.GroundXError({
+                statusCode: _response.error.statusCode,
+                body: _response.error.body,
+            });
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.GroundXError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
                 });
-                if (_response.ok) {
-                    return {
-                        ok: _response.ok,
-                        body: _response.body as GroundX.DocumentListResponse,
-                        headers: _response.headers,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    throw new errors.GroundXError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                    });
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.GroundXError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                        });
-                    case "timeout":
-                        throw new errors.GroundXTimeoutError("Timeout exceeded when calling GET /v1/ingest/documents.");
-                    case "unknown":
-                        throw new errors.GroundXError({
-                            message: _response.error.errorMessage,
-                        });
-                }
-            })()
-        );
+            case "timeout":
+                throw new errors.GroundXTimeoutError("Timeout exceeded when calling GET /v1/ingest/documents.");
+            case "unknown":
+                throw new errors.GroundXError({
+                    message: _response.error.errorMessage,
+                });
+        }
     }
 
     /**
@@ -408,82 +382,74 @@ export class Documents {
      * @example
      *     await client.documents.delete()
      */
-    public delete(
+    public async delete(
         request: GroundX.DocumentsDeleteRequest = {},
         requestOptions?: Documents.RequestOptions
-    ): core.APIPromise<GroundX.IngestResponse> {
-        return core.APIPromise.from(
-            (async () => {
-                const { documentIds } = request;
-                const _queryParams: Record<string, string | string[] | object | object[]> = {};
-                if (documentIds != null) {
-                    if (Array.isArray(documentIds)) {
-                        _queryParams["documentIds"] = documentIds.map((item) => item);
-                    } else {
-                        _queryParams["documentIds"] = documentIds;
-                    }
-                }
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
-                        "v1/ingest/documents"
-                    ),
-                    method: "DELETE",
-                    headers: {
-                        "X-Fern-Language": "JavaScript",
-                        "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.1.0",
-                        "User-Agent": "groundx/2.1.0",
-                        "X-Fern-Runtime": core.RUNTIME.type,
-                        "X-Fern-Runtime-Version": core.RUNTIME.version,
-                        ...(await this._getCustomAuthorizationHeaders()),
-                        ...requestOptions?.headers,
-                    },
-                    contentType: "application/json",
-                    queryParameters: _queryParams,
-                    requestType: "json",
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
+    ): Promise<GroundX.IngestResponse> {
+        const { documentIds } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        if (documentIds != null) {
+            if (Array.isArray(documentIds)) {
+                _queryParams["documentIds"] = documentIds.map((item) => item);
+            } else {
+                _queryParams["documentIds"] = documentIds;
+            }
+        }
+
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
+                "v1/ingest/documents"
+            ),
+            method: "DELETE",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "groundx",
+                "X-Fern-SDK-Version": "2.1.1",
+                "User-Agent": "groundx/2.1.1",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            queryParameters: _queryParams,
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return _response.body as GroundX.IngestResponse;
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new GroundX.BadRequestError(_response.error.body as unknown);
+                case 401:
+                    throw new GroundX.UnauthorizedError(_response.error.body as unknown);
+                default:
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.GroundXError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
                 });
-                if (_response.ok) {
-                    return {
-                        ok: _response.ok,
-                        body: _response.body as GroundX.IngestResponse,
-                        headers: _response.headers,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    switch (_response.error.statusCode) {
-                        case 400:
-                            throw new GroundX.BadRequestError(_response.error.body as unknown);
-                        case 401:
-                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
-                        default:
-                            throw new errors.GroundXError({
-                                statusCode: _response.error.statusCode,
-                                body: _response.error.body,
-                            });
-                    }
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.GroundXError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                        });
-                    case "timeout":
-                        throw new errors.GroundXTimeoutError(
-                            "Timeout exceeded when calling DELETE /v1/ingest/documents."
-                        );
-                    case "unknown":
-                        throw new errors.GroundXError({
-                            message: _response.error.errorMessage,
-                        });
-                }
-            })()
-        );
+            case "timeout":
+                throw new errors.GroundXTimeoutError("Timeout exceeded when calling DELETE /v1/ingest/documents.");
+            case "unknown":
+                throw new errors.GroundXError({
+                    message: _response.error.errorMessage,
+                });
+        }
     }
 
     /**
@@ -500,72 +466,63 @@ export class Documents {
      * @example
      *     await client.documents.getProcessingStatusById("processId")
      */
-    public getProcessingStatusById(
+    public async getProcessingStatusById(
         processId: string,
         requestOptions?: Documents.RequestOptions
-    ): core.APIPromise<GroundX.ProcessStatusResponse> {
-        return core.APIPromise.from(
-            (async () => {
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
-                        `v1/ingest/${encodeURIComponent(processId)}`
-                    ),
-                    method: "GET",
-                    headers: {
-                        "X-Fern-Language": "JavaScript",
-                        "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.1.0",
-                        "User-Agent": "groundx/2.1.0",
-                        "X-Fern-Runtime": core.RUNTIME.type,
-                        "X-Fern-Runtime-Version": core.RUNTIME.version,
-                        ...(await this._getCustomAuthorizationHeaders()),
-                        ...requestOptions?.headers,
-                    },
-                    contentType: "application/json",
-                    requestType: "json",
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
+    ): Promise<GroundX.ProcessStatusResponse> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
+                `v1/ingest/${encodeURIComponent(processId)}`
+            ),
+            method: "GET",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "groundx",
+                "X-Fern-SDK-Version": "2.1.1",
+                "User-Agent": "groundx/2.1.1",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return _response.body as GroundX.ProcessStatusResponse;
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new GroundX.BadRequestError(_response.error.body as unknown);
+                case 401:
+                    throw new GroundX.UnauthorizedError(_response.error.body as unknown);
+                default:
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.GroundXError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
                 });
-                if (_response.ok) {
-                    return {
-                        ok: _response.ok,
-                        body: _response.body as GroundX.ProcessStatusResponse,
-                        headers: _response.headers,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    switch (_response.error.statusCode) {
-                        case 400:
-                            throw new GroundX.BadRequestError(_response.error.body as unknown);
-                        case 401:
-                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
-                        default:
-                            throw new errors.GroundXError({
-                                statusCode: _response.error.statusCode,
-                                body: _response.error.body,
-                            });
-                    }
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.GroundXError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                        });
-                    case "timeout":
-                        throw new errors.GroundXTimeoutError(
-                            "Timeout exceeded when calling GET /v1/ingest/{processId}."
-                        );
-                    case "unknown":
-                        throw new errors.GroundXError({
-                            message: _response.error.errorMessage,
-                        });
-                }
-            })()
-        );
+            case "timeout":
+                throw new errors.GroundXTimeoutError("Timeout exceeded when calling GET /v1/ingest/{processId}.");
+            case "unknown":
+                throw new errors.GroundXError({
+                    message: _response.error.errorMessage,
+                });
+        }
     }
 
     /**
@@ -583,94 +540,91 @@ export class Documents {
      * @example
      *     await client.documents.lookup(1)
      */
-    public lookup(
+    public async lookup(
         id: number,
         request: GroundX.DocumentsLookupRequest = {},
         requestOptions?: Documents.RequestOptions
-    ): core.APIPromise<GroundX.DocumentLookupResponse> {
-        return core.APIPromise.from(
-            (async () => {
-                const { n, filter, sort, sortOrder, status, nextToken } = request;
-                const _queryParams: Record<string, string | string[] | object | object[]> = {};
-                if (n != null) {
-                    _queryParams["n"] = n.toString();
-                }
-                if (filter != null) {
-                    _queryParams["filter"] = filter;
-                }
-                if (sort != null) {
-                    _queryParams["sort"] = sort;
-                }
-                if (sortOrder != null) {
-                    _queryParams["sortOrder"] = sortOrder;
-                }
-                if (status != null) {
-                    _queryParams["status"] = status;
-                }
-                if (nextToken != null) {
-                    _queryParams["nextToken"] = nextToken;
-                }
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
-                        `v1/ingest/documents/${encodeURIComponent(id)}`
-                    ),
-                    method: "GET",
-                    headers: {
-                        "X-Fern-Language": "JavaScript",
-                        "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.1.0",
-                        "User-Agent": "groundx/2.1.0",
-                        "X-Fern-Runtime": core.RUNTIME.type,
-                        "X-Fern-Runtime-Version": core.RUNTIME.version,
-                        ...(await this._getCustomAuthorizationHeaders()),
-                        ...requestOptions?.headers,
-                    },
-                    contentType: "application/json",
-                    queryParameters: _queryParams,
-                    requestType: "json",
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
+    ): Promise<GroundX.DocumentLookupResponse> {
+        const { n, filter, sort, sortOrder, status, nextToken } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        if (n != null) {
+            _queryParams["n"] = n.toString();
+        }
+
+        if (filter != null) {
+            _queryParams["filter"] = filter;
+        }
+
+        if (sort != null) {
+            _queryParams["sort"] = sort;
+        }
+
+        if (sortOrder != null) {
+            _queryParams["sortOrder"] = sortOrder;
+        }
+
+        if (status != null) {
+            _queryParams["status"] = status;
+        }
+
+        if (nextToken != null) {
+            _queryParams["nextToken"] = nextToken;
+        }
+
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
+                `v1/ingest/documents/${encodeURIComponent(id)}`
+            ),
+            method: "GET",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "groundx",
+                "X-Fern-SDK-Version": "2.1.1",
+                "User-Agent": "groundx/2.1.1",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            queryParameters: _queryParams,
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return _response.body as GroundX.DocumentLookupResponse;
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new GroundX.BadRequestError(_response.error.body as unknown);
+                case 401:
+                    throw new GroundX.UnauthorizedError(_response.error.body as unknown);
+                default:
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.GroundXError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
                 });
-                if (_response.ok) {
-                    return {
-                        ok: _response.ok,
-                        body: _response.body as GroundX.DocumentLookupResponse,
-                        headers: _response.headers,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    switch (_response.error.statusCode) {
-                        case 400:
-                            throw new GroundX.BadRequestError(_response.error.body as unknown);
-                        case 401:
-                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
-                        default:
-                            throw new errors.GroundXError({
-                                statusCode: _response.error.statusCode,
-                                body: _response.error.body,
-                            });
-                    }
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.GroundXError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                        });
-                    case "timeout":
-                        throw new errors.GroundXTimeoutError(
-                            "Timeout exceeded when calling GET /v1/ingest/documents/{id}."
-                        );
-                    case "unknown":
-                        throw new errors.GroundXError({
-                            message: _response.error.errorMessage,
-                        });
-                }
-            })()
-        );
+            case "timeout":
+                throw new errors.GroundXTimeoutError("Timeout exceeded when calling GET /v1/ingest/documents/{id}.");
+            case "unknown":
+                throw new errors.GroundXError({
+                    message: _response.error.errorMessage,
+                });
+        }
     }
 
     /**
@@ -687,72 +641,62 @@ export class Documents {
      * @example
      *     await client.documents.get("documentId")
      */
-    public get(
-        documentId: string,
-        requestOptions?: Documents.RequestOptions
-    ): core.APIPromise<GroundX.DocumentResponse> {
-        return core.APIPromise.from(
-            (async () => {
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
-                        `v1/ingest/document/${encodeURIComponent(documentId)}`
-                    ),
-                    method: "GET",
-                    headers: {
-                        "X-Fern-Language": "JavaScript",
-                        "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.1.0",
-                        "User-Agent": "groundx/2.1.0",
-                        "X-Fern-Runtime": core.RUNTIME.type,
-                        "X-Fern-Runtime-Version": core.RUNTIME.version,
-                        ...(await this._getCustomAuthorizationHeaders()),
-                        ...requestOptions?.headers,
-                    },
-                    contentType: "application/json",
-                    requestType: "json",
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
+    public async get(documentId: string, requestOptions?: Documents.RequestOptions): Promise<GroundX.DocumentResponse> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
+                `v1/ingest/document/${encodeURIComponent(documentId)}`
+            ),
+            method: "GET",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "groundx",
+                "X-Fern-SDK-Version": "2.1.1",
+                "User-Agent": "groundx/2.1.1",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return _response.body as GroundX.DocumentResponse;
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new GroundX.BadRequestError(_response.error.body as unknown);
+                case 401:
+                    throw new GroundX.UnauthorizedError(_response.error.body as unknown);
+                default:
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.GroundXError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
                 });
-                if (_response.ok) {
-                    return {
-                        ok: _response.ok,
-                        body: _response.body as GroundX.DocumentResponse,
-                        headers: _response.headers,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    switch (_response.error.statusCode) {
-                        case 400:
-                            throw new GroundX.BadRequestError(_response.error.body as unknown);
-                        case 401:
-                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
-                        default:
-                            throw new errors.GroundXError({
-                                statusCode: _response.error.statusCode,
-                                body: _response.error.body,
-                            });
-                    }
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.GroundXError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                        });
-                    case "timeout":
-                        throw new errors.GroundXTimeoutError(
-                            "Timeout exceeded when calling GET /v1/ingest/document/{documentId}."
-                        );
-                    case "unknown":
-                        throw new errors.GroundXError({
-                            message: _response.error.errorMessage,
-                        });
-                }
-            })()
-        );
+            case "timeout":
+                throw new errors.GroundXTimeoutError(
+                    "Timeout exceeded when calling GET /v1/ingest/document/{documentId}."
+                );
+            case "unknown":
+                throw new errors.GroundXError({
+                    message: _response.error.errorMessage,
+                });
+        }
     }
 
     /**
@@ -769,72 +713,65 @@ export class Documents {
      * @example
      *     await client.documents.deleteById("documentId")
      */
-    public deleteById(
+    public async deleteById(
         documentId: string,
         requestOptions?: Documents.RequestOptions
-    ): core.APIPromise<GroundX.IngestResponse> {
-        return core.APIPromise.from(
-            (async () => {
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
-                        `v1/ingest/document/${encodeURIComponent(documentId)}`
-                    ),
-                    method: "DELETE",
-                    headers: {
-                        "X-Fern-Language": "JavaScript",
-                        "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.1.0",
-                        "User-Agent": "groundx/2.1.0",
-                        "X-Fern-Runtime": core.RUNTIME.type,
-                        "X-Fern-Runtime-Version": core.RUNTIME.version,
-                        ...(await this._getCustomAuthorizationHeaders()),
-                        ...requestOptions?.headers,
-                    },
-                    contentType: "application/json",
-                    requestType: "json",
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
+    ): Promise<GroundX.IngestResponse> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
+                `v1/ingest/document/${encodeURIComponent(documentId)}`
+            ),
+            method: "DELETE",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "groundx",
+                "X-Fern-SDK-Version": "2.1.1",
+                "User-Agent": "groundx/2.1.1",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return _response.body as GroundX.IngestResponse;
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new GroundX.BadRequestError(_response.error.body as unknown);
+                case 401:
+                    throw new GroundX.UnauthorizedError(_response.error.body as unknown);
+                default:
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.GroundXError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
                 });
-                if (_response.ok) {
-                    return {
-                        ok: _response.ok,
-                        body: _response.body as GroundX.IngestResponse,
-                        headers: _response.headers,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    switch (_response.error.statusCode) {
-                        case 400:
-                            throw new GroundX.BadRequestError(_response.error.body as unknown);
-                        case 401:
-                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
-                        default:
-                            throw new errors.GroundXError({
-                                statusCode: _response.error.statusCode,
-                                body: _response.error.body,
-                            });
-                    }
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.GroundXError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                        });
-                    case "timeout":
-                        throw new errors.GroundXTimeoutError(
-                            "Timeout exceeded when calling DELETE /v1/ingest/document/{documentId}."
-                        );
-                    case "unknown":
-                        throw new errors.GroundXError({
-                            message: _response.error.errorMessage,
-                        });
-                }
-            })()
-        );
+            case "timeout":
+                throw new errors.GroundXTimeoutError(
+                    "Timeout exceeded when calling DELETE /v1/ingest/document/{documentId}."
+                );
+            case "unknown":
+                throw new errors.GroundXError({
+                    message: _response.error.errorMessage,
+                });
+        }
     }
 
     protected async _getCustomAuthorizationHeaders() {

@@ -6,7 +6,6 @@
  * The type of document (one of the currently supported file types)
  */
 export type DocumentType = "txt" | "docx" | "pptx" | "xlsx" | "pdf" | "png" | "jpg" | "csv" | "tsv" | "json";
-
 export const DocumentType = {
     Txt: "txt",
     Docx: "docx",

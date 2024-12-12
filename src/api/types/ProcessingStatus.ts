@@ -3,7 +3,6 @@
  */
 
 export type ProcessingStatus = "queued" | "processing" | "error" | "complete" | "cancelled";
-
 export const ProcessingStatus = {
     Queued: "queued",
     Processing: "processing",

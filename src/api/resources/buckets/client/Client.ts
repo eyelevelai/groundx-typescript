@@ -41,72 +41,67 @@ export class Buckets {
      * @example
      *     await client.buckets.list()
      */
-    public list(
+    public async list(
         request: GroundX.BucketsListRequest = {},
         requestOptions?: Buckets.RequestOptions
-    ): core.APIPromise<GroundX.BucketListResponse> {
-        return core.APIPromise.from(
-            (async () => {
-                const { n, nextToken } = request;
-                const _queryParams: Record<string, string | string[] | object | object[]> = {};
-                if (n != null) {
-                    _queryParams["n"] = n.toString();
-                }
-                if (nextToken != null) {
-                    _queryParams["nextToken"] = nextToken;
-                }
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
-                        "v1/bucket"
-                    ),
-                    method: "GET",
-                    headers: {
-                        "X-Fern-Language": "JavaScript",
-                        "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.1.0",
-                        "User-Agent": "groundx/2.1.0",
-                        "X-Fern-Runtime": core.RUNTIME.type,
-                        "X-Fern-Runtime-Version": core.RUNTIME.version,
-                        ...(await this._getCustomAuthorizationHeaders()),
-                        ...requestOptions?.headers,
-                    },
-                    contentType: "application/json",
-                    queryParameters: _queryParams,
-                    requestType: "json",
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
+    ): Promise<GroundX.BucketListResponse> {
+        const { n, nextToken } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        if (n != null) {
+            _queryParams["n"] = n.toString();
+        }
+
+        if (nextToken != null) {
+            _queryParams["nextToken"] = nextToken;
+        }
+
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
+                "v1/bucket"
+            ),
+            method: "GET",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "groundx",
+                "X-Fern-SDK-Version": "2.1.1",
+                "User-Agent": "groundx/2.1.1",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            queryParameters: _queryParams,
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return _response.body as GroundX.BucketListResponse;
+        }
+
+        if (_response.error.reason === "status-code") {
+            throw new errors.GroundXError({
+                statusCode: _response.error.statusCode,
+                body: _response.error.body,
+            });
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.GroundXError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
                 });
-                if (_response.ok) {
-                    return {
-                        ok: _response.ok,
-                        body: _response.body as GroundX.BucketListResponse,
-                        headers: _response.headers,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    throw new errors.GroundXError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                    });
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.GroundXError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                        });
-                    case "timeout":
-                        throw new errors.GroundXTimeoutError("Timeout exceeded when calling GET /v1/bucket.");
-                    case "unknown":
-                        throw new errors.GroundXError({
-                            message: _response.error.errorMessage,
-                        });
-                }
-            })()
-        );
+            case "timeout":
+                throw new errors.GroundXTimeoutError("Timeout exceeded when calling GET /v1/bucket.");
+            case "unknown":
+                throw new errors.GroundXError({
+                    message: _response.error.errorMessage,
+                });
+        }
     }
 
     /**
@@ -124,69 +119,62 @@ export class Buckets {
      *         name: "your_bucket_name"
      *     })
      */
-    public create(
+    public async create(
         request: GroundX.BucketCreateRequest,
         requestOptions?: Buckets.RequestOptions
-    ): core.APIPromise<GroundX.BucketResponse> {
-        return core.APIPromise.from(
-            (async () => {
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
-                        "v1/bucket"
-                    ),
-                    method: "POST",
-                    headers: {
-                        "X-Fern-Language": "JavaScript",
-                        "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.1.0",
-                        "User-Agent": "groundx/2.1.0",
-                        "X-Fern-Runtime": core.RUNTIME.type,
-                        "X-Fern-Runtime-Version": core.RUNTIME.version,
-                        ...(await this._getCustomAuthorizationHeaders()),
-                        ...requestOptions?.headers,
-                    },
-                    contentType: "application/json",
-                    requestType: "json",
-                    body: request,
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
+    ): Promise<GroundX.BucketResponse> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
+                "v1/bucket"
+            ),
+            method: "POST",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "groundx",
+                "X-Fern-SDK-Version": "2.1.1",
+                "User-Agent": "groundx/2.1.1",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            body: request,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return _response.body as GroundX.BucketResponse;
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new GroundX.BadRequestError(_response.error.body as unknown);
+                default:
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.GroundXError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
                 });
-                if (_response.ok) {
-                    return {
-                        ok: _response.ok,
-                        body: _response.body as GroundX.BucketResponse,
-                        headers: _response.headers,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    switch (_response.error.statusCode) {
-                        case 400:
-                            throw new GroundX.BadRequestError(_response.error.body as unknown);
-                        default:
-                            throw new errors.GroundXError({
-                                statusCode: _response.error.statusCode,
-                                body: _response.error.body,
-                            });
-                    }
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.GroundXError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                        });
-                    case "timeout":
-                        throw new errors.GroundXTimeoutError("Timeout exceeded when calling POST /v1/bucket.");
-                    case "unknown":
-                        throw new errors.GroundXError({
-                            message: _response.error.errorMessage,
-                        });
-                }
-            })()
-        );
+            case "timeout":
+                throw new errors.GroundXTimeoutError("Timeout exceeded when calling POST /v1/bucket.");
+            case "unknown":
+                throw new errors.GroundXError({
+                    message: _response.error.errorMessage,
+                });
+        }
     }
 
     /**
@@ -203,69 +191,60 @@ export class Buckets {
      * @example
      *     await client.buckets.get(1)
      */
-    public get(bucketId: number, requestOptions?: Buckets.RequestOptions): core.APIPromise<GroundX.BucketResponse> {
-        return core.APIPromise.from(
-            (async () => {
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
-                        `v1/bucket/${encodeURIComponent(bucketId)}`
-                    ),
-                    method: "GET",
-                    headers: {
-                        "X-Fern-Language": "JavaScript",
-                        "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.1.0",
-                        "User-Agent": "groundx/2.1.0",
-                        "X-Fern-Runtime": core.RUNTIME.type,
-                        "X-Fern-Runtime-Version": core.RUNTIME.version,
-                        ...(await this._getCustomAuthorizationHeaders()),
-                        ...requestOptions?.headers,
-                    },
-                    contentType: "application/json",
-                    requestType: "json",
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
+    public async get(bucketId: number, requestOptions?: Buckets.RequestOptions): Promise<GroundX.BucketResponse> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
+                `v1/bucket/${encodeURIComponent(bucketId)}`
+            ),
+            method: "GET",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "groundx",
+                "X-Fern-SDK-Version": "2.1.1",
+                "User-Agent": "groundx/2.1.1",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return _response.body as GroundX.BucketResponse;
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new GroundX.BadRequestError(_response.error.body as unknown);
+                case 401:
+                    throw new GroundX.UnauthorizedError(_response.error.body as unknown);
+                default:
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.GroundXError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
                 });
-                if (_response.ok) {
-                    return {
-                        ok: _response.ok,
-                        body: _response.body as GroundX.BucketResponse,
-                        headers: _response.headers,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    switch (_response.error.statusCode) {
-                        case 400:
-                            throw new GroundX.BadRequestError(_response.error.body as unknown);
-                        case 401:
-                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
-                        default:
-                            throw new errors.GroundXError({
-                                statusCode: _response.error.statusCode,
-                                body: _response.error.body,
-                            });
-                    }
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.GroundXError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                        });
-                    case "timeout":
-                        throw new errors.GroundXTimeoutError(
-                            "Timeout exceeded when calling GET /v1/bucket/{bucketId}."
-                        );
-                    case "unknown":
-                        throw new errors.GroundXError({
-                            message: _response.error.errorMessage,
-                        });
-                }
-            })()
-        );
+            case "timeout":
+                throw new errors.GroundXTimeoutError("Timeout exceeded when calling GET /v1/bucket/{bucketId}.");
+            case "unknown":
+                throw new errors.GroundXError({
+                    message: _response.error.errorMessage,
+                });
+        }
     }
 
     /**
@@ -285,74 +264,65 @@ export class Buckets {
      *         newName: "your_bucket_name"
      *     })
      */
-    public update(
+    public async update(
         bucketId: number,
         request: GroundX.BucketUpdateRequest,
         requestOptions?: Buckets.RequestOptions
-    ): core.APIPromise<GroundX.BucketUpdateResponse> {
-        return core.APIPromise.from(
-            (async () => {
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
-                        `v1/bucket/${encodeURIComponent(bucketId)}`
-                    ),
-                    method: "PUT",
-                    headers: {
-                        "X-Fern-Language": "JavaScript",
-                        "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.1.0",
-                        "User-Agent": "groundx/2.1.0",
-                        "X-Fern-Runtime": core.RUNTIME.type,
-                        "X-Fern-Runtime-Version": core.RUNTIME.version,
-                        ...(await this._getCustomAuthorizationHeaders()),
-                        ...requestOptions?.headers,
-                    },
-                    contentType: "application/json",
-                    requestType: "json",
-                    body: request,
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
+    ): Promise<GroundX.BucketUpdateResponse> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
+                `v1/bucket/${encodeURIComponent(bucketId)}`
+            ),
+            method: "PUT",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "groundx",
+                "X-Fern-SDK-Version": "2.1.1",
+                "User-Agent": "groundx/2.1.1",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            body: request,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return _response.body as GroundX.BucketUpdateResponse;
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new GroundX.BadRequestError(_response.error.body as unknown);
+                case 401:
+                    throw new GroundX.UnauthorizedError(_response.error.body as unknown);
+                default:
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.GroundXError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
                 });
-                if (_response.ok) {
-                    return {
-                        ok: _response.ok,
-                        body: _response.body as GroundX.BucketUpdateResponse,
-                        headers: _response.headers,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    switch (_response.error.statusCode) {
-                        case 400:
-                            throw new GroundX.BadRequestError(_response.error.body as unknown);
-                        case 401:
-                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
-                        default:
-                            throw new errors.GroundXError({
-                                statusCode: _response.error.statusCode,
-                                body: _response.error.body,
-                            });
-                    }
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.GroundXError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                        });
-                    case "timeout":
-                        throw new errors.GroundXTimeoutError(
-                            "Timeout exceeded when calling PUT /v1/bucket/{bucketId}."
-                        );
-                    case "unknown":
-                        throw new errors.GroundXError({
-                            message: _response.error.errorMessage,
-                        });
-                }
-            })()
-        );
+            case "timeout":
+                throw new errors.GroundXTimeoutError("Timeout exceeded when calling PUT /v1/bucket/{bucketId}.");
+            case "unknown":
+                throw new errors.GroundXError({
+                    message: _response.error.errorMessage,
+                });
+        }
     }
 
     /**
@@ -369,69 +339,60 @@ export class Buckets {
      * @example
      *     await client.buckets.delete(1)
      */
-    public delete(bucketId: number, requestOptions?: Buckets.RequestOptions): core.APIPromise<GroundX.MessageResponse> {
-        return core.APIPromise.from(
-            (async () => {
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
-                        `v1/bucket/${encodeURIComponent(bucketId)}`
-                    ),
-                    method: "DELETE",
-                    headers: {
-                        "X-Fern-Language": "JavaScript",
-                        "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.1.0",
-                        "User-Agent": "groundx/2.1.0",
-                        "X-Fern-Runtime": core.RUNTIME.type,
-                        "X-Fern-Runtime-Version": core.RUNTIME.version,
-                        ...(await this._getCustomAuthorizationHeaders()),
-                        ...requestOptions?.headers,
-                    },
-                    contentType: "application/json",
-                    requestType: "json",
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
+    public async delete(bucketId: number, requestOptions?: Buckets.RequestOptions): Promise<GroundX.MessageResponse> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
+                `v1/bucket/${encodeURIComponent(bucketId)}`
+            ),
+            method: "DELETE",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "groundx",
+                "X-Fern-SDK-Version": "2.1.1",
+                "User-Agent": "groundx/2.1.1",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return _response.body as GroundX.MessageResponse;
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new GroundX.BadRequestError(_response.error.body as unknown);
+                case 401:
+                    throw new GroundX.UnauthorizedError(_response.error.body as unknown);
+                default:
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.GroundXError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
                 });
-                if (_response.ok) {
-                    return {
-                        ok: _response.ok,
-                        body: _response.body as GroundX.MessageResponse,
-                        headers: _response.headers,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    switch (_response.error.statusCode) {
-                        case 400:
-                            throw new GroundX.BadRequestError(_response.error.body as unknown);
-                        case 401:
-                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
-                        default:
-                            throw new errors.GroundXError({
-                                statusCode: _response.error.statusCode,
-                                body: _response.error.body,
-                            });
-                    }
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.GroundXError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                        });
-                    case "timeout":
-                        throw new errors.GroundXTimeoutError(
-                            "Timeout exceeded when calling DELETE /v1/bucket/{bucketId}."
-                        );
-                    case "unknown":
-                        throw new errors.GroundXError({
-                            message: _response.error.errorMessage,
-                        });
-                }
-            })()
-        );
+            case "timeout":
+                throw new errors.GroundXTimeoutError("Timeout exceeded when calling DELETE /v1/bucket/{bucketId}.");
+            case "unknown":
+                throw new errors.GroundXError({
+                    message: _response.error.errorMessage,
+                });
+        }
     }
 
     protected async _getCustomAuthorizationHeaders() {

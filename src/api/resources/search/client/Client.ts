@@ -50,84 +50,80 @@ export class Search {
      *         query: "my search query"
      *     })
      */
-    public content(
+    public async content(
         id: GroundX.SearchContentRequestId,
         request: GroundX.SearchRequest,
         requestOptions?: Search.RequestOptions
-    ): core.APIPromise<GroundX.SearchResponse> {
-        return core.APIPromise.from(
-            (async () => {
-                const { n, nextToken, verbosity, ..._body } = request;
-                const _queryParams: Record<string, string | string[] | object | object[]> = {};
-                if (n != null) {
-                    _queryParams["n"] = n.toString();
-                }
-                if (nextToken != null) {
-                    _queryParams["nextToken"] = nextToken;
-                }
-                if (verbosity != null) {
-                    _queryParams["verbosity"] = verbosity.toString();
-                }
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
-                        `v1/search/${encodeURIComponent(id)}`
-                    ),
-                    method: "POST",
-                    headers: {
-                        "X-Fern-Language": "JavaScript",
-                        "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.1.0",
-                        "User-Agent": "groundx/2.1.0",
-                        "X-Fern-Runtime": core.RUNTIME.type,
-                        "X-Fern-Runtime-Version": core.RUNTIME.version,
-                        ...(await this._getCustomAuthorizationHeaders()),
-                        ...requestOptions?.headers,
-                    },
-                    contentType: "application/json",
-                    queryParameters: _queryParams,
-                    requestType: "json",
-                    body: _body,
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
+    ): Promise<GroundX.SearchResponse> {
+        const { n, nextToken, verbosity, ..._body } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        if (n != null) {
+            _queryParams["n"] = n.toString();
+        }
+
+        if (nextToken != null) {
+            _queryParams["nextToken"] = nextToken;
+        }
+
+        if (verbosity != null) {
+            _queryParams["verbosity"] = verbosity.toString();
+        }
+
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
+                `v1/search/${encodeURIComponent(id)}`
+            ),
+            method: "POST",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "groundx",
+                "X-Fern-SDK-Version": "2.1.1",
+                "User-Agent": "groundx/2.1.1",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            queryParameters: _queryParams,
+            requestType: "json",
+            body: _body,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return _response.body as GroundX.SearchResponse;
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new GroundX.BadRequestError(_response.error.body as unknown);
+                case 401:
+                    throw new GroundX.UnauthorizedError(_response.error.body as unknown);
+                default:
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.GroundXError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
                 });
-                if (_response.ok) {
-                    return {
-                        ok: _response.ok,
-                        body: _response.body as GroundX.SearchResponse,
-                        headers: _response.headers,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    switch (_response.error.statusCode) {
-                        case 400:
-                            throw new GroundX.BadRequestError(_response.error.body as unknown);
-                        case 401:
-                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
-                        default:
-                            throw new errors.GroundXError({
-                                statusCode: _response.error.statusCode,
-                                body: _response.error.body,
-                            });
-                    }
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.GroundXError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                        });
-                    case "timeout":
-                        throw new errors.GroundXTimeoutError("Timeout exceeded when calling POST /v1/search/{id}.");
-                    case "unknown":
-                        throw new errors.GroundXError({
-                            message: _response.error.errorMessage,
-                        });
-                }
-            })()
-        );
+            case "timeout":
+                throw new errors.GroundXTimeoutError("Timeout exceeded when calling POST /v1/search/{id}.");
+            case "unknown":
+                throw new errors.GroundXError({
+                    message: _response.error.errorMessage,
+                });
+        }
     }
 
     /**
@@ -150,85 +146,79 @@ export class Search {
      *         documentIds: ["docUUID1", "docUUID2"]
      *     })
      */
-    public documents(
+    public async documents(
         request: GroundX.SearchDocumentsRequest,
         requestOptions?: Search.RequestOptions
-    ): core.APIPromise<GroundX.SearchResponse> {
-        return core.APIPromise.from(
-            (async () => {
-                const { n, nextToken, verbosity, ..._body } = request;
-                const _queryParams: Record<string, string | string[] | object | object[]> = {};
-                if (n != null) {
-                    _queryParams["n"] = n.toString();
-                }
-                if (nextToken != null) {
-                    _queryParams["nextToken"] = nextToken;
-                }
-                if (verbosity != null) {
-                    _queryParams["verbosity"] = verbosity.toString();
-                }
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
-                        "v1/search/documents"
-                    ),
-                    method: "POST",
-                    headers: {
-                        "X-Fern-Language": "JavaScript",
-                        "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.1.0",
-                        "User-Agent": "groundx/2.1.0",
-                        "X-Fern-Runtime": core.RUNTIME.type,
-                        "X-Fern-Runtime-Version": core.RUNTIME.version,
-                        ...(await this._getCustomAuthorizationHeaders()),
-                        ...requestOptions?.headers,
-                    },
-                    contentType: "application/json",
-                    queryParameters: _queryParams,
-                    requestType: "json",
-                    body: _body,
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
+    ): Promise<GroundX.SearchResponse> {
+        const { n, nextToken, verbosity, ..._body } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        if (n != null) {
+            _queryParams["n"] = n.toString();
+        }
+
+        if (nextToken != null) {
+            _queryParams["nextToken"] = nextToken;
+        }
+
+        if (verbosity != null) {
+            _queryParams["verbosity"] = verbosity.toString();
+        }
+
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
+                "v1/search/documents"
+            ),
+            method: "POST",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "groundx",
+                "X-Fern-SDK-Version": "2.1.1",
+                "User-Agent": "groundx/2.1.1",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            queryParameters: _queryParams,
+            requestType: "json",
+            body: _body,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return _response.body as GroundX.SearchResponse;
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new GroundX.BadRequestError(_response.error.body as unknown);
+                case 401:
+                    throw new GroundX.UnauthorizedError(_response.error.body as unknown);
+                default:
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.GroundXError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
                 });
-                if (_response.ok) {
-                    return {
-                        ok: _response.ok,
-                        body: _response.body as GroundX.SearchResponse,
-                        headers: _response.headers,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    switch (_response.error.statusCode) {
-                        case 400:
-                            throw new GroundX.BadRequestError(_response.error.body as unknown);
-                        case 401:
-                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
-                        default:
-                            throw new errors.GroundXError({
-                                statusCode: _response.error.statusCode,
-                                body: _response.error.body,
-                            });
-                    }
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.GroundXError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                        });
-                    case "timeout":
-                        throw new errors.GroundXTimeoutError(
-                            "Timeout exceeded when calling POST /v1/search/documents."
-                        );
-                    case "unknown":
-                        throw new errors.GroundXError({
-                            message: _response.error.errorMessage,
-                        });
-                }
-            })()
-        );
+            case "timeout":
+                throw new errors.GroundXTimeoutError("Timeout exceeded when calling POST /v1/search/documents.");
+            case "unknown":
+                throw new errors.GroundXError({
+                    message: _response.error.errorMessage,
+                });
+        }
     }
 
     protected async _getCustomAuthorizationHeaders() {

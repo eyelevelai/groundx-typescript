@@ -6,7 +6,6 @@
  * The attribute to use to sort results
  */
 export type Sort = "name" | "created";
-
 export const Sort = {
     Name: "name",
     Created: "created",

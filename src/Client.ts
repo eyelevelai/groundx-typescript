@@ -31,39 +31,34 @@ export declare namespace GroundXClient {
 }
 
 export class GroundXClient {
-    constructor(protected readonly _options: GroundXClient.Options) {}
-
     protected _documents: Documents | undefined;
+    protected _search: Search | undefined;
+    protected _buckets: Buckets | undefined;
+    protected _groups: Groups | undefined;
+    protected _customer: Customer | undefined;
+    protected _health: Health | undefined;
+
+    constructor(protected readonly _options: GroundXClient.Options) {}
 
     public get documents(): Documents {
         return (this._documents ??= new Documents(this._options));
     }
 
-    protected _search: Search | undefined;
-
     public get search(): Search {
         return (this._search ??= new Search(this._options));
     }
-
-    protected _buckets: Buckets | undefined;
 
     public get buckets(): Buckets {
         return (this._buckets ??= new Buckets(this._options));
     }
 
-    protected _groups: Groups | undefined;
-
     public get groups(): Groups {
         return (this._groups ??= new Groups(this._options));
     }
 
-    protected _customer: Customer | undefined;
-
     public get customer(): Customer {
         return (this._customer ??= new Customer(this._options));
     }
-
-    protected _health: Health | undefined;
 
     public get health(): Health {
         return (this._health ??= new Health(this._options));

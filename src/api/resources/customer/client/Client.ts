@@ -38,60 +38,53 @@ export class Customer {
      * @example
      *     await client.customer.get()
      */
-    public get(requestOptions?: Customer.RequestOptions): core.APIPromise<GroundX.CustomerResponse> {
-        return core.APIPromise.from(
-            (async () => {
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
-                        "v1/customer"
-                    ),
-                    method: "GET",
-                    headers: {
-                        "X-Fern-Language": "JavaScript",
-                        "X-Fern-SDK-Name": "groundx",
-                        "X-Fern-SDK-Version": "2.1.0",
-                        "User-Agent": "groundx/2.1.0",
-                        "X-Fern-Runtime": core.RUNTIME.type,
-                        "X-Fern-Runtime-Version": core.RUNTIME.version,
-                        ...(await this._getCustomAuthorizationHeaders()),
-                        ...requestOptions?.headers,
-                    },
-                    contentType: "application/json",
-                    requestType: "json",
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
+    public async get(requestOptions?: Customer.RequestOptions): Promise<GroundX.CustomerResponse> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
+                "v1/customer"
+            ),
+            method: "GET",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "groundx",
+                "X-Fern-SDK-Version": "2.1.1",
+                "User-Agent": "groundx/2.1.1",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return _response.body as GroundX.CustomerResponse;
+        }
+
+        if (_response.error.reason === "status-code") {
+            throw new errors.GroundXError({
+                statusCode: _response.error.statusCode,
+                body: _response.error.body,
+            });
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.GroundXError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
                 });
-                if (_response.ok) {
-                    return {
-                        ok: _response.ok,
-                        body: _response.body as GroundX.CustomerResponse,
-                        headers: _response.headers,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    throw new errors.GroundXError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                    });
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.GroundXError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                        });
-                    case "timeout":
-                        throw new errors.GroundXTimeoutError("Timeout exceeded when calling GET /v1/customer.");
-                    case "unknown":
-                        throw new errors.GroundXError({
-                            message: _response.error.errorMessage,
-                        });
-                }
-            })()
-        );
+            case "timeout":
+                throw new errors.GroundXTimeoutError("Timeout exceeded when calling GET /v1/customer.");
+            case "unknown":
+                throw new errors.GroundXError({
+                    message: _response.error.errorMessage,
+                });
+        }
     }
 
     protected async _getCustomAuthorizationHeaders() {
