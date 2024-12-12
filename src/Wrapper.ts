@@ -5,6 +5,7 @@ import { GroundXClient as FernClient } from "./Client";
 
 import * as GroundX from "./api/index";
 import * as core from "./core";
+import * as environments from "./environments";
 import * as errors from "./errors/index";
 import * as path from "path";
 
@@ -88,11 +89,6 @@ export class GroundXClient extends FernClient {
         return core.APIPromise.from(
             (async () => {
                 // Handle local documents
-                const url = urlJoin(
-                    (await core.Supplier.get(this._options.environment)) ?? "default-environment",
-                    "v1/ingest/documents/local"
-                );
-
                 const formData = new FormData();
                 for (const { fileName, filePath, mimeType, metadata } of localDocuments) {
                     formData.append(
@@ -108,16 +104,18 @@ export class GroundXClient extends FernClient {
                 }
 
                 const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url,
+                    url: urlJoin(
+                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
+                        "v1/ingest/documents/local"
+                    ),
                     method: "POST",
                     headers: {
                         ...(await this._getCustomAuthorizationHeaders()),
                         ...requestOptions?.headers,
                     },
                     body: formData,
-                    timeoutMs: requestOptions?.timeoutInSeconds
-                        ? requestOptions.timeoutInSeconds * 1000
-                        : 60000,
+                    timeoutMs:
+                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                     maxRetries: requestOptions?.maxRetries,
                     abortSignal: requestOptions?.abortSignal,
                 });
