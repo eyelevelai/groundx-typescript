@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "extendedDiagnostics": true,
+        "sourceMap": true,
         "strict": true,
         "target": "ES6",
         "module": "CommonJS",
