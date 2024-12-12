@@ -5,7 +5,6 @@ import { GroundXClient as FernClient } from "./Client";
 
 import * as GroundX from "./api/index";
 import * as core from "./core";
-import * as environments from "./environments";
 import * as errors from "./errors/index";
 import * as path from "path";
 
@@ -98,7 +97,7 @@ export class GroundXClient extends FernClient {
                 for (const { fileName, filePath, mimeType, metadata } of localDocuments) {
                     formData.append(
                         "blob",
-                        new Blob([await this.readFile(filePath)], { type: mimeType }),
+                        new Blob([this.readFile(filePath)], { type: mimeType }),
                         fileName
                     );
                     formData.append(
@@ -179,6 +178,7 @@ export class GroundXClient extends FernClient {
     private isValidLocalPath(filePath: string): boolean {
         try {
             const expandedPath = this.expandedPath(filePath);
+
             const stats = fs.statSync(expandedPath);
             return stats.isFile();
         } catch {
@@ -220,9 +220,10 @@ export class GroundXClient extends FernClient {
         return "application/octet-stream";
     }
 
-    private async readFile(filePath: string): Promise<Buffer> {
-        const fs = await import("fs/promises");
-        return await fs.readFile(filePath);
+    private readFile(filePath: string): Buffer {
+        const expandedPath = this.expandedPath(filePath);
+
+        return fs.readFileSync(expandedPath);
     }
 
     protected async _getCustomAuthorizationHeaders() {
