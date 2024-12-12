@@ -129,14 +129,12 @@ export class GroundXClient extends FernClient {
                         headers: _response.headers,
                     };
                 }
-
-                // Handle errors
-                if (_response.error?.reason === "status-code") {
+                if (_response.error.reason === "status-code") {
                     switch (_response.error.statusCode) {
                         case 400:
-                            throw new GroundX.BadRequestError(_response.error.body);
+                            throw new GroundX.BadRequestError(_response.error.body as unknown);
                         case 401:
-                            throw new GroundX.UnauthorizedError(_response.error.body);
+                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
                         default:
                             throw new errors.GroundXError({
                                 statusCode: _response.error.statusCode,
@@ -144,10 +142,21 @@ export class GroundXClient extends FernClient {
                             });
                     }
                 }
-
-                throw new errors.GroundXError({
-                    message: "Unexpected error during document ingestion.",
-                });
+                switch (_response.error.reason) {
+                    case "non-json":
+                        throw new errors.GroundXError({
+                            statusCode: _response.error.statusCode,
+                            body: _response.error.rawBody,
+                        });
+                    case "timeout":
+                        throw new errors.GroundXTimeoutError(
+                            "Timeout exceeded when calling POST /v1/ingest/documents/local."
+                        );
+                    case "unknown":
+                        throw new errors.GroundXError({
+                            message: _response.error.errorMessage,
+                        });
+                }
             })()
         );
     }
