@@ -13,10 +13,10 @@ import urlJoin from "url-join";
 
 export class GroundXClient extends FernClient {
   
-    public ingest(
+    public async ingest(
         documents: GroundX.Document[],
         requestOptions?: FernClient.RequestOptions
-    ): core.APIPromise<GroundX.IngestResponse> {
+    ): Promise<GroundX.IngestResponse> {
         if (documents.length === 0) {
             throw new Error("No documents provided for ingestion.");
         }
@@ -86,77 +86,68 @@ export class GroundXClient extends FernClient {
             return this.documents.ingestRemote({ documents: remoteDocuments }, requestOptions);
         }
 
-        return core.APIPromise.from(
-            (async () => {
-                // Handle local documents
-                const formData = new FormData();
-                for (const { fileName, filePath, mimeType, metadata } of localDocuments) {
-                    formData.append(
-                        "blob",
-                        new Blob([this.readFile(filePath)], { type: mimeType }),
-                        fileName
-                    );
-                    formData.append(
-                        "metadata",
-                        new Blob([JSON.stringify(metadata)], { type: "application/json" }),
-                        "data.json"
-                    );
-                }
+        // Handle local documents
+        const formData = new FormData();
+        for (const { fileName, filePath, mimeType, metadata } of localDocuments) {
+            formData.append(
+                "blob",
+                new Blob([this.readFile(filePath)], { type: mimeType }),
+                fileName
+            );
+            formData.append(
+                "metadata",
+                new Blob([JSON.stringify(metadata)], { type: "application/json" }),
+                "data.json"
+            );
+        }
 
-                const _response = await (this._options.fetcher ?? core.fetcher)({
-                    url: urlJoin(
-                        (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
-                        "v1/ingest/documents/local"
-                    ),
-                    method: "POST",
-                    headers: {
-                        ...(await this._getCustomAuthorizationHeaders()),
-                        ...requestOptions?.headers,
-                    },
-                    body: formData,
-                    timeoutMs:
-                        requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                    maxRetries: requestOptions?.maxRetries,
-                    abortSignal: requestOptions?.abortSignal,
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
+                "v1/ingest/documents/local"
+            ),
+            method: "POST",
+            headers: {
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            body: formData,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+
+        if (_response.ok) {
+            return _response.body as GroundX.IngestResponse;
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new GroundX.BadRequestError(_response.error.body as unknown);
+                case 401:
+                    throw new GroundX.UnauthorizedError(_response.error.body as unknown);
+                default:
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.GroundXError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
                 });
-
-                if (_response.ok) {
-                    return {
-                        ok: _response.ok,
-                        body: _response.body as GroundX.IngestResponse,
-                        headers: _response.headers,
-                    };
-                }
-                if (_response.error.reason === "status-code") {
-                    switch (_response.error.statusCode) {
-                        case 400:
-                            throw new GroundX.BadRequestError(_response.error.body as unknown);
-                        case 401:
-                            throw new GroundX.UnauthorizedError(_response.error.body as unknown);
-                        default:
-                            throw new errors.GroundXError({
-                                statusCode: _response.error.statusCode,
-                                body: _response.error.body,
-                            });
-                    }
-                }
-                switch (_response.error.reason) {
-                    case "non-json":
-                        throw new errors.GroundXError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.rawBody,
-                        });
-                    case "timeout":
-                        throw new errors.GroundXTimeoutError(
-                            "Timeout exceeded when calling POST /v1/ingest/documents/local."
-                        );
-                    case "unknown":
-                        throw new errors.GroundXError({
-                            message: _response.error.errorMessage,
-                        });
-                }
-            })()
-        );
+            case "timeout":
+                throw new errors.GroundXTimeoutError("Timeout exceeded when calling POST /v1/ingest/documents/local.");
+            case "unknown":
+                throw new errors.GroundXError({
+                    message: _response.error.errorMessage,
+                });
+        }
     }
 
     private expandedPath(filePath: string): string {
