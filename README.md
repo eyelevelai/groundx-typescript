@@ -1,9 +1,9 @@
-# Eyelevel TypeScript Library
+# GroundX TypeScript Library
 
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2Feyelevelai%2Fgroundx-typescript)
 [![npm shield](https://img.shields.io/npm/v/groundx)](https://www.npmjs.com/package/groundx)
 
-The Eyelevel TypeScript library provides convenient access to the Eyelevel API from TypeScript.
+The GroundX TypeScript library provides convenient access to the GroundX API from TypeScript.
 
 ## Documentation
 
@@ -27,16 +27,17 @@ Instantiate and use the client with the following:
 import { GroundXClient } from "groundx";
 
 const client = new GroundXClient({ apiKey: "YOUR_API_KEY" });
-await client.documents.ingestRemote({
-    documents: [
+
+await client.ingest(
+    [
         {
             bucketId: 1234,
             fileName: "my_file1.txt",
+            filePath: "https://my.source.url.com/file1.txt",
             fileType: "txt",
-            sourceUrl: "https://my.source.url.com/file1.txt",
         },
     ],
-});
+);
 ```
 
 ## Request And Response Types
@@ -47,7 +48,7 @@ following namespace:
 ```typescript
 import { GroundX } from "groundx";
 
-const request: GroundX.DocumentRemoteIngestRequest = {
+const request: GroundX.Document = {
     ...
 };
 ```
@@ -61,7 +62,7 @@ will be thrown.
 import { GroundXError } from "groundx";
 
 try {
-    await client.documents.ingestRemote(...);
+    await client.ingest(...);
 } catch (err) {
     if (err instanceof GroundXError) {
         console.log(err.statusCode);
@@ -79,7 +80,7 @@ The SDK provides access to raw response data, including headers, through the `.a
 the parsed response body will be available in the `body` field, along with the response headers:
 
 ```typescript
-const response = await client.documents.ingestRemote(...).asRaw();
+const response = await client.ingest(...).asRaw();
 
 console.log(response.headers['X-My-Header']);
 console.log(response.body);
@@ -90,7 +91,7 @@ console.log(response.body);
 If you would like to send additional headers as part of the request, use the `headers` request option.
 
 ```typescript
-const response = await client.documents.ingestRemote(..., {
+const response = await client.ingest(..., {
     headers: {
         'X-Custom-Header': 'custom value'
     }
@@ -112,7 +113,7 @@ A request is deemed retriable when any of the following HTTP status codes is ret
 Use the `maxRetries` request option to configure this behavior.
 
 ```typescript
-const response = await client.documents.ingestRemote(..., {
+const response = await client.ingest(..., {
     maxRetries: 0 // override maxRetries at the request level
 });
 ```
@@ -122,7 +123,7 @@ const response = await client.documents.ingestRemote(..., {
 The SDK defaults to a 60 second timeout. Use the `timeoutInSeconds` option to configure this behavior.
 
 ```typescript
-const response = await client.documents.ingestRemote(..., {
+const response = await client.ingest(..., {
     timeoutInSeconds: 30 // override timeout to 30s
 });
 ```
@@ -133,7 +134,7 @@ The SDK allows users to abort requests at any point by passing in an abort signa
 
 ```typescript
 const controller = new AbortController();
-const response = await client.documents.ingestRemote(..., {
+const response = await client.ingest(..., {
     abortSignal: controller.signal
 });
 controller.abort(); // aborts the request
