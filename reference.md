@@ -178,8 +178,8 @@ await client.documents.crawlWebsite({
     websites: [
         {
             bucketId: 1234,
-            cap: 100,
-            depth: 3,
+            cap: 10,
+            depth: 2,
             searchData: {
                 key: "value",
             },
@@ -298,8 +298,6 @@ await client.documents.list();
 
 Delete multiple documents hosted on GroundX
 
- 
-
 </dd>
 </dl>
 </dd>
@@ -314,7 +312,9 @@ Delete multiple documents hosted on GroundX
 <dd>
 
 ```typescript
-await client.documents.delete();
+await client.documents.delete({
+    documentIds: "123e4567-e89b-12d3-a456-426614174000,9f7c11a6-24b8-4d52-a9f3-90a7e70a9e49",
+});
 ```
 
 </dd>
@@ -362,8 +362,6 @@ await client.documents.delete();
 <dd>
 
 Get the current status of an ingest, initiated with documents.ingest_remote, documents.ingest_local, or documents.crawl_website, by specifying the processId (the processId is included in the response of the documents.ingest functions).
-
- 
 
 </dd>
 </dl>
@@ -427,8 +425,6 @@ await client.documents.getProcessingStatusById("processId");
 <dd>
 
 lookup the document(s) associated with a processId, bucketId, groupId, or projectId.
-
- 
 
 </dd>
 </dl>
@@ -501,8 +497,6 @@ await client.documents.lookup(1);
 
 Look up an existing document by documentId.
 
- 
-
 </dd>
 </dl>
 </dd>
@@ -565,8 +559,6 @@ await client.documents.get("documentId");
 <dd>
 
 Delete a single document hosted on GroundX
-
- 
 
 </dd>
 </dl>
@@ -632,10 +624,7 @@ await client.documents.deleteById("documentId");
 <dd>
 
 Search documents on GroundX for the most relevant information to a given query.
-
-The result of this query is typically used in one of two ways; result['search']['text'] can be used to provide context to a language model, facilitating RAG, or result['search']['results'] can be used to observe chunks of text which are relevant to the query, facilitating citation.
-
- 
+The result of this query is typically used in one of two ways; `result.search.text` can be used to provide context to a language model, facilitating RAG, or `result.search.results` can be used to observe chunks of text which are relevant to the query, facilitating citation.
 
 </dd>
 </dl>
@@ -710,10 +699,7 @@ await client.search.content(1, {
 <dd>
 
 Search documents on GroundX for the most relevant information to a given query by documentId(s).
-
-The result of this query is typically used in one of two ways; result['search']['text'] can be used to provide context to a language model, facilitating RAG, or result['search']['results'] can be used to observe chunks of text which are relevant to the query, facilitating citation.
-
- 
+The result of this query is typically used in one of two ways; `result.search.text` can be used to provide context to a language model, facilitating RAG, or `result.search.results` can be used to observe chunks of text which are relevant to the query, facilitating citation.
 
 </dd>
 </dl>
@@ -784,8 +770,6 @@ await client.search.documents({
 
 List all buckets within your GroundX account
 
- 
-
 </dd>
 </dl>
 </dd>
@@ -848,8 +832,6 @@ await client.buckets.list();
 <dd>
 
 Create a new bucket.
-
- 
 
 </dd>
 </dl>
@@ -916,8 +898,6 @@ await client.buckets.create({
 
 Look up a specific bucket by its bucketId.
 
- 
-
 </dd>
 </dl>
 </dd>
@@ -980,8 +960,6 @@ await client.buckets.get(1);
 <dd>
 
 Rename a bucket.
-
- 
 
 </dd>
 </dl>
@@ -1056,8 +1034,6 @@ await client.buckets.update(1, {
 
 Delete a bucket.
 
- 
-
 </dd>
 </dl>
 </dd>
@@ -1123,8 +1099,6 @@ await client.buckets.delete(1);
 
 list all groups within your GroundX account.
 
- 
-
 </dd>
 </dl>
 </dd>
@@ -1187,8 +1161,6 @@ await client.groups.list();
 <dd>
 
 create a new group, a group being a collection of buckets which can be searched.
-
- 
 
 </dd>
 </dl>
@@ -1255,8 +1227,6 @@ await client.groups.create({
 
 look up a specific group by its groupId.
 
- 
-
 </dd>
 </dl>
 </dd>
@@ -1319,8 +1289,6 @@ await client.groups.get(1);
 <dd>
 
 Rename a group
-
- 
 
 </dd>
 </dl>
@@ -1395,8 +1363,6 @@ await client.groups.update(1, {
 
 Delete a group.
 
- 
-
 </dd>
 </dl>
 </dd>
@@ -1459,8 +1425,6 @@ await client.groups.delete(1);
 <dd>
 
 Add an existing bucket to an existing group. Buckets and groups can be associated many to many.
-
- 
 
 </dd>
 </dl>
@@ -1532,8 +1496,6 @@ await client.groups.addBucket(1, 1);
 <dd>
 
 remove a bucket from a group. Buckets and groups can be associated many to many, this removes one bucket to group association without disturbing others.
-
- 
 
 </dd>
 </dl>

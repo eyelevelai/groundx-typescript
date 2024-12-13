@@ -9,8 +9,8 @@ import * as GroundX from "../../../../index";
  *     {
  *         websites: [{
  *                 bucketId: 1234,
- *                 cap: 100,
- *                 depth: 3,
+ *                 cap: 10,
+ *                 depth: 2,
  *                 searchData: {
  *                     "key": "value"
  *                 },

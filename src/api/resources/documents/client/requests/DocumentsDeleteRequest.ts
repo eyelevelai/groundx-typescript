@@ -4,7 +4,9 @@
 
 /**
  * @example
- *     {}
+ *     {
+ *         documentIds: "123e4567-e89b-12d3-a456-426614174000,9f7c11a6-24b8-4d52-a9f3-90a7e70a9e49"
+ *     }
  */
 export interface DocumentsDeleteRequest {
     /**

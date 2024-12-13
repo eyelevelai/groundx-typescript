@@ -32,10 +32,7 @@ export class Search {
 
     /**
      * Search documents on GroundX for the most relevant information to a given query.
-     *
-     * The result of this query is typically used in one of two ways; result['search']['text'] can be used to provide context to a language model, facilitating RAG, or result['search']['results'] can be used to observe chunks of text which are relevant to the query, facilitating citation.
-     *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+     * The result of this query is typically used in one of two ways; `result.search.text` can be used to provide context to a language model, facilitating RAG, or `result.search.results` can be used to observe chunks of text which are relevant to the query, facilitating citation.
      *
      * @param {GroundX.SearchContentRequestId} id - The bucketId, groupId, projectId, or documentId to be searched. The document or documents within the specified container will be compared to the query, and relevant information will be extracted.
      * @param {GroundX.SearchRequest} request
@@ -78,8 +75,8 @@ export class Search {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -128,10 +125,7 @@ export class Search {
 
     /**
      * Search documents on GroundX for the most relevant information to a given query by documentId(s).
-     *
-     * The result of this query is typically used in one of two ways; result['search']['text'] can be used to provide context to a language model, facilitating RAG, or result['search']['results'] can be used to observe chunks of text which are relevant to the query, facilitating citation.
-     *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+     * The result of this query is typically used in one of two ways; `result.search.text` can be used to provide context to a language model, facilitating RAG, or `result.search.results` can be used to observe chunks of text which are relevant to the query, facilitating citation.
      *
      * @param {GroundX.SearchDocumentsRequest} request
      * @param {Search.RequestOptions} requestOptions - Request-specific configuration.
@@ -173,8 +167,8 @@ export class Search {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

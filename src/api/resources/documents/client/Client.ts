@@ -33,8 +33,6 @@ export class Documents {
     /**
      * Ingest documents hosted on public URLs into a GroundX bucket.
      *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-     *
      * @param {GroundX.DocumentRemoteIngestRequest} request
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -64,8 +62,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -114,8 +112,6 @@ export class Documents {
     /**
      * Upload documents hosted on a local file system into a GroundX bucket.
      *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-     *
      * @param {GroundX.DocumentLocalIngestRequest} request
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -145,8 +141,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -195,8 +191,6 @@ export class Documents {
     /**
      * Upload the content of a publicly accessible website for ingestion into a GroundX bucket. This is done by following links within a specified URL, recursively, up to a specified depth or number of pages.
      *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-     *
      * @param {GroundX.WebsiteCrawlRequest} request
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -207,8 +201,8 @@ export class Documents {
      *     await client.documents.crawlWebsite({
      *         websites: [{
      *                 bucketId: 1234,
-     *                 cap: 100,
-     *                 depth: 3,
+     *                 cap: 10,
+     *                 depth: 2,
      *                 searchData: {
      *                     "key": "value"
      *                 },
@@ -229,8 +223,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -281,8 +275,6 @@ export class Documents {
     /**
      * lookup all documents across all resources which are currently on GroundX
      *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-     *
      * @param {GroundX.DocumentsListRequest} request
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -328,8 +320,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -371,8 +363,6 @@ export class Documents {
     /**
      * Delete multiple documents hosted on GroundX
      *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-     *
      * @param {GroundX.DocumentsDeleteRequest} request
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -380,7 +370,9 @@ export class Documents {
      * @throws {@link GroundX.UnauthorizedError}
      *
      * @example
-     *     await client.documents.delete()
+     *     await client.documents.delete({
+     *         documentIds: "123e4567-e89b-12d3-a456-426614174000,9f7c11a6-24b8-4d52-a9f3-90a7e70a9e49"
+     *     })
      */
     public async delete(
         request: GroundX.DocumentsDeleteRequest = {},
@@ -405,8 +397,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -455,8 +447,6 @@ export class Documents {
     /**
      * Get the current status of an ingest, initiated with documents.ingest_remote, documents.ingest_local, or documents.crawl_website, by specifying the processId (the processId is included in the response of the documents.ingest functions).
      *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-     *
      * @param {string} processId - the processId for the ingest process being checked
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -479,8 +469,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -527,8 +517,6 @@ export class Documents {
 
     /**
      * lookup the document(s) associated with a processId, bucketId, groupId, or projectId.
-     *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
      *
      * @param {number} id - a processId, bucketId, groupId, or projectId
      * @param {GroundX.DocumentsLookupRequest} request
@@ -580,8 +568,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -630,8 +618,6 @@ export class Documents {
     /**
      * Look up an existing document by documentId.
      *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-     *
      * @param {string} documentId - The documentId of the document for which GroundX information will be provided.
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -651,8 +637,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -702,8 +688,6 @@ export class Documents {
     /**
      * Delete a single document hosted on GroundX
      *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-     *
      * @param {string} documentId - A documentId which correspond to a document ingested by GroundX
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -726,8 +710,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

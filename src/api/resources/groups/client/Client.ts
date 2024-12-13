@@ -33,8 +33,6 @@ export class Groups {
     /**
      * list all groups within your GroundX account.
      *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-     *
      * @param {GroundX.GroupsListRequest} request
      * @param {Groups.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -64,8 +62,8 @@ export class Groups {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -107,8 +105,6 @@ export class Groups {
     /**
      * create a new group, a group being a collection of buckets which can be searched.
      *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-     *
      * @param {GroundX.GroupCreateRequest} request
      * @param {Groups.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -132,8 +128,8 @@ export class Groups {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -180,8 +176,6 @@ export class Groups {
     /**
      * look up a specific group by its groupId.
      *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-     *
      * @param {number} groupId - The groupId of the group to look up.
      * @param {Groups.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -201,8 +195,8 @@ export class Groups {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -250,8 +244,6 @@ export class Groups {
     /**
      * Rename a group
      *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-     *
      * @param {number} groupId - The groupId of the group to update.
      * @param {GroundX.GroupUpdateRequest} request
      * @param {Groups.RequestOptions} requestOptions - Request-specific configuration.
@@ -278,8 +270,8 @@ export class Groups {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -328,8 +320,6 @@ export class Groups {
     /**
      * Delete a group.
      *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-     *
      * @param {number} groupId - The groupId of the group to be deleted.
      * @param {Groups.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -349,8 +339,8 @@ export class Groups {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -398,8 +388,6 @@ export class Groups {
     /**
      * Add an existing bucket to an existing group. Buckets and groups can be associated many to many.
      *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-     *
      * @param {number} groupId - The groupId of the group which the bucket will be added to.
      * @param {number} bucketId - The bucketId of the bucket being added to the group.
      * @param {Groups.RequestOptions} requestOptions - Request-specific configuration.
@@ -424,8 +412,8 @@ export class Groups {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -475,8 +463,6 @@ export class Groups {
     /**
      * remove a bucket from a group. Buckets and groups can be associated many to many, this removes one bucket to group association without disturbing others.
      *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-     *
      * @param {number} groupId - The groupId of the group which the bucket will be removed from.
      * @param {number} bucketId - The bucketId of the bucket which will be removed from the group.
      * @param {Groups.RequestOptions} requestOptions - Request-specific configuration.
@@ -501,8 +487,8 @@ export class Groups {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

@@ -33,8 +33,6 @@ export class Buckets {
     /**
      * List all buckets within your GroundX account
      *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-     *
      * @param {GroundX.BucketsListRequest} request
      * @param {Buckets.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -64,8 +62,8 @@ export class Buckets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -107,8 +105,6 @@ export class Buckets {
     /**
      * Create a new bucket.
      *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-     *
      * @param {GroundX.BucketCreateRequest} request
      * @param {Buckets.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -132,8 +128,8 @@ export class Buckets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -180,8 +176,6 @@ export class Buckets {
     /**
      * Look up a specific bucket by its bucketId.
      *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-     *
      * @param {number} bucketId - The bucketId of the bucket to look up.
      * @param {Buckets.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -201,8 +195,8 @@ export class Buckets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -250,8 +244,6 @@ export class Buckets {
     /**
      * Rename a bucket.
      *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-     *
      * @param {number} bucketId - The bucketId of the bucket being updated.
      * @param {GroundX.BucketUpdateRequest} request
      * @param {Buckets.RequestOptions} requestOptions - Request-specific configuration.
@@ -278,8 +270,8 @@ export class Buckets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -328,8 +320,6 @@ export class Buckets {
     /**
      * Delete a bucket.
      *
-     * Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-     *
      * @param {number} bucketId - The bucketId of the bucket being deleted.
      * @param {Buckets.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -349,8 +339,8 @@ export class Buckets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.2",
-                "User-Agent": "groundx/2.1.2",
+                "X-Fern-SDK-Version": "2.1.3",
+                "User-Agent": "groundx/2.1.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
