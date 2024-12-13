@@ -16,8 +16,6 @@
 
 Ingest documents hosted on public URLs into a GroundX bucket.
 
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-
 </dd>
 </dl>
 </dd>
@@ -90,8 +88,6 @@ await client.documents.ingestRemote({
 
 Upload documents hosted on a local file system into a GroundX bucket.
 
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-
 </dd>
 </dl>
 </dd>
@@ -163,8 +159,6 @@ await client.documents.ingestLocal([
 <dd>
 
 Upload the content of a publicly accessible website for ingestion into a GroundX bucket. This is done by following links within a specified URL, recursively, up to a specified depth or number of pages.
-
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
 
 </dd>
 </dl>
@@ -241,8 +235,6 @@ await client.documents.crawlWebsite({
 
 lookup all documents across all resources which are currently on GroundX
 
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
-
 </dd>
 </dl>
 </dd>
@@ -306,7 +298,7 @@ await client.documents.list();
 
 Delete multiple documents hosted on GroundX
 
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+ 
 
 </dd>
 </dl>
@@ -371,7 +363,7 @@ await client.documents.delete();
 
 Get the current status of an ingest, initiated with documents.ingest_remote, documents.ingest_local, or documents.crawl_website, by specifying the processId (the processId is included in the response of the documents.ingest functions).
 
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+ 
 
 </dd>
 </dl>
@@ -436,7 +428,7 @@ await client.documents.getProcessingStatusById("processId");
 
 lookup the document(s) associated with a processId, bucketId, groupId, or projectId.
 
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+ 
 
 </dd>
 </dl>
@@ -509,7 +501,7 @@ await client.documents.lookup(1);
 
 Look up an existing document by documentId.
 
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+ 
 
 </dd>
 </dl>
@@ -574,7 +566,7 @@ await client.documents.get("documentId");
 
 Delete a single document hosted on GroundX
 
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+ 
 
 </dd>
 </dl>
@@ -643,7 +635,7 @@ Search documents on GroundX for the most relevant information to a given query.
 
 The result of this query is typically used in one of two ways; result['search']['text'] can be used to provide context to a language model, facilitating RAG, or result['search']['results'] can be used to observe chunks of text which are relevant to the query, facilitating citation.
 
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+ 
 
 </dd>
 </dl>
@@ -721,7 +713,7 @@ Search documents on GroundX for the most relevant information to a given query b
 
 The result of this query is typically used in one of two ways; result['search']['text'] can be used to provide context to a language model, facilitating RAG, or result['search']['results'] can be used to observe chunks of text which are relevant to the query, facilitating citation.
 
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+ 
 
 </dd>
 </dl>
@@ -792,7 +784,7 @@ await client.search.documents({
 
 List all buckets within your GroundX account
 
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+ 
 
 </dd>
 </dl>
@@ -857,7 +849,7 @@ await client.buckets.list();
 
 Create a new bucket.
 
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+ 
 
 </dd>
 </dl>
@@ -924,7 +916,7 @@ await client.buckets.create({
 
 Look up a specific bucket by its bucketId.
 
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+ 
 
 </dd>
 </dl>
@@ -989,7 +981,7 @@ await client.buckets.get(1);
 
 Rename a bucket.
 
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+ 
 
 </dd>
 </dl>
@@ -1064,7 +1056,7 @@ await client.buckets.update(1, {
 
 Delete a bucket.
 
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+ 
 
 </dd>
 </dl>
@@ -1131,7 +1123,7 @@ await client.buckets.delete(1);
 
 list all groups within your GroundX account.
 
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+ 
 
 </dd>
 </dl>
@@ -1196,7 +1188,7 @@ await client.groups.list();
 
 create a new group, a group being a collection of buckets which can be searched.
 
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+ 
 
 </dd>
 </dl>
@@ -1263,7 +1255,7 @@ await client.groups.create({
 
 look up a specific group by its groupId.
 
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+ 
 
 </dd>
 </dl>
@@ -1328,7 +1320,7 @@ await client.groups.get(1);
 
 Rename a group
 
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+ 
 
 </dd>
 </dl>
@@ -1403,7 +1395,7 @@ await client.groups.update(1, {
 
 Delete a group.
 
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+ 
 
 </dd>
 </dl>
@@ -1468,7 +1460,7 @@ await client.groups.delete(1);
 
 Add an existing bucket to an existing group. Buckets and groups can be associated many to many.
 
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+ 
 
 </dd>
 </dl>
@@ -1541,7 +1533,7 @@ await client.groups.addBucket(1, 1);
 
 remove a bucket from a group. Buckets and groups can be associated many to many, this removes one bucket to group association without disturbing others.
 
-Interact with the "Request Body" below to explore the arguments of this function. Enter your GroundX API key to send a request directly from this web page. Select your language of choice to structure a code snippet based on your specified arguments.
+ 
 
 </dd>
 </dl>
