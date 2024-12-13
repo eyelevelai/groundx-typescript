@@ -7,7 +7,7 @@ The GroundX TypeScript library provides convenient access to the GroundX API fro
 
 ## Documentation
 
-API reference documentation is available [here](https://docs.groundx.ai/reference).
+API reference documentation is available [here](https://docs.eyelevel.ai/reference).
 
 ## Installation
 
