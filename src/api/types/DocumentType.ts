@@ -5,16 +5,42 @@
 /**
  * The type of document (one of the currently supported file types)
  */
-export type DocumentType = "txt" | "docx" | "pptx" | "xlsx" | "pdf" | "png" | "jpg" | "csv" | "tsv" | "json";
+export type DocumentType =
+    | "bmp"
+    | "csv"
+    | "docx"
+    | "gif"
+    | "heif"
+    | "hwp"
+    | "ico"
+    | "jpg"
+    | "json"
+    | "pdf"
+    | "png"
+    | "pptx"
+    | "svg"
+    | "tiff"
+    | "tsv"
+    | "txt"
+    | "xlsx"
+    | "webp";
 export const DocumentType = {
-    Txt: "txt",
+    Bmp: "bmp",
+    Csv: "csv",
     Docx: "docx",
-    Pptx: "pptx",
-    Xlsx: "xlsx",
+    Gif: "gif",
+    Heif: "heif",
+    Hwp: "hwp",
+    Ico: "ico",
+    Jpg: "jpg",
+    Json: "json",
     Pdf: "pdf",
     Png: "png",
-    Jpg: "jpg",
-    Csv: "csv",
+    Pptx: "pptx",
+    Svg: "svg",
+    Tiff: "tiff",
     Tsv: "tsv",
-    Json: "json",
+    Txt: "txt",
+    Xlsx: "xlsx",
+    Webp: "webp",
 } as const;

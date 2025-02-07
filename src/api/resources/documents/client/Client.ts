@@ -62,8 +62,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.3",
-                "User-Agent": "groundx/2.1.3",
+                "X-Fern-SDK-Version": "2.1.0",
+                "User-Agent": "groundx/2.1.0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -141,8 +141,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.3",
-                "User-Agent": "groundx/2.1.3",
+                "X-Fern-SDK-Version": "2.1.0",
+                "User-Agent": "groundx/2.1.0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -190,6 +190,8 @@ export class Documents {
 
     /**
      * Upload the content of a publicly accessible website for ingestion into a GroundX bucket. This is done by following links within a specified URL, recursively, up to a specified depth or number of pages.
+     * Note1: This endpoint is currently not supported for on-prem deployments.
+     * Note2: The `source_url` must include the protocol, http:// or https://.
      *
      * @param {GroundX.WebsiteCrawlRequest} request
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
@@ -223,8 +225,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.3",
-                "User-Agent": "groundx/2.1.3",
+                "X-Fern-SDK-Version": "2.1.0",
+                "User-Agent": "groundx/2.1.0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -320,8 +322,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.3",
-                "User-Agent": "groundx/2.1.3",
+                "X-Fern-SDK-Version": "2.1.0",
+                "User-Agent": "groundx/2.1.0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -397,8 +399,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.3",
-                "User-Agent": "groundx/2.1.3",
+                "X-Fern-SDK-Version": "2.1.0",
+                "User-Agent": "groundx/2.1.0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -469,8 +471,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.3",
-                "User-Agent": "groundx/2.1.3",
+                "X-Fern-SDK-Version": "2.1.0",
+                "User-Agent": "groundx/2.1.0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -568,8 +570,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.3",
-                "User-Agent": "groundx/2.1.3",
+                "X-Fern-SDK-Version": "2.1.0",
+                "User-Agent": "groundx/2.1.0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -637,8 +639,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.3",
-                "User-Agent": "groundx/2.1.3",
+                "X-Fern-SDK-Version": "2.1.0",
+                "User-Agent": "groundx/2.1.0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -710,8 +712,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.1.3",
-                "User-Agent": "groundx/2.1.3",
+                "X-Fern-SDK-Version": "2.1.0",
+                "User-Agent": "groundx/2.1.0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
