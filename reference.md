@@ -611,7 +611,7 @@ await client.documents.deleteById("documentId");
 </dl>
 </details>
 
-<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">documentGetProcessingStatus</a>({ ...params }) -> GroundX.DocumentResponse</code></summary>
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">documentGetProcesses</a>({ ...params }) -> GroundX.ProcessesStatusResponse</code></summary>
 <dl>
 <dd>
 
@@ -623,7 +623,7 @@ await client.documents.deleteById("documentId");
 <dl>
 <dd>
 
-Get the current status of ingest processes, sorted from most recent to least.
+Get a list of ingest process requests, sorted from most recent to least.
 
 </dd>
 </dl>
@@ -639,7 +639,7 @@ Get the current status of ingest processes, sorted from most recent to least.
 <dd>
 
 ```typescript
-await client.documents.documentGetProcessingStatus();
+await client.documents.documentGetProcesses();
 ```
 
 </dd>
@@ -655,7 +655,7 @@ await client.documents.documentGetProcessingStatus();
 <dl>
 <dd>
 
-**request:** `GroundX.DocumentGetProcessingStatusRequest`
+**request:** `GroundX.DocumentGetProcessesRequest`
 
 </dd>
 </dl>

@@ -25,6 +25,7 @@ export * from "./ProcessStatusResponseIngestProgressProcessing";
 export * from "./ProcessStatusResponseIngestProgress";
 export * from "./ProcessStatusResponseIngest";
 export * from "./ProcessStatusResponse";
+export * from "./ProcessesStatusResponse";
 export * from "./ProcessingStatus";
 export * from "./GroupListResponse";
 export * from "./BucketListResponse";

@@ -62,8 +62,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.2.1",
-                "User-Agent": "groundx/2.2.1",
+                "X-Fern-SDK-Version": "2.2.2",
+                "User-Agent": "groundx/2.2.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -141,8 +141,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.2.1",
-                "User-Agent": "groundx/2.2.1",
+                "X-Fern-SDK-Version": "2.2.2",
+                "User-Agent": "groundx/2.2.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -225,8 +225,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.2.1",
-                "User-Agent": "groundx/2.2.1",
+                "X-Fern-SDK-Version": "2.2.2",
+                "User-Agent": "groundx/2.2.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -322,8 +322,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.2.1",
-                "User-Agent": "groundx/2.2.1",
+                "X-Fern-SDK-Version": "2.2.2",
+                "User-Agent": "groundx/2.2.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -399,8 +399,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.2.1",
-                "User-Agent": "groundx/2.2.1",
+                "X-Fern-SDK-Version": "2.2.2",
+                "User-Agent": "groundx/2.2.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -471,8 +471,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.2.1",
-                "User-Agent": "groundx/2.2.1",
+                "X-Fern-SDK-Version": "2.2.2",
+                "User-Agent": "groundx/2.2.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -570,8 +570,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.2.1",
-                "User-Agent": "groundx/2.2.1",
+                "X-Fern-SDK-Version": "2.2.2",
+                "User-Agent": "groundx/2.2.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -639,8 +639,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.2.1",
-                "User-Agent": "groundx/2.2.1",
+                "X-Fern-SDK-Version": "2.2.2",
+                "User-Agent": "groundx/2.2.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -712,8 +712,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.2.1",
-                "User-Agent": "groundx/2.2.1",
+                "X-Fern-SDK-Version": "2.2.2",
+                "User-Agent": "groundx/2.2.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -761,21 +761,18 @@ export class Documents {
     }
 
     /**
-     * Get the current status of ingest processes, sorted from most recent to least.
+     * Get a list of ingest process requests, sorted from most recent to least.
      *
-     * @param {GroundX.DocumentGetProcessingStatusRequest} request
+     * @param {GroundX.DocumentGetProcessesRequest} request
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
-     * @throws {@link GroundX.BadRequestError}
-     * @throws {@link GroundX.UnauthorizedError}
-     *
      * @example
-     *     await client.documents.documentGetProcessingStatus()
+     *     await client.documents.documentGetProcesses()
      */
-    public async documentGetProcessingStatus(
-        request: GroundX.DocumentGetProcessingStatusRequest = {},
+    public async documentGetProcesses(
+        request: GroundX.DocumentGetProcessesRequest = {},
         requestOptions?: Documents.RequestOptions
-    ): Promise<GroundX.DocumentResponse> {
+    ): Promise<GroundX.ProcessesStatusResponse> {
         const { n, status } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
         if (n != null) {
@@ -795,8 +792,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.2.1",
-                "User-Agent": "groundx/2.2.1",
+                "X-Fern-SDK-Version": "2.2.2",
+                "User-Agent": "groundx/2.2.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -810,21 +807,14 @@ export class Documents {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return _response.body as GroundX.DocumentResponse;
+            return _response.body as GroundX.ProcessesStatusResponse;
         }
 
         if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new GroundX.BadRequestError(_response.error.body as unknown);
-                case 401:
-                    throw new GroundX.UnauthorizedError(_response.error.body as unknown);
-                default:
-                    throw new errors.GroundXError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                    });
-            }
+            throw new errors.GroundXError({
+                statusCode: _response.error.statusCode,
+                body: _response.error.body,
+            });
         }
 
         switch (_response.error.reason) {
