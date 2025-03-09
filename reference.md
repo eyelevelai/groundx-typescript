@@ -611,7 +611,7 @@ await client.documents.deleteById("documentId");
 </dl>
 </details>
 
-<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">documentGetProcesses</a>({ ...params }) -> GroundX.ProcessesStatusResponse</code></summary>
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">getProcesses</a>({ ...params }) -> GroundX.ProcessesStatusResponse</code></summary>
 <dl>
 <dd>
 
@@ -639,7 +639,7 @@ Get a list of ingest process requests, sorted from most recent to least.
 <dd>
 
 ```typescript
-await client.documents.documentGetProcesses();
+await client.documents.getProcesses();
 ```
 
 </dd>
@@ -655,7 +655,7 @@ await client.documents.documentGetProcesses();
 <dl>
 <dd>
 
-**request:** `GroundX.DocumentGetProcessesRequest`
+**request:** `GroundX.DocumentsGetProcessesRequest`
 
 </dd>
 </dl>

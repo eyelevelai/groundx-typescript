@@ -13,6 +13,7 @@ export * from "./DocumentResponse";
 export * from "./Document";
 export * from "./IngestRemoteDocument";
 export * from "./DocumentType";
+export * from "./ProcessLevel";
 export * from "./IngestLocalDocumentMetadata";
 export * from "./IngestLocalDocument";
 export * from "./DocumentLocalIngestRequest";

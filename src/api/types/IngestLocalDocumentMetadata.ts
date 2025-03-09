@@ -10,6 +10,7 @@ export interface IngestLocalDocumentMetadata {
     /** The name of the file being ingested */
     fileName?: string;
     fileType?: GroundX.DocumentType;
+    processLevel?: GroundX.ProcessLevel;
     /** Custom metadata which can be used to influence GroundX's search functionality. This data can be used to further hone GroundX search. */
     searchData?: Record<string, unknown>;
 }

@@ -8,7 +8,7 @@ import * as GroundX from "../../../../index";
  * @example
  *     {}
  */
-export interface DocumentGetProcessesRequest {
+export interface DocumentsGetProcessesRequest {
     /**
      * The maximum number of returned processes. Accepts 1-100 with a default of 20.
      */
