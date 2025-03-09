@@ -35,6 +35,7 @@ export class GroundXClient extends FernClient {
                         bucketId: document.bucketId,
                         fileName: document.fileName,
                         fileType: document.fileType,
+                        processLevel: document.processLevel,
                         searchData: document.searchData,
                         sourceUrl: document.filePath,
                     }
@@ -62,6 +63,9 @@ export class GroundXClient extends FernClient {
                     fileName,
                     fileType: fileType,
                 };
+                if (document.processLevel) {
+                    meta.processLevel = document.processLevel;
+                }
                 if (document.searchData) {
                     meta.searchData = document.searchData;
                 }
