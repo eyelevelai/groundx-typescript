@@ -24,6 +24,8 @@ export interface SearchRequest {
     verbosity?: number;
     /** The search query to be used to find relevant documentation. */
     query: string;
+    /** A dictionary of key-value pairs that can be used to pre-filter documents prior to a search. */
+    filter?: Record<string, unknown>;
     /** The minimum search relevance score required to include the result. By default, this is 10.0. */
     relevance?: number;
 }

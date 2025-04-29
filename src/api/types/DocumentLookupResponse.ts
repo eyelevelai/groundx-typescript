@@ -9,6 +9,8 @@ export interface DocumentLookupResponse {
     count?: number;
     documents?: GroundX.DocumentDetail[];
     nextToken?: string;
+    /** The number of results that have not been returned yet. Will be null if there are no remaining results. */
+    remaining?: number;
     /** The total number of results found */
     total?: number;
 }

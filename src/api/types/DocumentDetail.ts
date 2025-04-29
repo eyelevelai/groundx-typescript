@@ -12,6 +12,8 @@ export interface DocumentDetail {
     /** The file size of the file stored in GroundX */
     fileSize?: string;
     fileType?: GroundX.DocumentType;
+    /** A dictionary of key-value pairs that can be used to pre-filter documents prior to a search. */
+    filter?: Record<string, unknown>;
     /** Unique system generated ID for the ingest request */
     processId?: string;
     searchData?: Record<string, unknown>;

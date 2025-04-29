@@ -4,7 +4,10 @@
 
 import * as GroundX from "../index";
 
-export interface IngestResponseIngest {
+export interface IngestStatus {
+    id?: number;
     processId: string;
+    progress?: GroundX.IngestStatusProgress;
     status: GroundX.ProcessingStatus;
+    statusMessage?: string;
 }

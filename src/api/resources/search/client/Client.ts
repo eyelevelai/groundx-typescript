@@ -34,7 +34,7 @@ export class Search {
      * Search documents on GroundX for the most relevant information to a given query.
      * The result of this query is typically used in one of two ways; `result.search.text` can be used to provide context to a language model, facilitating RAG, or `result.search.results` can be used to observe chunks of text which are relevant to the query, facilitating citation.
      *
-     * @param {GroundX.SearchContentRequestId} id - The bucketId, groupId, projectId, or documentId to be searched. The document or documents within the specified container will be compared to the query, and relevant information will be extracted.
+     * @param {GroundX.SearchContentRequestId} id - The bucketId, groupId, or documentId to be searched. The document or documents within the specified container will be compared to the query, and relevant information will be extracted.
      * @param {GroundX.SearchRequest} request
      * @param {Search.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -75,8 +75,8 @@ export class Search {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.2.3",
-                "User-Agent": "groundx/2.2.3",
+                "X-Fern-SDK-Version": "2.3.1",
+                "User-Agent": "groundx/2.3.1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -167,8 +167,8 @@ export class Search {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.2.3",
-                "User-Agent": "groundx/2.2.3",
+                "X-Fern-SDK-Version": "2.3.1",
+                "User-Agent": "groundx/2.3.1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

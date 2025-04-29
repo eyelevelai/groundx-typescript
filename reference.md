@@ -16,6 +16,8 @@
 
 Ingest documents hosted on public URLs into a GroundX bucket.
 
+[Supported Document Types and Ingest Capacities](https://docs.eyelevel.ai/documentation/fundamentals/document-types-and-ingest-capacities)
+
 </dd>
 </dl>
 </dd>
@@ -88,6 +90,8 @@ await client.documents.ingestRemote({
 
 Upload documents hosted on a local file system into a GroundX bucket.
 
+[Supported Document Types and Ingest Capacities](https://docs.eyelevel.ai/documentation/fundamentals/document-types-and-ingest-capacities)
+
 </dd>
 </dl>
 </dd>
@@ -159,8 +163,11 @@ await client.documents.ingestLocal([
 <dd>
 
 Upload the content of a publicly accessible website for ingestion into a GroundX bucket. This is done by following links within a specified URL, recursively, up to a specified depth or number of pages.
+
 Note1: This endpoint is currently not supported for on-prem deployments.
 Note2: The `source_url` must include the protocol, http:// or https://.
+
+[Supported Document Types and Ingest Capacities](https://docs.eyelevel.ai/documentation/fundamentals/document-types-and-ingest-capacities)
 
 </dd>
 </dl>
@@ -351,7 +358,7 @@ await client.documents.delete({
 </dl>
 </details>
 
-<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">getProcessingStatusById</a>(processId) -> GroundX.ProcessStatusResponse</code></summary>
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">getProcessingStatusById</a>(processId) -> GroundX.IngestResponse</code></summary>
 <dl>
 <dd>
 
@@ -426,7 +433,7 @@ await client.documents.getProcessingStatusById("processId");
 <dl>
 <dd>
 
-lookup the document(s) associated with a processId, bucketId, groupId, or projectId.
+lookup the document(s) associated with a processId, bucketId, or groupId.
 
 </dd>
 </dl>
@@ -458,7 +465,7 @@ await client.documents.lookup(1);
 <dl>
 <dd>
 
-**id:** `number` — a processId, bucketId, groupId, or projectId
+**id:** `number` — a processId, bucketId, or groupId
 
 </dd>
 </dl>
@@ -724,7 +731,7 @@ await client.search.content(1, {
 <dl>
 <dd>
 
-**id:** `GroundX.SearchContentRequestId` — The bucketId, groupId, projectId, or documentId to be searched. The document or documents within the specified container will be compared to the query, and relevant information will be extracted.
+**id:** `GroundX.SearchContentRequestId` — The bucketId, groupId, or documentId to be searched. The document or documents within the specified container will be compared to the query, and relevant information will be extracted.
 
 </dd>
 </dl>

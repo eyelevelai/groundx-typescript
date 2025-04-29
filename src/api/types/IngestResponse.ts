@@ -5,5 +5,5 @@
 import * as GroundX from "../index";
 
 export interface IngestResponse {
-    ingest: GroundX.IngestResponseIngest;
+    ingest: GroundX.IngestStatus;
 }

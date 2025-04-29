@@ -4,7 +4,7 @@
 
 import * as GroundX from "../index";
 
-export interface ProcessStatusResponseIngestProgressCancelled {
+export interface IngestStatusProgressComplete {
     documents?: GroundX.DocumentDetail[];
     total?: number;
 }

@@ -33,6 +33,8 @@ export class Documents {
     /**
      * Ingest documents hosted on public URLs into a GroundX bucket.
      *
+     * [Supported Document Types and Ingest Capacities](https://docs.eyelevel.ai/documentation/fundamentals/document-types-and-ingest-capacities)
+     *
      * @param {GroundX.DocumentRemoteIngestRequest} request
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -62,8 +64,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.2.3",
-                "User-Agent": "groundx/2.2.3",
+                "X-Fern-SDK-Version": "2.3.1",
+                "User-Agent": "groundx/2.3.1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -112,6 +114,8 @@ export class Documents {
     /**
      * Upload documents hosted on a local file system into a GroundX bucket.
      *
+     * [Supported Document Types and Ingest Capacities](https://docs.eyelevel.ai/documentation/fundamentals/document-types-and-ingest-capacities)
+     *
      * @param {GroundX.DocumentLocalIngestRequest} request
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -141,8 +145,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.2.3",
-                "User-Agent": "groundx/2.2.3",
+                "X-Fern-SDK-Version": "2.3.1",
+                "User-Agent": "groundx/2.3.1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -190,8 +194,11 @@ export class Documents {
 
     /**
      * Upload the content of a publicly accessible website for ingestion into a GroundX bucket. This is done by following links within a specified URL, recursively, up to a specified depth or number of pages.
+     *
      * Note1: This endpoint is currently not supported for on-prem deployments.
      * Note2: The `source_url` must include the protocol, http:// or https://.
+     *
+     * [Supported Document Types and Ingest Capacities](https://docs.eyelevel.ai/documentation/fundamentals/document-types-and-ingest-capacities)
      *
      * @param {GroundX.WebsiteCrawlRequest} request
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
@@ -225,8 +232,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.2.3",
-                "User-Agent": "groundx/2.2.3",
+                "X-Fern-SDK-Version": "2.3.1",
+                "User-Agent": "groundx/2.3.1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -322,8 +329,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.2.3",
-                "User-Agent": "groundx/2.2.3",
+                "X-Fern-SDK-Version": "2.3.1",
+                "User-Agent": "groundx/2.3.1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -399,8 +406,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.2.3",
-                "User-Agent": "groundx/2.2.3",
+                "X-Fern-SDK-Version": "2.3.1",
+                "User-Agent": "groundx/2.3.1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -461,7 +468,7 @@ export class Documents {
     public async getProcessingStatusById(
         processId: string,
         requestOptions?: Documents.RequestOptions
-    ): Promise<GroundX.ProcessStatusResponse> {
+    ): Promise<GroundX.IngestResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
@@ -471,8 +478,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.2.3",
-                "User-Agent": "groundx/2.2.3",
+                "X-Fern-SDK-Version": "2.3.1",
+                "User-Agent": "groundx/2.3.1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -485,7 +492,7 @@ export class Documents {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return _response.body as GroundX.ProcessStatusResponse;
+            return _response.body as GroundX.IngestResponse;
         }
 
         if (_response.error.reason === "status-code") {
@@ -518,9 +525,9 @@ export class Documents {
     }
 
     /**
-     * lookup the document(s) associated with a processId, bucketId, groupId, or projectId.
+     * lookup the document(s) associated with a processId, bucketId, or groupId.
      *
-     * @param {number} id - a processId, bucketId, groupId, or projectId
+     * @param {number} id - a processId, bucketId, or groupId
      * @param {GroundX.DocumentsLookupRequest} request
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -570,8 +577,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.2.3",
-                "User-Agent": "groundx/2.2.3",
+                "X-Fern-SDK-Version": "2.3.1",
+                "User-Agent": "groundx/2.3.1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -639,8 +646,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.2.3",
-                "User-Agent": "groundx/2.2.3",
+                "X-Fern-SDK-Version": "2.3.1",
+                "User-Agent": "groundx/2.3.1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -712,8 +719,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.2.3",
-                "User-Agent": "groundx/2.2.3",
+                "X-Fern-SDK-Version": "2.3.1",
+                "User-Agent": "groundx/2.3.1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -792,8 +799,8 @@ export class Documents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.2.3",
-                "User-Agent": "groundx/2.2.3",
+                "X-Fern-SDK-Version": "2.3.1",
+                "User-Agent": "groundx/2.3.1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

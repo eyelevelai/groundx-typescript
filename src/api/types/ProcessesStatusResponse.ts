@@ -4,7 +4,7 @@
 
 import * as GroundX from "../index";
 
-/**
- * Processes
- */
-export type ProcessesStatusResponse = GroundX.ProcessStatusResponse[];
+export interface ProcessesStatusResponse {
+    /** Processes */
+    processes: GroundX.IngestStatusLight[];
+}

@@ -4,6 +4,7 @@
 
 import * as GroundX from "../index";
 
-export interface ProcessStatusResponse {
-    ingest: GroundX.ProcessStatusResponseIngest;
+export interface IngestStatusProgressErrors {
+    documents?: GroundX.DocumentDetail[];
+    total?: number;
 }
