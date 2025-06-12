@@ -3,7 +3,7 @@
  */
 
 /**
- * The amount of processing of document chunks to perform (default 'full')
+ * The amount of processing of document chunks to perform. 'none' specifies the document to go through only text extraction and chunking. Documents uploaded with 'full' go through text extraction, chunking, and an agentic process that creates robust metadata for each chunk. (default 'full').
  */
 export type ProcessLevel = "none" | "full";
 export const ProcessLevel = {

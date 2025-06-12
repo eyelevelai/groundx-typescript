@@ -48,8 +48,8 @@ export class Customer {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "groundx",
-                "X-Fern-SDK-Version": "2.3.1",
-                "User-Agent": "groundx/2.3.1",
+                "X-Fern-SDK-Version": "2.3.3",
+                "User-Agent": "groundx/2.3.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
