@@ -1,2 +1,2 @@
-export { GroundXError } from "./GroundXError";
-export { GroundXTimeoutError } from "./GroundXTimeoutError";
+export { GroundXError } from "./GroundXError.js";
+export { GroundXTimeoutError } from "./GroundXTimeoutError.js";

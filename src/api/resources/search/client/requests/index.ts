@@ -1,2 +1,2 @@
-export { type SearchRequest } from "./SearchRequest";
-export { type SearchDocumentsRequest } from "./SearchDocumentsRequest";
+export { type SearchRequest } from "./SearchRequest.js";
+export { type SearchDocumentsRequest } from "./SearchDocumentsRequest.js";

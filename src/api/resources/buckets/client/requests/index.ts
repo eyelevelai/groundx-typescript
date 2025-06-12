@@ -1,3 +1,3 @@
-export { type BucketsListRequest } from "./BucketsListRequest";
-export { type BucketCreateRequest } from "./BucketCreateRequest";
-export { type BucketUpdateRequest } from "./BucketUpdateRequest";
+export { type BucketsListRequest } from "./BucketsListRequest.js";
+export { type BucketCreateRequest } from "./BucketCreateRequest.js";
+export { type BucketUpdateRequest } from "./BucketUpdateRequest.js";

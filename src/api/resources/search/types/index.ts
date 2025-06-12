@@ -1,1 +1,1 @@
-export * from "./SearchContentRequestId";
+export * from "./SearchContentRequestId.js";

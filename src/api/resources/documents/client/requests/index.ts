@@ -1,6 +1,6 @@
-export { type DocumentRemoteIngestRequest } from "./DocumentRemoteIngestRequest";
-export { type WebsiteCrawlRequest } from "./WebsiteCrawlRequest";
-export { type DocumentsListRequest } from "./DocumentsListRequest";
-export { type DocumentsDeleteRequest } from "./DocumentsDeleteRequest";
-export { type DocumentsLookupRequest } from "./DocumentsLookupRequest";
-export { type DocumentsGetProcessesRequest } from "./DocumentsGetProcessesRequest";
+export { type DocumentRemoteIngestRequest } from "./DocumentRemoteIngestRequest.js";
+export { type WebsiteCrawlRequest } from "./WebsiteCrawlRequest.js";
+export { type DocumentsListRequest } from "./DocumentsListRequest.js";
+export { type DocumentsDeleteRequest } from "./DocumentsDeleteRequest.js";
+export { type DocumentsLookupRequest } from "./DocumentsLookupRequest.js";
+export { type DocumentsGetProcessesRequest } from "./DocumentsGetProcessesRequest.js";

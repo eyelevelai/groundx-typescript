@@ -1,2 +1,2 @@
-export * from "./BadRequestError";
-export * from "./UnauthorizedError";
+export * from "./BadRequestError.js";
+export * from "./UnauthorizedError.js";
