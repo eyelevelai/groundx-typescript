@@ -18,6 +18,7 @@ export interface SearchResultItem {
     /** An image clipping of the table or figure object from the document */
     multimodalUrl?: string;
     pageImages?: string[];
+    pages?: SearchResultItem.Pages.Item[];
     /** Confidence score in the search result */
     score?: number;
     /** Document, section, and chunk search data, both custom and system-generated */
@@ -28,4 +29,21 @@ export interface SearchResultItem {
     suggestedText?: string;
     /** Original text from the source document */
     text?: string;
+}
+
+export namespace SearchResultItem {
+    export type Pages = Pages.Item[];
+
+    export namespace Pages {
+        export interface Item {
+            /** The height of the page image */
+            height?: number;
+            /** A jpg of the page the chunk appears on */
+            imageUrl?: string;
+            /** The page number */
+            number?: number;
+            /** The width of the page image */
+            width?: number;
+        }
+    }
 }
