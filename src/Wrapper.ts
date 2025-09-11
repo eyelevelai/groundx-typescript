@@ -15,6 +15,8 @@ export class GroundXClient extends FernClient {
   
     public async ingest(
         documents: GroundX.Document[],
+        callbackUrl?: string,
+        callbackData?: string,
         requestOptions?: FernClient.RequestOptions
     ): Promise<GroundX.IngestResponse> {
         if (documents.length === 0) {
@@ -91,7 +93,7 @@ export class GroundXClient extends FernClient {
 
         if (remoteDocuments.length > 0) {
             // Handle remote documents
-            return this.documents.ingestRemote({ documents: remoteDocuments }, requestOptions);
+            return this.documents.ingestRemote({ documents: remoteDocuments, callbackData: callbackData, callbackUrl: callbackUrl }, requestOptions);
         }
 
         // Handle local documents
@@ -99,7 +101,7 @@ export class GroundXClient extends FernClient {
         for (const { fileName, filePath, mimeType, metadata } of localDocuments) {
             formData.append(
                 "blob",
-                new Blob([this.readFile(filePath)], { type: mimeType }),
+                new Blob([new Uint8Array(this.readFile(filePath))], { type: mimeType }),
                 fileName
             );
             formData.append(
