@@ -1,9 +1,8 @@
 # Reference
 
-## Ingest
+## Documents
 
-
-<details><summary><code>client.<a href="https://docs.eyelevel.ai/reference/api-reference/documents/ingest-documents">ingest</a>({ ...params }) -> GroundX.IngestResponse</code></summary>
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">ingestRemote</a>({ ...params }) -> GroundX.IngestResponse</code></summary>
 <dl>
 <dd>
 
@@ -15,7 +14,7 @@
 <dl>
 <dd>
 
-Ingest local or hosted documents into a GroundX bucket.
+Ingest documents hosted on public URLs into a GroundX bucket.
 
 [Supported Document Types and Ingest Capacities](https://docs.eyelevel.ai/documentation/fundamentals/document-types-and-ingest-capacities)
 
@@ -33,13 +32,13 @@ Ingest local or hosted documents into a GroundX bucket.
 <dd>
 
 ```typescript
-await client.ingest({
+await client.documents.ingestRemote({
     documents: [
         {
             bucketId: 1234,
             fileName: "my_file1.txt",
-            filePath: "https://my.source.url.com/file1.txt",
             fileType: "txt",
+            sourceUrl: "https://my.source.url.com/file1.txt",
         },
     ],
 });
@@ -58,7 +57,7 @@ await client.ingest({
 <dl>
 <dd>
 
-**request:** `GroundX.Document`
+**request:** `GroundX.DocumentRemoteIngestRequest`
 
 </dd>
 </dl>
@@ -77,7 +76,79 @@ await client.ingest({
 </dl>
 </details>
 
-## Documents
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">ingestLocal</a>({ ...params }) -> GroundX.IngestResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Upload documents hosted on a local file system into a GroundX bucket.
+
+[Supported Document Types and Ingest Capacities](https://docs.eyelevel.ai/documentation/fundamentals/document-types-and-ingest-capacities)
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.documents.ingestLocal([
+    {
+        blob: "blob",
+        metadata: {
+            bucketId: 1234,
+            fileName: "my_file1.txt",
+            fileType: "txt",
+        },
+    },
+]);
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `GroundX.DocumentLocalIngestRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Documents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
 
 <details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">crawlWebsite</a>({ ...params }) -> GroundX.IngestResponse</code></summary>
 <dl>

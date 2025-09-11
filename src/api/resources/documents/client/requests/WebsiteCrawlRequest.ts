@@ -20,4 +20,8 @@ import * as GroundX from "../../../../index.js";
  */
 export interface WebsiteCrawlRequest {
     websites: GroundX.WebsiteSource[];
+    /** The URL that will receive processing event updates. */
+    callbackUrl?: string;
+    /** A string that is returned, along with processing event updates, to the callback URL. */
+    callbackData?: string;
 }
