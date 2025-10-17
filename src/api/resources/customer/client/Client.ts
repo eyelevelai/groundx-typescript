@@ -14,7 +14,7 @@ export declare namespace Customer {
         environment?: core.Supplier<environments.GroundXEnvironment | string>;
         /** Specify a custom URL to connect the client to. */
         baseUrl?: core.Supplier<string>;
-        apiKey: core.Supplier<string>;
+        apiKey?: core.Supplier<string | undefined>;
         /** Additional headers to include in requests. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
         fetcher?: core.FetchFunction;
@@ -35,7 +35,7 @@ export declare namespace Customer {
 export class Customer {
     protected readonly _options: Customer.Options;
 
-    constructor(_options: Customer.Options) {
+    constructor(_options: Customer.Options = {}) {
         this._options = _options;
     }
 

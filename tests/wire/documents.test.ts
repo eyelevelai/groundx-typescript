@@ -144,6 +144,7 @@ describe("Documents", () => {
                     sourceUrl: "sourceUrl",
                     status: "queued",
                     statusMessage: "statusMessage",
+                    textUrl: "textUrl",
                     xrayUrl: "xrayUrl",
                 },
             ],
@@ -157,7 +158,14 @@ describe("Documents", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.documents.list();
+        const response = await client.documents.list({
+            n: 1,
+            filter: "filter",
+            sort: "name",
+            sortOrder: "asc",
+            status: "queued",
+            nextToken: "nextToken",
+        });
         expect(response).toEqual({
             documents: [
                 {
@@ -179,6 +187,7 @@ describe("Documents", () => {
                     sourceUrl: "sourceUrl",
                     status: "queued",
                     statusMessage: "statusMessage",
+                    textUrl: "textUrl",
                     xrayUrl: "xrayUrl",
                 },
             ],
@@ -255,6 +264,7 @@ describe("Documents", () => {
                     sourceUrl: "sourceUrl",
                     status: "queued",
                     statusMessage: "statusMessage",
+                    textUrl: "textUrl",
                     xrayUrl: "xrayUrl",
                 },
             ],
@@ -270,7 +280,14 @@ describe("Documents", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.documents.lookup(1);
+        const response = await client.documents.lookup(1, {
+            n: 1,
+            filter: "filter",
+            sort: "name",
+            sortOrder: "asc",
+            status: "queued",
+            nextToken: "nextToken",
+        });
         expect(response).toEqual({
             count: 20,
             documents: [
@@ -293,6 +310,7 @@ describe("Documents", () => {
                     sourceUrl: "sourceUrl",
                     status: "queued",
                     statusMessage: "statusMessage",
+                    textUrl: "textUrl",
                     xrayUrl: "xrayUrl",
                 },
             ],
@@ -319,6 +337,7 @@ describe("Documents", () => {
                 sourceUrl: "sourceUrl",
                 status: "queued",
                 statusMessage: "statusMessage",
+                textUrl: "textUrl",
                 xrayUrl: "xrayUrl",
             },
         };
@@ -351,6 +370,7 @@ describe("Documents", () => {
                 sourceUrl: "sourceUrl",
                 status: "queued",
                 statusMessage: "statusMessage",
+                textUrl: "textUrl",
                 xrayUrl: "xrayUrl",
             },
         });
@@ -391,7 +411,10 @@ describe("Documents", () => {
         };
         server.mockEndpoint().get("/v1/ingest").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
-        const response = await client.documents.getProcesses();
+        const response = await client.documents.getProcesses({
+            n: 1,
+            status: "queued",
+        });
         expect(response).toEqual({
             processes: [
                 {

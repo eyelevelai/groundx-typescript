@@ -17,7 +17,7 @@ export declare namespace GroundXClient {
         environment?: core.Supplier<environments.GroundXEnvironment | string>;
         /** Specify a custom URL to connect the client to. */
         baseUrl?: core.Supplier<string>;
-        apiKey: core.Supplier<string>;
+        apiKey?: core.Supplier<string | undefined>;
         /** Additional headers to include in requests. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
         fetcher?: core.FetchFunction;
@@ -44,15 +44,15 @@ export class GroundXClient {
     protected _customer: Customer | undefined;
     protected _health: Health | undefined;
 
-    constructor(_options: GroundXClient.Options) {
+    constructor(_options: GroundXClient.Options = {}) {
         this._options = {
             ..._options,
             headers: mergeHeaders(
                 {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "groundx",
-                    "X-Fern-SDK-Version": "2.4.0",
-                    "User-Agent": "groundx/2.4.0",
+                    "X-Fern-SDK-Version": "2.4.1",
+                    "User-Agent": "groundx/2.4.1",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },

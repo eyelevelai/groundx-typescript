@@ -31,7 +31,9 @@ describe("Search", () => {
             .build();
 
         const response = await client.search.content(1, {
+            n: 1,
             nextToken: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
+            verbosity: 1,
             query: "my search query",
         });
         expect(response).toEqual({
@@ -72,7 +74,9 @@ describe("Search", () => {
             .build();
 
         const response = await client.search.documents({
+            n: 1,
             nextToken: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
+            verbosity: 1,
             query: "my search query",
             documentIds: ["docUUID1", "docUUID2"],
         });

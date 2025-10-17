@@ -21,6 +21,8 @@ export interface DocumentDetail {
     sourceUrl?: string;
     status?: GroundX.ProcessingStatus;
     statusMessage?: string;
+    /** Extracted text URL, if using the extract agent */
+    textUrl?: string;
     /** Document X-Ray results */
     xrayUrl?: string;
 }

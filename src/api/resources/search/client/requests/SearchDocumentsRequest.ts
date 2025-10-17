@@ -5,7 +5,9 @@
 /**
  * @example
  *     {
+ *         n: 1,
  *         nextToken: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
+ *         verbosity: 1,
  *         query: "my search query",
  *         documentIds: ["docUUID1", "docUUID2"]
  *     }

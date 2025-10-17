@@ -14,7 +14,7 @@ export declare namespace Search {
         environment?: core.Supplier<environments.GroundXEnvironment | string>;
         /** Specify a custom URL to connect the client to. */
         baseUrl?: core.Supplier<string>;
-        apiKey: core.Supplier<string>;
+        apiKey?: core.Supplier<string | undefined>;
         /** Additional headers to include in requests. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
         fetcher?: core.FetchFunction;
@@ -35,7 +35,7 @@ export declare namespace Search {
 export class Search {
     protected readonly _options: Search.Options;
 
-    constructor(_options: Search.Options) {
+    constructor(_options: Search.Options = {}) {
         this._options = _options;
     }
 
@@ -52,7 +52,9 @@ export class Search {
      *
      * @example
      *     await client.search.content(1, {
+     *         n: 1,
      *         nextToken: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
+     *         verbosity: 1,
      *         query: "my search query"
      *     })
      */
@@ -152,7 +154,9 @@ export class Search {
      *
      * @example
      *     await client.search.documents({
+     *         n: 1,
      *         nextToken: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
+     *         verbosity: 1,
      *         query: "my search query",
      *         documentIds: ["docUUID1", "docUUID2"]
      *     })

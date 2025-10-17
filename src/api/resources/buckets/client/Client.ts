@@ -14,7 +14,7 @@ export declare namespace Buckets {
         environment?: core.Supplier<environments.GroundXEnvironment | string>;
         /** Specify a custom URL to connect the client to. */
         baseUrl?: core.Supplier<string>;
-        apiKey: core.Supplier<string>;
+        apiKey?: core.Supplier<string | undefined>;
         /** Additional headers to include in requests. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
         fetcher?: core.FetchFunction;
@@ -35,7 +35,7 @@ export declare namespace Buckets {
 export class Buckets {
     protected readonly _options: Buckets.Options;
 
-    constructor(_options: Buckets.Options) {
+    constructor(_options: Buckets.Options = {}) {
         this._options = _options;
     }
 
@@ -46,7 +46,10 @@ export class Buckets {
      * @param {Buckets.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @example
-     *     await client.buckets.list()
+     *     await client.buckets.list({
+     *         n: 1,
+     *         nextToken: "nextToken"
+     *     })
      */
     public list(
         request: GroundX.BucketsListRequest = {},

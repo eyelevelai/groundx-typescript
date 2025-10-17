@@ -4,7 +4,10 @@
 
 /**
  * @example
- *     {}
+ *     {
+ *         n: 1,
+ *         nextToken: "nextToken"
+ *     }
  */
 export interface BucketsListRequest {
     /**

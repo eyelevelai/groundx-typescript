@@ -35,7 +35,10 @@ describe("Groups", () => {
         };
         server.mockEndpoint().get("/v1/group").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
-        const response = await client.groups.list();
+        const response = await client.groups.list({
+            n: 1,
+            nextToken: "nextToken",
+        });
         expect(response).toEqual({
             groups: [
                 {

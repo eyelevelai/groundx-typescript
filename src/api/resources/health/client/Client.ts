@@ -14,7 +14,7 @@ export declare namespace Health {
         environment?: core.Supplier<environments.GroundXEnvironment | string>;
         /** Specify a custom URL to connect the client to. */
         baseUrl?: core.Supplier<string>;
-        apiKey: core.Supplier<string>;
+        apiKey?: core.Supplier<string | undefined>;
         /** Additional headers to include in requests. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
         fetcher?: core.FetchFunction;
@@ -35,7 +35,7 @@ export declare namespace Health {
 export class Health {
     protected readonly _options: Health.Options;
 
-    constructor(_options: Health.Options) {
+    constructor(_options: Health.Options = {}) {
         this._options = _options;
     }
 

@@ -258,7 +258,14 @@ lookup all documents across all resources which are currently on GroundX
 <dd>
 
 ```typescript
-await client.documents.list();
+await client.documents.list({
+    n: 1,
+    filter: "filter",
+    sort: "name",
+    sortOrder: "asc",
+    status: "queued",
+    nextToken: "nextToken",
+});
 ```
 
 </dd>
@@ -449,7 +456,14 @@ lookup the document(s) associated with a processId, bucketId, or groupId.
 <dd>
 
 ```typescript
-await client.documents.lookup(1);
+await client.documents.lookup(1, {
+    n: 1,
+    filter: "filter",
+    sort: "name",
+    sortOrder: "asc",
+    status: "queued",
+    nextToken: "nextToken",
+});
 ```
 
 </dd>
@@ -646,7 +660,10 @@ Get a list of ingest process requests, sorted from most recent to least.
 <dd>
 
 ```typescript
-await client.documents.getProcesses();
+await client.documents.getProcesses({
+    n: 1,
+    status: "queued",
+});
 ```
 
 </dd>
@@ -713,7 +730,9 @@ The result of this query is typically used in one of two ways; `result.search.te
 
 ```typescript
 await client.search.content(1, {
+    n: 1,
     nextToken: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
+    verbosity: 1,
     query: "my search query",
 });
 ```
@@ -788,7 +807,9 @@ The result of this query is typically used in one of two ways; `result.search.te
 
 ```typescript
 await client.search.documents({
+    n: 1,
     nextToken: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
+    verbosity: 1,
     query: "my search query",
     documentIds: ["docUUID1", "docUUID2"],
 });
@@ -856,7 +877,10 @@ List all buckets within your GroundX account
 <dd>
 
 ```typescript
-await client.buckets.list();
+await client.buckets.list({
+    n: 1,
+    nextToken: "nextToken",
+});
 ```
 
 </dd>
@@ -1185,7 +1209,10 @@ list all groups within your GroundX account.
 <dd>
 
 ```typescript
-await client.groups.list();
+await client.groups.list({
+    n: 1,
+    nextToken: "nextToken",
+});
 ```
 
 </dd>

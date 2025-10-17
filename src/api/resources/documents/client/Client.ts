@@ -14,7 +14,7 @@ export declare namespace Documents {
         environment?: core.Supplier<environments.GroundXEnvironment | string>;
         /** Specify a custom URL to connect the client to. */
         baseUrl?: core.Supplier<string>;
-        apiKey: core.Supplier<string>;
+        apiKey?: core.Supplier<string | undefined>;
         /** Additional headers to include in requests. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
         fetcher?: core.FetchFunction;
@@ -35,7 +35,7 @@ export declare namespace Documents {
 export class Documents {
     protected readonly _options: Documents.Options;
 
-    constructor(_options: Documents.Options) {
+    constructor(_options: Documents.Options = {}) {
         this._options = _options;
     }
 
@@ -318,7 +318,14 @@ export class Documents {
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @example
-     *     await client.documents.list()
+     *     await client.documents.list({
+     *         n: 1,
+     *         filter: "filter",
+     *         sort: "name",
+     *         sortOrder: "asc",
+     *         status: "queued",
+     *         nextToken: "nextToken"
+     *     })
      */
     public list(
         request: GroundX.DocumentsListRequest = {},
@@ -580,7 +587,14 @@ export class Documents {
      * @throws {@link GroundX.UnauthorizedError}
      *
      * @example
-     *     await client.documents.lookup(1)
+     *     await client.documents.lookup(1, {
+     *         n: 1,
+     *         filter: "filter",
+     *         sort: "name",
+     *         sortOrder: "asc",
+     *         status: "queued",
+     *         nextToken: "nextToken"
+     *     })
      */
     public lookup(
         id: number,
@@ -838,7 +852,10 @@ export class Documents {
      * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @example
-     *     await client.documents.getProcesses()
+     *     await client.documents.getProcesses({
+     *         n: 1,
+     *         status: "queued"
+     *     })
      */
     public getProcesses(
         request: GroundX.DocumentsGetProcessesRequest = {},

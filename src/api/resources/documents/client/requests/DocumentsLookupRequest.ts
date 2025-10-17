@@ -6,7 +6,14 @@ import * as GroundX from "../../../../index.js";
 
 /**
  * @example
- *     {}
+ *     {
+ *         n: 1,
+ *         filter: "filter",
+ *         sort: "name",
+ *         sortOrder: "asc",
+ *         status: "queued",
+ *         nextToken: "nextToken"
+ *     }
  */
 export interface DocumentsLookupRequest {
     /**

@@ -27,7 +27,10 @@ describe("Buckets", () => {
         };
         server.mockEndpoint().get("/v1/bucket").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
-        const response = await client.buckets.list();
+        const response = await client.buckets.list({
+            n: 1,
+            nextToken: "nextToken",
+        });
         expect(response).toEqual({
             buckets: [
                 {

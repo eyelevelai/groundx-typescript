@@ -6,7 +6,10 @@ import * as GroundX from "../../../../index.js";
 
 /**
  * @example
- *     {}
+ *     {
+ *         n: 1,
+ *         status: "queued"
+ *     }
  */
 export interface DocumentsGetProcessesRequest {
     /**
