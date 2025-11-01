@@ -1,5 +1,7 @@
 export * as search from "./search/index.js";
 export * from "./search/types/index.js";
+export * as workflow from "./workflow/index.js";
+export * from "./workflow/types/index.js";
 export * as documents from "./documents/index.js";
 export * as buckets from "./buckets/index.js";
 export * as groups from "./groups/index.js";
@@ -9,3 +11,4 @@ export * from "./documents/client/requests/index.js";
 export * from "./search/client/requests/index.js";
 export * from "./buckets/client/requests/index.js";
 export * from "./groups/client/requests/index.js";
+export * from "./workflow/client/requests/index.js";

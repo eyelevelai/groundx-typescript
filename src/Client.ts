@@ -9,6 +9,7 @@ import { Documents } from "./api/resources/documents/client/Client.js";
 import { Search } from "./api/resources/search/client/Client.js";
 import { Buckets } from "./api/resources/buckets/client/Client.js";
 import { Groups } from "./api/resources/groups/client/Client.js";
+import { Workflow } from "./api/resources/workflow/client/Client.js";
 import { Customer } from "./api/resources/customer/client/Client.js";
 import { Health } from "./api/resources/health/client/Client.js";
 
@@ -41,6 +42,7 @@ export class GroundXClient {
     protected _search: Search | undefined;
     protected _buckets: Buckets | undefined;
     protected _groups: Groups | undefined;
+    protected _workflow: Workflow | undefined;
     protected _customer: Customer | undefined;
     protected _health: Health | undefined;
 
@@ -51,8 +53,8 @@ export class GroundXClient {
                 {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "groundx",
-                    "X-Fern-SDK-Version": "2.4.1",
-                    "User-Agent": "groundx/2.4.1",
+                    "X-Fern-SDK-Version": "2.6.0",
+                    "User-Agent": "groundx/2.6.0",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
@@ -75,6 +77,10 @@ export class GroundXClient {
 
     public get groups(): Groups {
         return (this._groups ??= new Groups(this._options));
+    }
+
+    public get workflow(): Workflow {
+        return (this._workflow ??= new Workflow(this._options));
     }
 
     public get customer(): Customer {
