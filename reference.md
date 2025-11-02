@@ -1643,7 +1643,7 @@ await client.groups.removeBucket(1, 1);
 </details>
 
 ## Workflows
-<details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">workflowList</a>() -> GroundX.WorkflowsResponse</code></summary>
+<details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">list</a>() -> GroundX.WorkflowsResponse</code></summary>
 <dl>
 <dd>
 
@@ -1670,7 +1670,7 @@ Get all workflows associated with the API key.
 <dd>
 
 ```typescript
-await client.workflows.workflowList();
+await client.workflows.list();
 
 ```
 </dd>
@@ -1698,7 +1698,7 @@ await client.workflows.workflowList();
 </dl>
 </details>
 
-<details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">workflowCreate</a>({ ...params }) -> GroundX.WorkflowResponse</code></summary>
+<details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">create</a>({ ...params }) -> GroundX.WorkflowResponse</code></summary>
 <dl>
 <dd>
 
@@ -1725,7 +1725,7 @@ Create a workflow.
 <dd>
 
 ```typescript
-await client.workflows.workflowCreate();
+await client.workflows.create();
 
 ```
 </dd>
@@ -2017,7 +2017,7 @@ await client.workflows.removeFromId(1);
 </dl>
 </details>
 
-<details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">workflowGet</a>(id) -> GroundX.WorkflowResponse</code></summary>
+<details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">get</a>(id) -> GroundX.WorkflowResponse</code></summary>
 <dl>
 <dd>
 
@@ -2044,7 +2044,7 @@ look up a specific workflow by groupId, bucketId, or workflowId.
 <dd>
 
 ```typescript
-await client.workflows.workflowGet(1);
+await client.workflows.get(1);
 
 ```
 </dd>
@@ -2060,7 +2060,7 @@ await client.workflows.workflowGet(1);
 <dl>
 <dd>
 
-**id:** `GroundX.WorkflowGetRequestId` — The id of the group, bucket, or workflow to look up.
+**id:** `GroundX.WorkflowsGetRequestId` — The id of the group, bucket, or workflow to look up.
     
 </dd>
 </dl>
@@ -2080,7 +2080,7 @@ await client.workflows.workflowGet(1);
 </dl>
 </details>
 
-<details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">workflowUpdate</a>(id, { ...params }) -> GroundX.WorkflowResponse</code></summary>
+<details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">update</a>(id, { ...params }) -> GroundX.WorkflowResponse</code></summary>
 <dl>
 <dd>
 
@@ -2107,7 +2107,7 @@ Update an existing workflow.
 <dd>
 
 ```typescript
-await client.workflows.workflowUpdate("id", {
+await client.workflows.update("id", {
     workflowId: "workflowId"
 });
 
@@ -2153,7 +2153,7 @@ await client.workflows.workflowUpdate("id", {
 </dl>
 </details>
 
-<details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">workflowDelete</a>(id) -> GroundX.MessageResponse</code></summary>
+<details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">delete</a>(id) -> GroundX.MessageResponse</code></summary>
 <dl>
 <dd>
 
@@ -2180,7 +2180,7 @@ Delete a workflow.
 <dd>
 
 ```typescript
-await client.workflows.workflowDelete("id");
+await client.workflows.delete("id");
 
 ```
 </dd>

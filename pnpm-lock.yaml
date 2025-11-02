@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      url-join:
+        specifier: '>=5.0.0'
+        version: 5.0.0
     devDependencies:
       '@biomejs/biome':
         specifier: 2.3.1
@@ -1015,6 +1019,10 @@ packages:
     peerDependencies:
       browserslist: '>= 4.21.0'
 
+  url-join@5.0.0:
+    resolution: {integrity: sha512-n2huDr9h9yzd6exQVnH/jU5mr+Pfx08LRXXZhkLLetAMESRj+anQsTAh940iMrIetKAmry9coFuZQ2jY8/p3WA==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+
   vite-node@3.2.4:
     resolution: {integrity: sha512-EbKSKh+bh1E1IFxeO0pg1n4dvoOTt0UDiXMd/qn++r98+jPO1xtJilvXldeuQ8giIB5IkpjCgMleHMNEsGH6pg==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
@@ -1983,6 +1991,8 @@ snapshots:
       browserslist: 4.27.0
       escalade: 3.2.0
       picocolors: 1.1.1
+
+  url-join@5.0.0: {}
 
   vite-node@3.2.4(@types/node@18.19.130)(terser@5.44.0):
     dependencies:

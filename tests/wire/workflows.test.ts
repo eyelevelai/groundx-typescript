@@ -4,7 +4,7 @@ import { GroundXClient } from "../../src/Client";
 import { mockServerPool } from "../mock-server/MockServerPool";
 
 describe("Workflows", () => {
-    test("Workflow_list", async () => {
+    test("list", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -13,7 +13,7 @@ describe("Workflows", () => {
         };
         server.mockEndpoint().get("/v1/workflow").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
-        const response = await client.workflows.workflowList();
+        const response = await client.workflows.list();
         expect(response).toEqual({
             workflows: [
                 {
@@ -26,7 +26,7 @@ describe("Workflows", () => {
         });
     });
 
-    test("Workflow_create", async () => {
+    test("create", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -48,7 +48,7 @@ describe("Workflows", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.workflows.workflowCreate();
+        const response = await client.workflows.create();
         expect(response).toEqual({
             workflow: {
                 documentId: "documentId",
@@ -146,7 +146,7 @@ describe("Workflows", () => {
         });
     });
 
-    test("Workflow_get", async () => {
+    test("get", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -161,7 +161,7 @@ describe("Workflows", () => {
         };
         server.mockEndpoint().get("/v1/workflow/1").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
-        const response = await client.workflows.workflowGet(1);
+        const response = await client.workflows.get(1);
         expect(response).toEqual({
             workflow: {
                 documentId: "documentId",
@@ -177,7 +177,7 @@ describe("Workflows", () => {
         });
     });
 
-    test("Workflow_update", async () => {
+    test("update", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { workflowId: "workflowId" };
@@ -199,7 +199,7 @@ describe("Workflows", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.workflows.workflowUpdate("id", {
+        const response = await client.workflows.update("id", {
             workflowId: "workflowId",
         });
         expect(response).toEqual({
@@ -217,14 +217,14 @@ describe("Workflows", () => {
         });
     });
 
-    test("Workflow_delete", async () => {
+    test("delete", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { message: "OK" };
         server.mockEndpoint().delete("/v1/workflow/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
-        const response = await client.workflows.workflowDelete("id");
+        const response = await client.workflows.delete("id");
         expect(response).toEqual({
             message: "OK",
         });

@@ -26,15 +26,13 @@ export class Workflows {
      * @param {Workflows.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @example
-     *     await client.workflows.workflowList()
+     *     await client.workflows.list()
      */
-    public workflowList(
-        requestOptions?: Workflows.RequestOptions,
-    ): core.HttpResponsePromise<GroundX.WorkflowsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__workflowList(requestOptions));
+    public list(requestOptions?: Workflows.RequestOptions): core.HttpResponsePromise<GroundX.WorkflowsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__list(requestOptions));
     }
 
-    private async __workflowList(
+    private async __list(
         requestOptions?: Workflows.RequestOptions,
     ): Promise<core.WithRawResponse<GroundX.WorkflowsResponse>> {
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -92,16 +90,16 @@ export class Workflows {
      * @param {Workflows.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @example
-     *     await client.workflows.workflowCreate()
+     *     await client.workflows.create()
      */
-    public workflowCreate(
+    public create(
         request: GroundX.WorkflowCreateRequest = {},
         requestOptions?: Workflows.RequestOptions,
     ): core.HttpResponsePromise<GroundX.WorkflowResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__workflowCreate(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
-    private async __workflowCreate(
+    private async __create(
         request: GroundX.WorkflowCreateRequest = {},
         requestOptions?: Workflows.RequestOptions,
     ): Promise<core.WithRawResponse<GroundX.WorkflowResponse>> {
@@ -445,21 +443,21 @@ export class Workflows {
     /**
      * look up a specific workflow by groupId, bucketId, or workflowId.
      *
-     * @param {GroundX.WorkflowGetRequestId} id - The id of the group, bucket, or workflow to look up.
+     * @param {GroundX.WorkflowsGetRequestId} id - The id of the group, bucket, or workflow to look up.
      * @param {Workflows.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @example
-     *     await client.workflows.workflowGet(1)
+     *     await client.workflows.get(1)
      */
-    public workflowGet(
-        id: GroundX.WorkflowGetRequestId,
+    public get(
+        id: GroundX.WorkflowsGetRequestId,
         requestOptions?: Workflows.RequestOptions,
     ): core.HttpResponsePromise<GroundX.WorkflowResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__workflowGet(id, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__get(id, requestOptions));
     }
 
-    private async __workflowGet(
-        id: GroundX.WorkflowGetRequestId,
+    private async __get(
+        id: GroundX.WorkflowsGetRequestId,
         requestOptions?: Workflows.RequestOptions,
     ): Promise<core.WithRawResponse<GroundX.WorkflowResponse>> {
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -518,19 +516,19 @@ export class Workflows {
      * @param {Workflows.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @example
-     *     await client.workflows.workflowUpdate("id", {
+     *     await client.workflows.update("id", {
      *         workflowId: "workflowId"
      *     })
      */
-    public workflowUpdate(
+    public update(
         id: string,
         request: GroundX.WorkflowUpdateRequest,
         requestOptions?: Workflows.RequestOptions,
     ): core.HttpResponsePromise<GroundX.WorkflowResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__workflowUpdate(id, request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
     }
 
-    private async __workflowUpdate(
+    private async __update(
         id: string,
         request: GroundX.WorkflowUpdateRequest,
         requestOptions?: Workflows.RequestOptions,
@@ -593,16 +591,16 @@ export class Workflows {
      * @param {Workflows.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @example
-     *     await client.workflows.workflowDelete("id")
+     *     await client.workflows.delete("id")
      */
-    public workflowDelete(
+    public delete(
         id: string,
         requestOptions?: Workflows.RequestOptions,
     ): core.HttpResponsePromise<GroundX.MessageResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__workflowDelete(id, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__delete(id, requestOptions));
     }
 
-    private async __workflowDelete(
+    private async __delete(
         id: string,
         requestOptions?: Workflows.RequestOptions,
     ): Promise<core.WithRawResponse<GroundX.MessageResponse>> {

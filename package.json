@@ -1,6 +1,6 @@
 {
     "name": "groundx",
-    "version": "2.6.1",
+    "version": "2.6.3",
     "private": false,
     "repository": "github:eyelevelai/groundx-typescript",
     "license": "MIT",
@@ -42,6 +42,9 @@
         "test": "vitest",
         "test:unit": "vitest --project unit",
         "test:wire": "vitest --project wire"
+    },
+    "dependencies": {
+        "url-join": ">=5.0.0"
     },
     "devDependencies": {
         "webpack": "^5.97.1",

@@ -1,1 +1,1 @@
-export * from "./WorkflowGetRequestId.js";
+export * from "./WorkflowsGetRequestId.js";
