@@ -236,7 +236,7 @@ export class GroundXClient extends FernClient {
 
     protected async _getCustomAuthorizationHeaders(): Promise<Record<string, string>> {
         const apiKeyValue = await core.Supplier.get(this._options.apiKey);
-        return { "X-API-Key": apiKeyValue };
+        return { "X-API-Key": apiKeyValue || "" };
     }
 
 }
