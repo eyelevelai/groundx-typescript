@@ -1,7 +1,5 @@
 # Reference
-
 ## Documents
-
 <details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">ingestRemote</a>({ ...params }) -> GroundX.IngestResponse</code></summary>
 <dl>
 <dd>
@@ -17,7 +15,6 @@
 Ingest documents hosted on public URLs into a GroundX bucket.
 
 [Supported Document Types and Ingest Capacities](https://docs.eyelevel.ai/documentation/fundamentals/document-types-and-ingest-capacities)
-
 </dd>
 </dl>
 </dd>
@@ -33,17 +30,15 @@ Ingest documents hosted on public URLs into a GroundX bucket.
 
 ```typescript
 await client.documents.ingestRemote({
-    documents: [
-        {
+    documents: [{
             bucketId: 1234,
             fileName: "my_file1.txt",
             fileType: "txt",
-            sourceUrl: "https://my.source.url.com/file1.txt",
-        },
-    ],
+            sourceUrl: "https://my.source.url.com/file1.txt"
+        }]
 });
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -57,20 +52,21 @@ await client.documents.ingestRemote({
 <dl>
 <dd>
 
-**request:** `GroundX.DocumentRemoteIngestRequest`
-
+**request:** `GroundX.DocumentRemoteIngestRequest` 
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions`
+**requestOptions:** `Documents.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
@@ -91,7 +87,6 @@ await client.documents.ingestRemote({
 Upload documents hosted on a local file system into a GroundX bucket.
 
 [Supported Document Types and Ingest Capacities](https://docs.eyelevel.ai/documentation/fundamentals/document-types-and-ingest-capacities)
-
 </dd>
 </dl>
 </dd>
@@ -106,18 +101,16 @@ Upload documents hosted on a local file system into a GroundX bucket.
 <dd>
 
 ```typescript
-await client.documents.ingestLocal([
-    {
+await client.documents.ingestLocal([{
         blob: "blob",
         metadata: {
             bucketId: 1234,
             fileName: "my_file1.txt",
-            fileType: "txt",
-        },
-    },
-]);
-```
+            fileType: "txt"
+        }
+    }]);
 
+```
 </dd>
 </dl>
 </dd>
@@ -131,20 +124,21 @@ await client.documents.ingestLocal([
 <dl>
 <dd>
 
-**request:** `GroundX.DocumentLocalIngestRequest`
-
+**request:** `GroundX.DocumentLocalIngestRequest` 
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions`
+**requestOptions:** `Documents.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
@@ -164,11 +158,10 @@ await client.documents.ingestLocal([
 
 Upload the content of a publicly accessible website for ingestion into a GroundX bucket. This is done by following links within a specified URL, recursively, up to a specified depth or number of pages.
 
-Note1: This endpoint is currently not supported for on-prem deployments.
+Note1: This endpoint is currently not supported for on-prem deployments. 
 Note2: The `source_url` must include the protocol, http:// or https://.
 
 [Supported Document Types and Ingest Capacities](https://docs.eyelevel.ai/documentation/fundamentals/document-types-and-ingest-capacities)
-
 </dd>
 </dl>
 </dd>
@@ -184,20 +177,18 @@ Note2: The `source_url` must include the protocol, http:// or https://.
 
 ```typescript
 await client.documents.crawlWebsite({
-    websites: [
-        {
+    websites: [{
             bucketId: 1234,
             cap: 10,
             depth: 2,
             searchData: {
-                key: "value",
+                "key": "value"
             },
-            sourceUrl: "https://my.website.com",
-        },
-    ],
+            sourceUrl: "https://my.website.com"
+        }]
 });
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -211,20 +202,21 @@ await client.documents.crawlWebsite({
 <dl>
 <dd>
 
-**request:** `GroundX.WebsiteCrawlRequest`
-
+**request:** `GroundX.WebsiteCrawlRequest` 
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions`
+**requestOptions:** `Documents.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
@@ -243,7 +235,6 @@ await client.documents.crawlWebsite({
 <dd>
 
 lookup all documents across all resources which are currently on GroundX
-
 </dd>
 </dl>
 </dd>
@@ -264,10 +255,10 @@ await client.documents.list({
     sort: "name",
     sortOrder: "asc",
     status: "queued",
-    nextToken: "nextToken",
+    nextToken: "nextToken"
 });
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -281,20 +272,21 @@ await client.documents.list({
 <dl>
 <dd>
 
-**request:** `GroundX.DocumentsListRequest`
-
+**request:** `GroundX.DocumentsListRequest` 
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions`
+**requestOptions:** `Documents.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
@@ -313,7 +305,6 @@ await client.documents.list({
 <dd>
 
 Delete multiple documents hosted on GroundX
-
 </dd>
 </dl>
 </dd>
@@ -329,10 +320,10 @@ Delete multiple documents hosted on GroundX
 
 ```typescript
 await client.documents.delete({
-    documentIds: "123e4567-e89b-12d3-a456-426614174000,9f7c11a6-24b8-4d52-a9f3-90a7e70a9e49",
+    documentIds: "123e4567-e89b-12d3-a456-426614174000,9f7c11a6-24b8-4d52-a9f3-90a7e70a9e49"
 });
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -346,20 +337,21 @@ await client.documents.delete({
 <dl>
 <dd>
 
-**request:** `GroundX.DocumentsDeleteRequest`
-
+**request:** `GroundX.DocumentsDeleteRequest` 
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions`
+**requestOptions:** `Documents.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
@@ -378,7 +370,6 @@ await client.documents.delete({
 <dd>
 
 Get the current status of an ingest, initiated with documents.ingest_remote, documents.ingest_local, or documents.crawl_website, by specifying the processId (the processId is included in the response of the documents.ingest functions).
-
 </dd>
 </dl>
 </dd>
@@ -394,8 +385,8 @@ Get the current status of an ingest, initiated with documents.ingest_remote, doc
 
 ```typescript
 await client.documents.getProcessingStatusById("processId");
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -410,19 +401,20 @@ await client.documents.getProcessingStatusById("processId");
 <dd>
 
 **processId:** `string` — the processId for the ingest process being checked
-
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions`
+**requestOptions:** `Documents.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
@@ -441,7 +433,6 @@ await client.documents.getProcessingStatusById("processId");
 <dd>
 
 lookup the document(s) associated with a processId, bucketId, or groupId.
-
 </dd>
 </dl>
 </dd>
@@ -462,10 +453,10 @@ await client.documents.lookup(1, {
     sort: "name",
     sortOrder: "asc",
     status: "queued",
-    nextToken: "nextToken",
+    nextToken: "nextToken"
 });
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -480,27 +471,28 @@ await client.documents.lookup(1, {
 <dd>
 
 **id:** `number` — a processId, bucketId, or groupId
-
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**request:** `GroundX.DocumentsLookupRequest`
-
+**request:** `GroundX.DocumentsLookupRequest` 
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions`
+**requestOptions:** `Documents.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
@@ -519,7 +511,6 @@ await client.documents.lookup(1, {
 <dd>
 
 Look up an existing document by documentId.
-
 </dd>
 </dl>
 </dd>
@@ -535,8 +526,8 @@ Look up an existing document by documentId.
 
 ```typescript
 await client.documents.get("documentId");
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -551,19 +542,20 @@ await client.documents.get("documentId");
 <dd>
 
 **documentId:** `string` — The documentId of the document for which GroundX information will be provided.
-
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions`
+**requestOptions:** `Documents.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
@@ -582,7 +574,6 @@ await client.documents.get("documentId");
 <dd>
 
 Delete a single document hosted on GroundX
-
 </dd>
 </dl>
 </dd>
@@ -598,8 +589,8 @@ Delete a single document hosted on GroundX
 
 ```typescript
 await client.documents.deleteById("documentId");
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -614,19 +605,20 @@ await client.documents.deleteById("documentId");
 <dd>
 
 **documentId:** `string` — A documentId which correspond to a document ingested by GroundX
-
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions`
+**requestOptions:** `Documents.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
@@ -645,7 +637,6 @@ await client.documents.deleteById("documentId");
 <dd>
 
 Get a list of ingest process requests, sorted from most recent to least.
-
 </dd>
 </dl>
 </dd>
@@ -662,10 +653,10 @@ Get a list of ingest process requests, sorted from most recent to least.
 ```typescript
 await client.documents.getProcesses({
     n: 1,
-    status: "queued",
+    status: "queued"
 });
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -679,27 +670,27 @@ await client.documents.getProcesses({
 <dl>
 <dd>
 
-**request:** `GroundX.DocumentsGetProcessesRequest`
-
+**request:** `GroundX.DocumentsGetProcessesRequest` 
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions`
+**requestOptions:** `Documents.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
 </details>
 
 ## Search
-
 <details><summary><code>client.search.<a href="/src/api/resources/search/client/Client.ts">content</a>(id, { ...params }) -> GroundX.SearchResponse</code></summary>
 <dl>
 <dd>
@@ -714,7 +705,6 @@ await client.documents.getProcesses({
 
 Search documents on GroundX for the most relevant information to a given query.
 The result of this query is typically used in one of two ways; `result.search.text` can be used to provide context to a language model, facilitating RAG, or `result.search.results` can be used to observe chunks of text which are relevant to the query, facilitating citation.
-
 </dd>
 </dl>
 </dd>
@@ -733,10 +723,10 @@ await client.search.content(1, {
     n: 1,
     nextToken: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
     verbosity: 1,
-    query: "my search query",
+    query: "my search query"
 });
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -751,27 +741,28 @@ await client.search.content(1, {
 <dd>
 
 **id:** `GroundX.SearchContentRequestId` — The bucketId, groupId, or documentId to be searched. The document or documents within the specified container will be compared to the query, and relevant information will be extracted.
-
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**request:** `GroundX.SearchRequest`
-
+**request:** `GroundX.SearchRequest` 
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Search.RequestOptions`
+**requestOptions:** `Search.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
@@ -791,7 +782,6 @@ await client.search.content(1, {
 
 Search documents on GroundX for the most relevant information to a given query by documentId(s).
 The result of this query is typically used in one of two ways; `result.search.text` can be used to provide context to a language model, facilitating RAG, or `result.search.results` can be used to observe chunks of text which are relevant to the query, facilitating citation.
-
 </dd>
 </dl>
 </dd>
@@ -811,10 +801,10 @@ await client.search.documents({
     nextToken: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
     verbosity: 1,
     query: "my search query",
-    documentIds: ["docUUID1", "docUUID2"],
+    documentIds: ["docUUID1", "docUUID2"]
 });
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -828,27 +818,27 @@ await client.search.documents({
 <dl>
 <dd>
 
-**request:** `GroundX.SearchDocumentsRequest`
-
+**request:** `GroundX.SearchDocumentsRequest` 
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Search.RequestOptions`
+**requestOptions:** `Search.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
 </details>
 
 ## Buckets
-
 <details><summary><code>client.buckets.<a href="/src/api/resources/buckets/client/Client.ts">list</a>({ ...params }) -> GroundX.BucketListResponse</code></summary>
 <dl>
 <dd>
@@ -862,7 +852,6 @@ await client.search.documents({
 <dd>
 
 List all buckets within your GroundX account
-
 </dd>
 </dl>
 </dd>
@@ -879,10 +868,10 @@ List all buckets within your GroundX account
 ```typescript
 await client.buckets.list({
     n: 1,
-    nextToken: "nextToken",
+    nextToken: "nextToken"
 });
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -896,20 +885,21 @@ await client.buckets.list({
 <dl>
 <dd>
 
-**request:** `GroundX.BucketsListRequest`
-
+**request:** `GroundX.BucketsListRequest` 
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Buckets.RequestOptions`
+**requestOptions:** `Buckets.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
@@ -928,7 +918,6 @@ await client.buckets.list({
 <dd>
 
 Create a new bucket.
-
 </dd>
 </dl>
 </dd>
@@ -944,10 +933,10 @@ Create a new bucket.
 
 ```typescript
 await client.buckets.create({
-    name: "your_bucket_name",
+    name: "your_bucket_name"
 });
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -961,20 +950,21 @@ await client.buckets.create({
 <dl>
 <dd>
 
-**request:** `GroundX.BucketCreateRequest`
-
+**request:** `GroundX.BucketCreateRequest` 
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Buckets.RequestOptions`
+**requestOptions:** `Buckets.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
@@ -993,7 +983,6 @@ await client.buckets.create({
 <dd>
 
 Look up a specific bucket by its bucketId.
-
 </dd>
 </dl>
 </dd>
@@ -1009,8 +998,8 @@ Look up a specific bucket by its bucketId.
 
 ```typescript
 await client.buckets.get(1);
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -1025,19 +1014,20 @@ await client.buckets.get(1);
 <dd>
 
 **bucketId:** `number` — The bucketId of the bucket to look up.
-
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Buckets.RequestOptions`
+**requestOptions:** `Buckets.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
@@ -1056,7 +1046,6 @@ await client.buckets.get(1);
 <dd>
 
 Rename a bucket.
-
 </dd>
 </dl>
 </dd>
@@ -1072,10 +1061,10 @@ Rename a bucket.
 
 ```typescript
 await client.buckets.update(1, {
-    newName: "your_bucket_name",
+    newName: "your_bucket_name"
 });
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -1090,27 +1079,28 @@ await client.buckets.update(1, {
 <dd>
 
 **bucketId:** `number` — The bucketId of the bucket being updated.
-
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**request:** `GroundX.BucketUpdateRequest`
-
+**request:** `GroundX.BucketUpdateRequest` 
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Buckets.RequestOptions`
+**requestOptions:** `Buckets.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
@@ -1129,7 +1119,6 @@ await client.buckets.update(1, {
 <dd>
 
 Delete a bucket.
-
 </dd>
 </dl>
 </dd>
@@ -1145,8 +1134,8 @@ Delete a bucket.
 
 ```typescript
 await client.buckets.delete(1);
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -1161,26 +1150,26 @@ await client.buckets.delete(1);
 <dd>
 
 **bucketId:** `number` — The bucketId of the bucket being deleted.
-
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Buckets.RequestOptions`
+**requestOptions:** `Buckets.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
 </details>
 
 ## Groups
-
 <details><summary><code>client.groups.<a href="/src/api/resources/groups/client/Client.ts">list</a>({ ...params }) -> GroundX.GroupListResponse</code></summary>
 <dl>
 <dd>
@@ -1194,7 +1183,6 @@ await client.buckets.delete(1);
 <dd>
 
 list all groups within your GroundX account.
-
 </dd>
 </dl>
 </dd>
@@ -1211,10 +1199,10 @@ list all groups within your GroundX account.
 ```typescript
 await client.groups.list({
     n: 1,
-    nextToken: "nextToken",
+    nextToken: "nextToken"
 });
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -1228,20 +1216,21 @@ await client.groups.list({
 <dl>
 <dd>
 
-**request:** `GroundX.GroupsListRequest`
-
+**request:** `GroundX.GroupsListRequest` 
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Groups.RequestOptions`
+**requestOptions:** `Groups.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
@@ -1260,7 +1249,6 @@ await client.groups.list({
 <dd>
 
 create a new group, a group being a collection of buckets which can be searched.
-
 </dd>
 </dl>
 </dd>
@@ -1276,10 +1264,10 @@ create a new group, a group being a collection of buckets which can be searched.
 
 ```typescript
 await client.groups.create({
-    name: "your_group_name",
+    name: "your_group_name"
 });
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -1293,20 +1281,21 @@ await client.groups.create({
 <dl>
 <dd>
 
-**request:** `GroundX.GroupCreateRequest`
-
+**request:** `GroundX.GroupCreateRequest` 
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Groups.RequestOptions`
+**requestOptions:** `Groups.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
@@ -1325,7 +1314,6 @@ await client.groups.create({
 <dd>
 
 look up a specific group by its groupId.
-
 </dd>
 </dl>
 </dd>
@@ -1341,8 +1329,8 @@ look up a specific group by its groupId.
 
 ```typescript
 await client.groups.get(1);
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -1357,19 +1345,20 @@ await client.groups.get(1);
 <dd>
 
 **groupId:** `number` — The groupId of the group to look up.
-
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Groups.RequestOptions`
+**requestOptions:** `Groups.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
@@ -1388,7 +1377,6 @@ await client.groups.get(1);
 <dd>
 
 Rename a group
-
 </dd>
 </dl>
 </dd>
@@ -1404,10 +1392,10 @@ Rename a group
 
 ```typescript
 await client.groups.update(1, {
-    newName: "your_group_name",
+    newName: "your_group_name"
 });
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -1422,27 +1410,28 @@ await client.groups.update(1, {
 <dd>
 
 **groupId:** `number` — The groupId of the group to update.
-
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**request:** `GroundX.GroupUpdateRequest`
-
+**request:** `GroundX.GroupUpdateRequest` 
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Groups.RequestOptions`
+**requestOptions:** `Groups.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
@@ -1461,7 +1450,6 @@ await client.groups.update(1, {
 <dd>
 
 Delete a group.
-
 </dd>
 </dl>
 </dd>
@@ -1477,8 +1465,8 @@ Delete a group.
 
 ```typescript
 await client.groups.delete(1);
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -1493,19 +1481,20 @@ await client.groups.delete(1);
 <dd>
 
 **groupId:** `number` — The groupId of the group to be deleted.
-
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Groups.RequestOptions`
+**requestOptions:** `Groups.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
@@ -1524,7 +1513,6 @@ await client.groups.delete(1);
 <dd>
 
 Add an existing bucket to an existing group. Buckets and groups can be associated many to many.
-
 </dd>
 </dl>
 </dd>
@@ -1540,8 +1528,8 @@ Add an existing bucket to an existing group. Buckets and groups can be associate
 
 ```typescript
 await client.groups.addBucket(1, 1);
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -1556,7 +1544,7 @@ await client.groups.addBucket(1, 1);
 <dd>
 
 **groupId:** `number` — The groupId of the group which the bucket will be added to.
-
+    
 </dd>
 </dl>
 
@@ -1564,19 +1552,20 @@ await client.groups.addBucket(1, 1);
 <dd>
 
 **bucketId:** `number` — The bucketId of the bucket being added to the group.
-
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Groups.RequestOptions`
+**requestOptions:** `Groups.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
@@ -1595,7 +1584,6 @@ await client.groups.addBucket(1, 1);
 <dd>
 
 remove a bucket from a group. Buckets and groups can be associated many to many, this removes one bucket to group association without disturbing others.
-
 </dd>
 </dl>
 </dd>
@@ -1611,8 +1599,8 @@ remove a bucket from a group. Buckets and groups can be associated many to many,
 
 ```typescript
 await client.groups.removeBucket(1, 1);
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -1627,7 +1615,7 @@ await client.groups.removeBucket(1, 1);
 <dd>
 
 **groupId:** `number` — The groupId of the group which the bucket will be removed from.
-
+    
 </dd>
 </dl>
 
@@ -1635,27 +1623,27 @@ await client.groups.removeBucket(1, 1);
 <dd>
 
 **bucketId:** `number` — The bucketId of the bucket which will be removed from the group.
-
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Groups.RequestOptions`
+**requestOptions:** `Groups.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
 </details>
 
-## Workflow
-
-<details><summary><code>client.workflow.<a href="/src/api/resources/workflow/client/Client.ts">list</a>() -> GroundX.WorkflowsResponse</code></summary>
+## Workflows
+<details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">workflowList</a>() -> GroundX.WorkflowsResponse</code></summary>
 <dl>
 <dd>
 
@@ -1668,7 +1656,6 @@ await client.groups.removeBucket(1, 1);
 <dd>
 
 Get all workflows associated with the API key.
-
 </dd>
 </dl>
 </dd>
@@ -1683,9 +1670,9 @@ Get all workflows associated with the API key.
 <dd>
 
 ```typescript
-await client.workflow.list();
-```
+await client.workflows.workflowList();
 
+```
 </dd>
 </dl>
 </dd>
@@ -1699,18 +1686,19 @@ await client.workflow.list();
 <dl>
 <dd>
 
-**requestOptions:** `Workflow.RequestOptions`
+**requestOptions:** `Workflows.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
 </details>
 
-<details><summary><code>client.workflow.<a href="/src/api/resources/workflow/client/Client.ts">create</a>({ ...params }) -> GroundX.WorkflowResponse</code></summary>
+<details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">workflowCreate</a>({ ...params }) -> GroundX.WorkflowResponse</code></summary>
 <dl>
 <dd>
 
@@ -1723,7 +1711,6 @@ await client.workflow.list();
 <dd>
 
 Create a workflow.
-
 </dd>
 </dl>
 </dd>
@@ -1738,9 +1725,9 @@ Create a workflow.
 <dd>
 
 ```typescript
-await client.workflow.create();
-```
+await client.workflows.workflowCreate();
 
+```
 </dd>
 </dl>
 </dd>
@@ -1754,26 +1741,27 @@ await client.workflow.create();
 <dl>
 <dd>
 
-**request:** `GroundX.WorkflowCreateRequest`
-
+**request:** `GroundX.WorkflowCreateRequest` 
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Workflow.RequestOptions`
+**requestOptions:** `Workflows.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
 </details>
 
-<details><summary><code>client.workflow.<a href="/src/api/resources/workflow/client/Client.ts">relationshipAddToAccount</a>({ ...params }) -> GroundX.MessageResponse</code></summary>
+<details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">addToAccount</a>({ ...params }) -> GroundX.MessageResponse</code></summary>
 <dl>
 <dd>
 
@@ -1786,7 +1774,6 @@ await client.workflow.create();
 <dd>
 
 Assigns the given workflow to the customer account and is applied by default to all files unless overridden by document or bucket workflows.
-
 </dd>
 </dl>
 </dd>
@@ -1801,11 +1788,11 @@ Assigns the given workflow to the customer account and is applied by default to 
 <dd>
 
 ```typescript
-await client.workflow.relationshipAddToAccount({
-    workflowId: "workflowId",
+await client.workflows.addToAccount({
+    workflowId: "workflowId"
 });
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -1819,26 +1806,27 @@ await client.workflow.relationshipAddToAccount({
 <dl>
 <dd>
 
-**request:** `GroundX.WorkflowApplyRequest`
-
+**request:** `GroundX.WorkflowApplyRequest` 
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Workflow.RequestOptions`
+**requestOptions:** `Workflows.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
 </details>
 
-<details><summary><code>client.workflow.<a href="/src/api/resources/workflow/client/Client.ts">relationshipRemoveFromAccount</a>() -> GroundX.MessageResponse</code></summary>
+<details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">removeFromAccount</a>() -> GroundX.MessageResponse</code></summary>
 <dl>
 <dd>
 
@@ -1851,7 +1839,6 @@ await client.workflow.relationshipAddToAccount({
 <dd>
 
 Removes the assigned workflow from the customer account.
-
 </dd>
 </dl>
 </dd>
@@ -1866,9 +1853,9 @@ Removes the assigned workflow from the customer account.
 <dd>
 
 ```typescript
-await client.workflow.relationshipRemoveFromAccount();
-```
+await client.workflows.removeFromAccount();
 
+```
 </dd>
 </dl>
 </dd>
@@ -1882,18 +1869,19 @@ await client.workflow.relationshipRemoveFromAccount();
 <dl>
 <dd>
 
-**requestOptions:** `Workflow.RequestOptions`
+**requestOptions:** `Workflows.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
 </details>
 
-<details><summary><code>client.workflow.<a href="/src/api/resources/workflow/client/Client.ts">relationshipAddToId</a>(id, { ...params }) -> GroundX.MessageResponse</code></summary>
+<details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">addToId</a>(id, { ...params }) -> GroundX.MessageResponse</code></summary>
 <dl>
 <dd>
 
@@ -1906,7 +1894,6 @@ await client.workflow.relationshipRemoveFromAccount();
 <dd>
 
 Assigns the given workflow to the group or bucket and is applied by default to all files unless overridden by document workflows.
-
 </dd>
 </dl>
 </dd>
@@ -1921,11 +1908,11 @@ Assigns the given workflow to the group or bucket and is applied by default to a
 <dd>
 
 ```typescript
-await client.workflow.relationshipAddToId(1, {
-    workflowId: "workflowId",
+await client.workflows.addToId(1, {
+    workflowId: "workflowId"
 });
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -1940,33 +1927,34 @@ await client.workflow.relationshipAddToId(1, {
 <dd>
 
 **id:** `number` — The id of the group or bucket that the workflow will be assigned to.
-
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**request:** `GroundX.WorkflowApplyRequest`
-
+**request:** `GroundX.WorkflowApplyRequest` 
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Workflow.RequestOptions`
+**requestOptions:** `Workflows.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
 </details>
 
-<details><summary><code>client.workflow.<a href="/src/api/resources/workflow/client/Client.ts">relationshipRemoveFromId</a>(id) -> GroundX.MessageResponse</code></summary>
+<details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">removeFromId</a>(id) -> GroundX.MessageResponse</code></summary>
 <dl>
 <dd>
 
@@ -1979,7 +1967,6 @@ await client.workflow.relationshipAddToId(1, {
 <dd>
 
 Removes the assigned workflow from the customer account.
-
 </dd>
 </dl>
 </dd>
@@ -1994,9 +1981,9 @@ Removes the assigned workflow from the customer account.
 <dd>
 
 ```typescript
-await client.workflow.relationshipRemoveFromId(1);
-```
+await client.workflows.removeFromId(1);
 
+```
 </dd>
 </dl>
 </dd>
@@ -2011,25 +1998,26 @@ await client.workflow.relationshipRemoveFromId(1);
 <dd>
 
 **id:** `number` — The id of the group or bucket that the workflow will removed from.
-
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Workflow.RequestOptions`
+**requestOptions:** `Workflows.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
 </details>
 
-<details><summary><code>client.workflow.<a href="/src/api/resources/workflow/client/Client.ts">get</a>(id) -> GroundX.WorkflowResponse</code></summary>
+<details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">workflowGet</a>(id) -> GroundX.WorkflowResponse</code></summary>
 <dl>
 <dd>
 
@@ -2042,7 +2030,6 @@ await client.workflow.relationshipRemoveFromId(1);
 <dd>
 
 look up a specific workflow by groupId, bucketId, or workflowId.
-
 </dd>
 </dl>
 </dd>
@@ -2057,9 +2044,9 @@ look up a specific workflow by groupId, bucketId, or workflowId.
 <dd>
 
 ```typescript
-await client.workflow.get(1);
-```
+await client.workflows.workflowGet(1);
 
+```
 </dd>
 </dl>
 </dd>
@@ -2074,25 +2061,26 @@ await client.workflow.get(1);
 <dd>
 
 **id:** `GroundX.WorkflowGetRequestId` — The id of the group, bucket, or workflow to look up.
-
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Workflow.RequestOptions`
+**requestOptions:** `Workflows.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
 </details>
 
-<details><summary><code>client.workflow.<a href="/src/api/resources/workflow/client/Client.ts">update</a>(id, { ...params }) -> GroundX.WorkflowResponse</code></summary>
+<details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">workflowUpdate</a>(id, { ...params }) -> GroundX.WorkflowResponse</code></summary>
 <dl>
 <dd>
 
@@ -2105,7 +2093,6 @@ await client.workflow.get(1);
 <dd>
 
 Update an existing workflow.
-
 </dd>
 </dl>
 </dd>
@@ -2120,11 +2107,11 @@ Update an existing workflow.
 <dd>
 
 ```typescript
-await client.workflow.update("id", {
-    workflowId: "workflowId",
+await client.workflows.workflowUpdate("id", {
+    workflowId: "workflowId"
 });
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -2139,33 +2126,34 @@ await client.workflow.update("id", {
 <dd>
 
 **id:** `string` — The workflowId of the workflow being updated.
-
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**request:** `GroundX.WorkflowUpdateRequest`
-
+**request:** `GroundX.WorkflowUpdateRequest` 
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Workflow.RequestOptions`
+**requestOptions:** `Workflows.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
 </details>
 
-<details><summary><code>client.workflow.<a href="/src/api/resources/workflow/client/Client.ts">delete</a>(id) -> GroundX.MessageResponse</code></summary>
+<details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">workflowDelete</a>(id) -> GroundX.MessageResponse</code></summary>
 <dl>
 <dd>
 
@@ -2178,7 +2166,6 @@ await client.workflow.update("id", {
 <dd>
 
 Delete a workflow.
-
 </dd>
 </dl>
 </dd>
@@ -2193,9 +2180,9 @@ Delete a workflow.
 <dd>
 
 ```typescript
-await client.workflow.delete("id");
-```
+await client.workflows.workflowDelete("id");
 
+```
 </dd>
 </dl>
 </dd>
@@ -2210,26 +2197,26 @@ await client.workflow.delete("id");
 <dd>
 
 **id:** `string` — The workflowId of the workflow being deleted.
-
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Workflow.RequestOptions`
+**requestOptions:** `Workflows.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
 </details>
 
 ## Customer
-
 <details><summary><code>client.customer.<a href="/src/api/resources/customer/client/Client.ts">get</a>() -> GroundX.CustomerResponse</code></summary>
 <dl>
 <dd>
@@ -2243,7 +2230,6 @@ await client.workflow.delete("id");
 <dd>
 
 Get the account information associated with the API key.
-
 </dd>
 </dl>
 </dd>
@@ -2259,8 +2245,8 @@ Get the account information associated with the API key.
 
 ```typescript
 await client.customer.get();
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -2274,19 +2260,19 @@ await client.customer.get();
 <dl>
 <dd>
 
-**requestOptions:** `Customer.RequestOptions`
+**requestOptions:** `Customer.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
 </details>
 
 ## Health
-
 <details><summary><code>client.health.<a href="/src/api/resources/health/client/Client.ts">list</a>() -> GroundX.HealthResponse</code></summary>
 <dl>
 <dd>
@@ -2300,7 +2286,6 @@ await client.customer.get();
 <dd>
 
 List the current health status of all services. Statuses update every 5 minutes.
-
 </dd>
 </dl>
 </dd>
@@ -2316,8 +2301,8 @@ List the current health status of all services. Statuses update every 5 minutes.
 
 ```typescript
 await client.health.list();
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -2331,12 +2316,13 @@ await client.health.list();
 <dl>
 <dd>
 
-**requestOptions:** `Health.RequestOptions`
+**requestOptions:** `Health.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
@@ -2355,7 +2341,6 @@ await client.health.list();
 <dd>
 
 Look up the current health status of a specific service. Statuses update every 5 minutes.
-
 </dd>
 </dl>
 </dd>
@@ -2371,8 +2356,8 @@ Look up the current health status of a specific service. Statuses update every 5
 
 ```typescript
 await client.health.get("search");
-```
 
+```
 </dd>
 </dl>
 </dd>
@@ -2387,19 +2372,20 @@ await client.health.get("search");
 <dd>
 
 **service:** `string` — The name of the service to look up.
-
+    
 </dd>
 </dl>
 
 <dl>
 <dd>
 
-**requestOptions:** `Health.RequestOptions`
+**requestOptions:** `Health.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
 
-</dd>
-</dl>
-</dd>
-</dl>
 
 </dd>
 </dl>
