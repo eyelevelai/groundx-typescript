@@ -234,7 +234,7 @@ export class GroundXClient extends FernClient {
         return fs.readFileSync(expandedPath);
     }
 
-    protected async _getCustomAuthorizationHeaders() {
+    protected async _getCustomAuthorizationHeaders(): Promise<Record<string, string>> {
         const apiKeyValue = await core.Supplier.get(this._options.apiKey);
         return { "X-API-Key": apiKeyValue };
     }
