@@ -9,6 +9,5 @@ export * as health from "./health/index.js";
 export * from "./search/client/requests/index.js";
 export * as search from "./search/index.js";
 export * from "./search/types/index.js";
-export * from "./workflows/client/requests/index.js";
 export * as workflows from "./workflows/index.js";
 export * from "./workflows/types/index.js";

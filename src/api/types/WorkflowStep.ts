@@ -6,6 +6,10 @@ import type * as GroundX from "../index.js";
  * Configurations for an agent, including LLM information and prompts
  */
 export interface WorkflowStep {
-    engine?: GroundX.WorkflowEngine;
-    prompt?: GroundX.WorkflowPromptGroup;
+    all?: GroundX.WorkflowStepConfig;
+    figure?: GroundX.WorkflowStepConfig;
+    json?: GroundX.WorkflowStepConfig;
+    paragraph?: GroundX.WorkflowStepConfig;
+    table?: GroundX.WorkflowStepConfig;
+    "table-figure"?: GroundX.WorkflowStepConfig;
 }

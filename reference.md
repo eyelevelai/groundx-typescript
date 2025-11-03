@@ -1725,7 +1725,7 @@ Create a workflow.
 <dd>
 
 ```typescript
-await client.workflows.create();
+await client.workflows.create({});
 
 ```
 </dd>
@@ -1741,7 +1741,7 @@ await client.workflows.create();
 <dl>
 <dd>
 
-**request:** `GroundX.WorkflowCreateRequest` 
+**request:** `GroundX.WorkflowRequest` 
     
 </dd>
 </dl>
@@ -2107,9 +2107,7 @@ Update an existing workflow.
 <dd>
 
 ```typescript
-await client.workflows.update("id", {
-    workflowId: "workflowId"
-});
+await client.workflows.update("id", {});
 
 ```
 </dd>
@@ -2133,7 +2131,7 @@ await client.workflows.update("id", {
 <dl>
 <dd>
 
-**request:** `GroundX.WorkflowUpdateRequest` 
+**request:** `GroundX.WorkflowRequest` 
     
 </dd>
 </dl>

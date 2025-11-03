@@ -6,6 +6,7 @@ import type * as GroundX from "../index.js";
  * Workflow information
  */
 export interface WorkflowDetail {
+    chunkStrategy?: WorkflowDetail.ChunkStrategy;
     /** The documentId associated with the workflow */
     documentId?: string;
     /** The bucketId or groupId associated with the workflow */
@@ -20,6 +21,12 @@ export interface WorkflowDetail {
 }
 
 export namespace WorkflowDetail {
+    export const ChunkStrategy = {
+        Element: "element",
+        Size: "size",
+    } as const;
+    export type ChunkStrategy = (typeof ChunkStrategy)[keyof typeof ChunkStrategy];
+
     /**
      * Information describing what the workflow is associated with
      */

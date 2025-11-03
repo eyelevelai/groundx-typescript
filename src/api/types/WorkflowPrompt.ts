@@ -7,7 +7,7 @@ export interface WorkflowPrompt {
     /** A short version of the prompt that is included in historical chat transcripts as part of the prompt context */
     abbreviated?: string;
     /** The prompt that is sent to the LLM */
-    long?: string;
+    prompt?: string;
     /** An enumerated value that conforms to OpenAI '/chat/completion' specifications */
     role?: WorkflowPrompt.Role;
 }
@@ -16,6 +16,7 @@ export namespace WorkflowPrompt {
     /** An enumerated value that conforms to OpenAI '/chat/completion' specifications */
     export const Role = {
         Assistant: "assistant",
+        Developer: "developer",
         System: "system",
         User: "user",
     } as const;

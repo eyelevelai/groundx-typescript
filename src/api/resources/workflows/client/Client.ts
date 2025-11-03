@@ -86,21 +86,21 @@ export class Workflows {
     /**
      * Create a workflow.
      *
-     * @param {GroundX.WorkflowCreateRequest} request
+     * @param {GroundX.WorkflowRequest} request
      * @param {Workflows.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @example
-     *     await client.workflows.create()
+     *     await client.workflows.create({})
      */
     public create(
-        request: GroundX.WorkflowCreateRequest = {},
+        request: GroundX.WorkflowRequest,
         requestOptions?: Workflows.RequestOptions,
     ): core.HttpResponsePromise<GroundX.WorkflowResponse> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: GroundX.WorkflowCreateRequest = {},
+        request: GroundX.WorkflowRequest,
         requestOptions?: Workflows.RequestOptions,
     ): Promise<core.WithRawResponse<GroundX.WorkflowResponse>> {
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -512,17 +512,15 @@ export class Workflows {
      * Update an existing workflow.
      *
      * @param {string} id - The workflowId of the workflow being updated.
-     * @param {GroundX.WorkflowUpdateRequest} request
+     * @param {GroundX.WorkflowRequest} request
      * @param {Workflows.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @example
-     *     await client.workflows.update("id", {
-     *         workflowId: "workflowId"
-     *     })
+     *     await client.workflows.update("id", {})
      */
     public update(
         id: string,
-        request: GroundX.WorkflowUpdateRequest,
+        request: GroundX.WorkflowRequest,
         requestOptions?: Workflows.RequestOptions,
     ): core.HttpResponsePromise<GroundX.WorkflowResponse> {
         return core.HttpResponsePromise.fromPromise(this.__update(id, request, requestOptions));
@@ -530,7 +528,7 @@ export class Workflows {
 
     private async __update(
         id: string,
-        request: GroundX.WorkflowUpdateRequest,
+        request: GroundX.WorkflowRequest,
         requestOptions?: Workflows.RequestOptions,
     ): Promise<core.WithRawResponse<GroundX.WorkflowResponse>> {
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(

@@ -9,7 +9,9 @@ describe("Workflows", () => {
         const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
-            workflows: [{ documentId: "documentId", id: 1, name: "name", workflowId: "workflowId" }],
+            workflows: [
+                { chunkStrategy: "element", documentId: "documentId", id: 1, name: "name", workflowId: "workflowId" },
+            ],
         };
         server.mockEndpoint().get("/v1/workflow").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
@@ -17,6 +19,7 @@ describe("Workflows", () => {
         expect(response).toEqual({
             workflows: [
                 {
+                    chunkStrategy: "element",
                     documentId: "documentId",
                     id: 1,
                     name: "name",
@@ -32,6 +35,7 @@ describe("Workflows", () => {
         const rawRequestBody = {};
         const rawResponseBody = {
             workflow: {
+                chunkStrategy: "element",
                 documentId: "documentId",
                 id: 1,
                 name: "name",
@@ -48,9 +52,10 @@ describe("Workflows", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.workflows.create();
+        const response = await client.workflows.create({});
         expect(response).toEqual({
             workflow: {
+                chunkStrategy: "element",
                 documentId: "documentId",
                 id: 1,
                 name: "name",
@@ -152,6 +157,7 @@ describe("Workflows", () => {
 
         const rawResponseBody = {
             workflow: {
+                chunkStrategy: "element",
                 documentId: "documentId",
                 id: 1,
                 name: "name",
@@ -164,6 +170,7 @@ describe("Workflows", () => {
         const response = await client.workflows.get(1);
         expect(response).toEqual({
             workflow: {
+                chunkStrategy: "element",
                 documentId: "documentId",
                 id: 1,
                 name: "name",
@@ -180,9 +187,10 @@ describe("Workflows", () => {
     test("update", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
-        const rawRequestBody = { workflowId: "workflowId" };
+        const rawRequestBody = {};
         const rawResponseBody = {
             workflow: {
+                chunkStrategy: "element",
                 documentId: "documentId",
                 id: 1,
                 name: "name",
@@ -199,11 +207,10 @@ describe("Workflows", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.workflows.update("id", {
-            workflowId: "workflowId",
-        });
+        const response = await client.workflows.update("id", {});
         expect(response).toEqual({
             workflow: {
+                chunkStrategy: "element",
                 documentId: "documentId",
                 id: 1,
                 name: "name",
