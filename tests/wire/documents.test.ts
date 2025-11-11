@@ -518,6 +518,68 @@ describe("Documents", () => {
         }).rejects.toThrow(GroundX.UnauthorizedError);
     });
 
+    test("Document_cancelProcess (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            ingest: { id: 1, processId: "processId", status: "queued", statusMessage: "statusMessage" },
+        };
+        server
+            .mockEndpoint()
+            .delete("/v1/ingest/processId")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.documents.documentCancelProcess("processId");
+        expect(response).toEqual({
+            ingest: {
+                id: 1,
+                processId: "processId",
+                status: "queued",
+                statusMessage: "statusMessage",
+            },
+        });
+    });
+
+    test("Document_cancelProcess (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/v1/ingest/processId")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.documentCancelProcess("processId");
+        }).rejects.toThrow(GroundX.BadRequestError);
+    });
+
+    test("Document_cancelProcess (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .delete("/v1/ingest/processId")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.documentCancelProcess("processId");
+        }).rejects.toThrow(GroundX.UnauthorizedError);
+    });
+
     test("lookup (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });

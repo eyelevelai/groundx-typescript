@@ -420,6 +420,69 @@ await client.documents.getProcessingStatusById("processId");
 </dl>
 </details>
 
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">documentCancelProcess</a>(processId) -> GroundX.IngestResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Cancel an ingest process, along with any files that have not been completely ingested.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.documents.documentCancelProcess("processId");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**processId:** `string` — the processId for the ingest process to be cancelled
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Documents.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">lookup</a>(id, { ...params }) -> GroundX.DocumentLookupResponse</code></summary>
 <dl>
 <dd>

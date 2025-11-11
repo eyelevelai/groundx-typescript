@@ -568,6 +568,84 @@ export class Documents {
     }
 
     /**
+     * Cancel an ingest process, along with any files that have not been completely ingested.
+     *
+     * @param {string} processId - the processId for the ingest process to be cancelled
+     * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link GroundX.BadRequestError}
+     * @throws {@link GroundX.UnauthorizedError}
+     *
+     * @example
+     *     await client.documents.documentCancelProcess("processId")
+     */
+    public documentCancelProcess(
+        processId: string,
+        requestOptions?: Documents.RequestOptions,
+    ): core.HttpResponsePromise<GroundX.IngestResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__documentCancelProcess(processId, requestOptions));
+    }
+
+    private async __documentCancelProcess(
+        processId: string,
+        requestOptions?: Documents.RequestOptions,
+    ): Promise<core.WithRawResponse<GroundX.IngestResponse>> {
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.GroundXEnvironment.Default,
+                `v1/ingest/${core.url.encodePathParam(processId)}`,
+            ),
+            method: "DELETE",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return { data: _response.body as GroundX.IngestResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new GroundX.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new GroundX.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.GroundXError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.GroundXTimeoutError("Timeout exceeded when calling DELETE /v1/ingest/{processId}.");
+            case "unknown":
+                throw new errors.GroundXError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
      * lookup the document(s) associated with a processId, bucketId, or groupId.
      *
      * @param {number} id - a processId, bucketId, or groupId
