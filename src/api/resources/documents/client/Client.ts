@@ -577,16 +577,16 @@ export class Documents {
      * @throws {@link GroundX.UnauthorizedError}
      *
      * @example
-     *     await client.documents.documentCancelProcess("processId")
+     *     await client.documents.cancelProcess("processId")
      */
-    public documentCancelProcess(
+    public cancelProcess(
         processId: string,
         requestOptions?: Documents.RequestOptions,
     ): core.HttpResponsePromise<GroundX.IngestResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__documentCancelProcess(processId, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__cancelProcess(processId, requestOptions));
     }
 
-    private async __documentCancelProcess(
+    private async __cancelProcess(
         processId: string,
         requestOptions?: Documents.RequestOptions,
     ): Promise<core.WithRawResponse<GroundX.IngestResponse>> {

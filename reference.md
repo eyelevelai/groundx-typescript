@@ -420,7 +420,7 @@ await client.documents.getProcessingStatusById("processId");
 </dl>
 </details>
 
-<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">documentCancelProcess</a>(processId) -> GroundX.IngestResponse</code></summary>
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">cancelProcess</a>(processId) -> GroundX.IngestResponse</code></summary>
 <dl>
 <dd>
 
@@ -447,7 +447,7 @@ Cancel an ingest process, along with any files that have not been completely ing
 <dd>
 
 ```typescript
-await client.documents.documentCancelProcess("processId");
+await client.documents.cancelProcess("processId");
 
 ```
 </dd>

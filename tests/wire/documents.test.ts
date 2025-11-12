@@ -518,7 +518,7 @@ describe("Documents", () => {
         }).rejects.toThrow(GroundX.UnauthorizedError);
     });
 
-    test("Document_cancelProcess (1)", async () => {
+    test("cancelProcess (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -533,7 +533,7 @@ describe("Documents", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.documents.documentCancelProcess("processId");
+        const response = await client.documents.cancelProcess("processId");
         expect(response).toEqual({
             ingest: {
                 id: 1,
@@ -544,7 +544,7 @@ describe("Documents", () => {
         });
     });
 
-    test("Document_cancelProcess (2)", async () => {
+    test("cancelProcess (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -558,11 +558,11 @@ describe("Documents", () => {
             .build();
 
         await expect(async () => {
-            return await client.documents.documentCancelProcess("processId");
+            return await client.documents.cancelProcess("processId");
         }).rejects.toThrow(GroundX.BadRequestError);
     });
 
-    test("Document_cancelProcess (3)", async () => {
+    test("cancelProcess (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -576,7 +576,7 @@ describe("Documents", () => {
             .build();
 
         await expect(async () => {
-            return await client.documents.documentCancelProcess("processId");
+            return await client.documents.cancelProcess("processId");
         }).rejects.toThrow(GroundX.UnauthorizedError);
     });
 
