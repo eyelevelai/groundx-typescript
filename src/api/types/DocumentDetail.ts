@@ -14,6 +14,7 @@ export interface DocumentDetail {
     filter?: Record<string, unknown>;
     /** Unique system generated ID for the ingest request */
     processId?: string;
+    processLevel?: GroundX.ProcessLevel;
     searchData?: Record<string, unknown>;
     /** Source document URL */
     sourceUrl?: string;

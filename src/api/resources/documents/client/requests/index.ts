@@ -1,3 +1,4 @@
+export type { DocumentCopyRequest } from "./DocumentCopyRequest.js";
 export type { DocumentRemoteIngestRequest } from "./DocumentRemoteIngestRequest.js";
 export type { DocumentsDeleteRequest } from "./DocumentsDeleteRequest.js";
 export type { DocumentsGetProcessesRequest } from "./DocumentsGetProcessesRequest.js";

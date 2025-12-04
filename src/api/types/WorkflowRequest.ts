@@ -6,6 +6,8 @@ export interface WorkflowRequest {
     chunkStrategy?: WorkflowRequest.ChunkStrategy;
     /** The name of the workflow being created. */
     name?: string;
+    /** Extract agent definitions. */
+    extract?: Record<string, unknown>;
     steps?: GroundX.WorkflowSteps;
 }
 

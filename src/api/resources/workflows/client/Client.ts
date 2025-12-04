@@ -155,6 +155,69 @@ export class Workflows {
     }
 
     /**
+     * Get the workflow associated with customer account.
+     *
+     * @param {Workflows.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @example
+     *     await client.workflows.getAccount()
+     */
+    public getAccount(requestOptions?: Workflows.RequestOptions): core.HttpResponsePromise<GroundX.WorkflowResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__getAccount(requestOptions));
+    }
+
+    private async __getAccount(
+        requestOptions?: Workflows.RequestOptions,
+    ): Promise<core.WithRawResponse<GroundX.WorkflowResponse>> {
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.GroundXEnvironment.Default,
+                "v1/workflow/relationship",
+            ),
+            method: "GET",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return { data: _response.body as GroundX.WorkflowResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            throw new errors.GroundXError({
+                statusCode: _response.error.statusCode,
+                body: _response.error.body,
+                rawResponse: _response.rawResponse,
+            });
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.GroundXError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.GroundXTimeoutError("Timeout exceeded when calling GET /v1/workflow/relationship.");
+            case "unknown":
+                throw new errors.GroundXError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
      * Assigns the given workflow to the customer account and is applied by default to all files unless overridden by document or bucket workflows.
      *
      * @param {GroundX.WorkflowApplyRequest} request

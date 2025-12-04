@@ -13,6 +13,8 @@ export interface WorkflowDetail {
     id?: number;
     /** The human-readable name of the workflow */
     name?: string;
+    /** Extract agent definitions. */
+    extract?: Record<string, unknown>;
     steps?: GroundX.WorkflowSteps;
     /** Information describing what the workflow is associated with */
     relationships?: WorkflowDetail.Relationships;

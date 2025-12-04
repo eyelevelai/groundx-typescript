@@ -10,7 +10,14 @@ describe("Workflows", () => {
 
         const rawResponseBody = {
             workflows: [
-                { chunkStrategy: "element", documentId: "documentId", id: 1, name: "name", workflowId: "workflowId" },
+                {
+                    chunkStrategy: "element",
+                    documentId: "documentId",
+                    id: 1,
+                    name: "name",
+                    extract: { key: "value" },
+                    workflowId: "workflowId",
+                },
             ],
         };
         server.mockEndpoint().get("/v1/workflow").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -23,6 +30,9 @@ describe("Workflows", () => {
                     documentId: "documentId",
                     id: 1,
                     name: "name",
+                    extract: {
+                        key: "value",
+                    },
                     workflowId: "workflowId",
                 },
             ],
@@ -39,6 +49,7 @@ describe("Workflows", () => {
                 documentId: "documentId",
                 id: 1,
                 name: "name",
+                extract: { key: "value" },
                 relationships: { account: true, documents: ["documents"], ids: [1] },
                 workflowId: "workflowId",
             },
@@ -59,6 +70,52 @@ describe("Workflows", () => {
                 documentId: "documentId",
                 id: 1,
                 name: "name",
+                extract: {
+                    key: "value",
+                },
+                relationships: {
+                    account: true,
+                    documents: ["documents"],
+                    ids: [1],
+                },
+                workflowId: "workflowId",
+            },
+        });
+    });
+
+    test("getAccount", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            workflow: {
+                chunkStrategy: "element",
+                documentId: "documentId",
+                id: 1,
+                name: "name",
+                extract: { key: "value" },
+                relationships: { account: true, documents: ["documents"], ids: [1] },
+                workflowId: "workflowId",
+            },
+        };
+        server
+            .mockEndpoint()
+            .get("/v1/workflow/relationship")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.workflows.getAccount();
+        expect(response).toEqual({
+            workflow: {
+                chunkStrategy: "element",
+                documentId: "documentId",
+                id: 1,
+                name: "name",
+                extract: {
+                    key: "value",
+                },
                 relationships: {
                     account: true,
                     documents: ["documents"],
@@ -161,6 +218,7 @@ describe("Workflows", () => {
                 documentId: "documentId",
                 id: 1,
                 name: "name",
+                extract: { key: "value" },
                 relationships: { account: true, documents: ["documents"], ids: [1] },
                 workflowId: "workflowId",
             },
@@ -174,6 +232,9 @@ describe("Workflows", () => {
                 documentId: "documentId",
                 id: 1,
                 name: "name",
+                extract: {
+                    key: "value",
+                },
                 relationships: {
                     account: true,
                     documents: ["documents"],
@@ -194,6 +255,7 @@ describe("Workflows", () => {
                 documentId: "documentId",
                 id: 1,
                 name: "name",
+                extract: { key: "value" },
                 relationships: { account: true, documents: ["documents"], ids: [1] },
                 workflowId: "workflowId",
             },
@@ -214,6 +276,9 @@ describe("Workflows", () => {
                 documentId: "documentId",
                 id: 1,
                 name: "name",
+                extract: {
+                    key: "value",
+                },
                 relationships: {
                     account: true,
                     documents: ["documents"],

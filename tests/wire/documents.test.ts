@@ -5,6 +5,35 @@ import { GroundXClient } from "../../src/Client";
 import { mockServerPool } from "../mock-server/MockServerPool";
 
 describe("Documents", () => {
+    test("copy", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { toBucket: 1234 };
+        const rawResponseBody = {
+            ingest: { id: 1, processId: "processId", status: "queued", statusMessage: "statusMessage" },
+        };
+        server
+            .mockEndpoint()
+            .post("/v1/ingest/copy")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.documents.copy({
+            toBucket: 1234,
+        });
+        expect(response).toEqual({
+            ingest: {
+                id: 1,
+                processId: "processId",
+                status: "queued",
+                statusMessage: "statusMessage",
+            },
+        });
+    });
+
     test("ingestRemote (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
@@ -341,6 +370,7 @@ describe("Documents", () => {
                     fileType: "bmp",
                     filter: { key: "value", another_key: { nested: "value" } },
                     processId: "processId",
+                    processLevel: "none",
                     searchData: { key: "value" },
                     sourceUrl: "sourceUrl",
                     status: "queued",
@@ -382,6 +412,7 @@ describe("Documents", () => {
                         },
                     },
                     processId: "processId",
+                    processLevel: "none",
                     searchData: {
                         key: "value",
                     },
@@ -595,6 +626,7 @@ describe("Documents", () => {
                     fileType: "bmp",
                     filter: { key: "value", another_key: { nested: "value" } },
                     processId: "processId",
+                    processLevel: "none",
                     searchData: { key: "value" },
                     sourceUrl: "sourceUrl",
                     status: "queued",
@@ -639,6 +671,7 @@ describe("Documents", () => {
                         },
                     },
                     processId: "processId",
+                    processLevel: "none",
                     searchData: {
                         key: "value",
                     },
@@ -704,6 +737,7 @@ describe("Documents", () => {
                 fileType: "bmp",
                 filter: { key: "value", another_key: { nested: "value" } },
                 processId: "processId",
+                processLevel: "none",
                 searchData: { key: "value" },
                 sourceUrl: "sourceUrl",
                 status: "queued",
@@ -735,6 +769,7 @@ describe("Documents", () => {
                     },
                 },
                 processId: "processId",
+                processLevel: "none",
                 searchData: {
                     key: "value",
                 },

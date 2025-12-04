@@ -21,6 +21,79 @@ export class Documents {
     }
 
     /**
+     * copy documents from one bucket to another
+     *
+     * @param {GroundX.DocumentCopyRequest} request
+     * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @example
+     *     await client.documents.copy({
+     *         toBucket: 1234
+     *     })
+     */
+    public copy(
+        request: GroundX.DocumentCopyRequest,
+        requestOptions?: Documents.RequestOptions,
+    ): core.HttpResponsePromise<GroundX.IngestResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__copy(request, requestOptions));
+    }
+
+    private async __copy(
+        request: GroundX.DocumentCopyRequest,
+        requestOptions?: Documents.RequestOptions,
+    ): Promise<core.WithRawResponse<GroundX.IngestResponse>> {
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.GroundXEnvironment.Default,
+                "v1/ingest/copy",
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: request,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return { data: _response.body as GroundX.IngestResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            throw new errors.GroundXError({
+                statusCode: _response.error.statusCode,
+                body: _response.error.body,
+                rawResponse: _response.rawResponse,
+            });
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.GroundXError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.GroundXTimeoutError("Timeout exceeded when calling POST /v1/ingest/copy.");
+            case "unknown":
+                throw new errors.GroundXError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
      * Ingest documents hosted on public URLs into a GroundX bucket.
      *
      * [Supported Document Types and Ingest Capacities](https://docs.eyelevel.ai/documentation/fundamentals/document-types-and-ingest-capacities)
