@@ -34,8 +34,8 @@ export class GroundXClient {
                 {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "groundx",
-                    "X-Fern-SDK-Version": "2.9.2",
-                    "User-Agent": "groundx/2.9.2",
+                    "X-Fern-SDK-Version": "3.0.0",
+                    "User-Agent": "groundx/3.0.0",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },

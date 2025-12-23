@@ -993,6 +993,86 @@ export class Documents {
     }
 
     /**
+     * Look up extractions for an existing document by documentId.
+     *
+     * @param {string} documentId - The documentId of the document for which GroundX extract has extracted information.
+     * @param {Documents.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link GroundX.BadRequestError}
+     * @throws {@link GroundX.UnauthorizedError}
+     *
+     * @example
+     *     await client.documents.getExtract("documentId")
+     */
+    public getExtract(
+        documentId: string,
+        requestOptions?: Documents.RequestOptions,
+    ): core.HttpResponsePromise<Record<string, unknown>> {
+        return core.HttpResponsePromise.fromPromise(this.__getExtract(documentId, requestOptions));
+    }
+
+    private async __getExtract(
+        documentId: string,
+        requestOptions?: Documents.RequestOptions,
+    ): Promise<core.WithRawResponse<Record<string, unknown>>> {
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.GroundXEnvironment.Default,
+                `v1/ingest/document/extract/${core.url.encodePathParam(documentId)}`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return { data: _response.body as Record<string, unknown>, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new GroundX.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new GroundX.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.GroundXError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.GroundXTimeoutError(
+                    "Timeout exceeded when calling GET /v1/ingest/document/extract/{documentId}.",
+                );
+            case "unknown":
+                throw new errors.GroundXError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
      * Get a list of ingest process requests, sorted from most recent to least.
      *
      * @param {GroundX.DocumentsGetProcessesRequest} request
