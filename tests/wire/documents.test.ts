@@ -935,6 +935,61 @@ describe("Documents", () => {
         }).rejects.toThrow(GroundX.UnauthorizedError);
     });
 
+    test("getXray (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/v1/ingest/document/xray/documentId")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.documents.getXray("documentId");
+        expect(response).toEqual({
+            key: "value",
+        });
+    });
+
+    test("getXray (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/v1/ingest/document/xray/documentId")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.getXray("documentId");
+        }).rejects.toThrow(GroundX.BadRequestError);
+    });
+
+    test("getXray (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .get("/v1/ingest/document/xray/documentId")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.getXray("documentId");
+        }).rejects.toThrow(GroundX.UnauthorizedError);
+    });
+
     test("getProcesses", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });

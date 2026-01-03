@@ -815,6 +815,69 @@ await client.documents.getExtract("documentId");
 </dl>
 </details>
 
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">getXray</a>(documentId) -> Record<string, unknown></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Look up X-Ray data for an existing document by documentId.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.documents.getXray("documentId");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**documentId:** `string` — The documentId of the document for which GroundX created an X-Ray.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Documents.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">getProcesses</a>({ ...params }) -> GroundX.ProcessesStatusResponse</code></summary>
 <dl>
 <dd>

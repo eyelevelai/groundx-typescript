@@ -15,6 +15,7 @@ export interface WorkflowDetail {
     name?: string;
     /** Extract agent definitions. */
     extract?: Record<string, unknown>;
+    sectionStrategy?: WorkflowDetail.SectionStrategy;
     steps?: GroundX.WorkflowSteps;
     /** Information describing what the workflow is associated with */
     relationships?: WorkflowDetail.Relationships;
@@ -28,6 +29,11 @@ export namespace WorkflowDetail {
         Size: "size",
     } as const;
     export type ChunkStrategy = (typeof ChunkStrategy)[keyof typeof ChunkStrategy];
+    export const SectionStrategy = {
+        Chunks: "chunks",
+        Page: "page",
+    } as const;
+    export type SectionStrategy = (typeof SectionStrategy)[keyof typeof SectionStrategy];
 
     /**
      * Information describing what the workflow is associated with

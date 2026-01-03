@@ -16,6 +16,7 @@ describe("Workflows", () => {
                     id: 1,
                     name: "name",
                     extract: { key: "value" },
+                    sectionStrategy: "chunks",
                     workflowId: "workflowId",
                 },
             ],
@@ -33,6 +34,7 @@ describe("Workflows", () => {
                     extract: {
                         key: "value",
                     },
+                    sectionStrategy: "chunks",
                     workflowId: "workflowId",
                 },
             ],
@@ -50,6 +52,7 @@ describe("Workflows", () => {
                 id: 1,
                 name: "name",
                 extract: { key: "value" },
+                sectionStrategy: "chunks",
                 relationships: { account: true, documents: ["documents"], ids: [1] },
                 workflowId: "workflowId",
             },
@@ -73,6 +76,7 @@ describe("Workflows", () => {
                 extract: {
                     key: "value",
                 },
+                sectionStrategy: "chunks",
                 relationships: {
                     account: true,
                     documents: ["documents"],
@@ -94,6 +98,7 @@ describe("Workflows", () => {
                 id: 1,
                 name: "name",
                 extract: { key: "value" },
+                sectionStrategy: "chunks",
                 relationships: { account: true, documents: ["documents"], ids: [1] },
                 workflowId: "workflowId",
             },
@@ -116,6 +121,7 @@ describe("Workflows", () => {
                 extract: {
                     key: "value",
                 },
+                sectionStrategy: "chunks",
                 relationships: {
                     account: true,
                     documents: ["documents"],
@@ -219,6 +225,7 @@ describe("Workflows", () => {
                 id: 1,
                 name: "name",
                 extract: { key: "value" },
+                sectionStrategy: "chunks",
                 relationships: { account: true, documents: ["documents"], ids: [1] },
                 workflowId: "workflowId",
             },
@@ -235,6 +242,7 @@ describe("Workflows", () => {
                 extract: {
                     key: "value",
                 },
+                sectionStrategy: "chunks",
                 relationships: {
                     account: true,
                     documents: ["documents"],
@@ -256,6 +264,7 @@ describe("Workflows", () => {
                 id: 1,
                 name: "name",
                 extract: { key: "value" },
+                sectionStrategy: "chunks",
                 relationships: { account: true, documents: ["documents"], ids: [1] },
                 workflowId: "workflowId",
             },
@@ -279,6 +288,7 @@ describe("Workflows", () => {
                 extract: {
                     key: "value",
                 },
+                sectionStrategy: "chunks",
                 relationships: {
                     account: true,
                     documents: ["documents"],

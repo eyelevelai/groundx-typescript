@@ -7,10 +7,12 @@ import type * as GroundX from "../index.js";
  */
 export interface WorkflowSteps {
     "chunk-instruct"?: GroundX.WorkflowStep;
+    "chunk-keys"?: GroundX.WorkflowStep;
     "chunk-summary"?: GroundX.WorkflowStep;
     "doc-keys"?: GroundX.WorkflowStep;
     "doc-summary"?: GroundX.WorkflowStep;
     "search-query"?: GroundX.WorkflowStep;
     "sect-instruct"?: GroundX.WorkflowStep;
+    "sect-keys"?: GroundX.WorkflowStep;
     "sect-summary"?: GroundX.WorkflowStep;
 }

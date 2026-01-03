@@ -8,6 +8,7 @@ export interface WorkflowRequest {
     name?: string;
     /** Extract agent definitions. */
     extract?: Record<string, unknown>;
+    sectionStrategy?: WorkflowRequest.SectionStrategy;
     steps?: GroundX.WorkflowSteps;
 }
 
@@ -17,4 +18,9 @@ export namespace WorkflowRequest {
         Size: "size",
     } as const;
     export type ChunkStrategy = (typeof ChunkStrategy)[keyof typeof ChunkStrategy];
+    export const SectionStrategy = {
+        Chunks: "chunks",
+        Page: "page",
+    } as const;
+    export type SectionStrategy = (typeof SectionStrategy)[keyof typeof SectionStrategy];
 }
