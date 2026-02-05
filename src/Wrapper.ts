@@ -214,6 +214,9 @@ export class GroundXClient extends FernClient {
                 return "application/pdf";
             case "png":
                 return "image/png";
+            case "jfi":
+            case "jfif":
+            case "jpe":
             case "jpg":
             case "jpeg":
                 return "image/jpeg";
@@ -248,6 +251,9 @@ const DOCUMENT_TYPE_TO_MIME: Record<string, string> = {
     xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     pdf: "application/pdf",
     png: "image/png",
+    jfi: "image/jpeg",
+    jfif: "image/jpeg",
+    jpe: "image/jpeg",
     jpg: "image/jpeg",
     jpeg: "image/jpeg",
     csv: "text/csv",
