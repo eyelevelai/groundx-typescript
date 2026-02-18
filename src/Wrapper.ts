@@ -157,6 +157,10 @@ export class GroundXClient extends FernClient {
                 throw new errors.GroundXError({
                     message: _response.error.errorMessage,
                 });
+            default:
+                throw new errors.GroundXError({
+                    message: "Unhandled error reason",
+                });
         }
     }
 
