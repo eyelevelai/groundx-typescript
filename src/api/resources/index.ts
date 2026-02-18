@@ -6,6 +6,7 @@ export * as documents from "./documents/index.js";
 export * from "./groups/client/requests/index.js";
 export * as groups from "./groups/index.js";
 export * as health from "./health/index.js";
+export * as mcp from "./mcp/index.js";
 export * from "./search/client/requests/index.js";
 export * as search from "./search/index.js";
 export * from "./search/types/index.js";

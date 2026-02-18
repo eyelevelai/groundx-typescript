@@ -16,6 +16,7 @@ export namespace IngestStatus {
         complete?: Progress.Complete;
         errors?: Progress.Errors;
         processing?: Progress.Processing;
+        queued?: Progress.Queued;
     }
 
     export namespace Progress {
@@ -35,6 +36,11 @@ export namespace IngestStatus {
         }
 
         export interface Processing {
+            documents?: GroundX.DocumentDetail[];
+            total?: number;
+        }
+
+        export interface Queued {
             documents?: GroundX.DocumentDetail[];
             total?: number;
         }

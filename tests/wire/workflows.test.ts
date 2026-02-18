@@ -3,10 +3,10 @@
 import { GroundXClient } from "../../src/Client";
 import { mockServerPool } from "../mock-server/MockServerPool";
 
-describe("Workflows", () => {
+describe("WorkflowsClient", () => {
     test("list", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             workflows: [
@@ -43,7 +43,7 @@ describe("Workflows", () => {
 
     test("create", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = {
             workflow: {
@@ -89,7 +89,7 @@ describe("Workflows", () => {
 
     test("getAccount", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             workflow: {
@@ -134,7 +134,7 @@ describe("Workflows", () => {
 
     test("addToAccount", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { workflowId: "workflowId" };
         const rawResponseBody = { message: "OK" };
         server
@@ -156,7 +156,7 @@ describe("Workflows", () => {
 
     test("removeFromAccount", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { message: "OK" };
         server
@@ -175,7 +175,7 @@ describe("Workflows", () => {
 
     test("addToId", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { workflowId: "workflowId" };
         const rawResponseBody = { message: "OK" };
         server
@@ -197,7 +197,7 @@ describe("Workflows", () => {
 
     test("removeFromId", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { message: "OK" };
         server
@@ -216,7 +216,7 @@ describe("Workflows", () => {
 
     test("get", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             workflow: {
@@ -255,7 +255,7 @@ describe("Workflows", () => {
 
     test("update", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = {
             workflow: {
@@ -301,7 +301,7 @@ describe("Workflows", () => {
 
     test("delete", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { message: "OK" };
         server.mockEndpoint().delete("/v1/workflow/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();

@@ -4,10 +4,10 @@ import * as GroundX from "../../src/api/index";
 import { GroundXClient } from "../../src/Client";
 import { mockServerPool } from "../mock-server/MockServerPool";
 
-describe("Search", () => {
+describe("SearchClient", () => {
     test("content (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { query: "my search query" };
         const rawResponseBody = {
             search: {
@@ -50,7 +50,7 @@ describe("Search", () => {
 
     test("content (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { query: "my search query" };
         const rawResponseBody = { key: "value" };
         server
@@ -71,7 +71,7 @@ describe("Search", () => {
 
     test("content (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { query: "my search query" };
         const rawResponseBody = { key: "value" };
         server
@@ -92,7 +92,7 @@ describe("Search", () => {
 
     test("documents (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { query: "my search query", documentIds: ["docUUID1", "docUUID2"] };
         const rawResponseBody = {
             search: {
@@ -136,7 +136,7 @@ describe("Search", () => {
 
     test("documents (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { query: "my search query", documentIds: ["documentIds", "documentIds"] };
         const rawResponseBody = { key: "value" };
         server
@@ -158,7 +158,7 @@ describe("Search", () => {
 
     test("documents (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { query: "my search query", documentIds: ["documentIds", "documentIds"] };
         const rawResponseBody = { key: "value" };
         server

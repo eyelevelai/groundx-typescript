@@ -1,4 +1,72 @@
 # Reference
+## MCP
+<details><summary><code>client.mcp.<a href="/src/api/resources/mcp/client/Client.ts">mcp</a>({ ...params }) -> Record&lt;string, unknown&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Integrate with GroundX via the MCP protocol. Currently requires an Enterprise subscription.
+
+This endpoint can be accessed at either `/api/v1/mcp` or `/mcp`.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.mcp.mcp({
+    "key": "value"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Record<string, unknown>` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `McpClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Documents
 <details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">copy</a>({ ...params }) -> GroundX.IngestResponse</code></summary>
 <dl>
@@ -53,7 +121,7 @@ await client.documents.copy({
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions` 
+**requestOptions:** `DocumentsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -125,7 +193,7 @@ await client.documents.ingestRemote({
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions` 
+**requestOptions:** `DocumentsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -197,7 +265,7 @@ await client.documents.ingestLocal([{
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions` 
+**requestOptions:** `DocumentsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -275,7 +343,7 @@ await client.documents.crawlWebsite({
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions` 
+**requestOptions:** `DocumentsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -345,7 +413,7 @@ await client.documents.list({
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions` 
+**requestOptions:** `DocumentsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -410,7 +478,7 @@ await client.documents.delete({
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions` 
+**requestOptions:** `DocumentsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -473,7 +541,7 @@ await client.documents.getProcessingStatusById("processId");
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions` 
+**requestOptions:** `DocumentsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -536,7 +604,7 @@ await client.documents.cancelProcess("processId");
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions` 
+**requestOptions:** `DocumentsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -614,7 +682,7 @@ await client.documents.lookup(1, {
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions` 
+**requestOptions:** `DocumentsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -677,7 +745,7 @@ await client.documents.get("documentId");
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions` 
+**requestOptions:** `DocumentsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -740,7 +808,7 @@ await client.documents.deleteById("documentId");
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions` 
+**requestOptions:** `DocumentsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -752,7 +820,7 @@ await client.documents.deleteById("documentId");
 </dl>
 </details>
 
-<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">getExtract</a>(documentId) -> Record<string, unknown></code></summary>
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">getExtract</a>(documentId) -> Record&lt;string, unknown&gt;</code></summary>
 <dl>
 <dd>
 
@@ -803,7 +871,7 @@ await client.documents.getExtract("documentId");
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions` 
+**requestOptions:** `DocumentsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -815,7 +883,7 @@ await client.documents.getExtract("documentId");
 </dl>
 </details>
 
-<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">getXray</a>(documentId) -> Record<string, unknown></code></summary>
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">getXray</a>(documentId) -> Record&lt;string, unknown&gt;</code></summary>
 <dl>
 <dd>
 
@@ -866,7 +934,7 @@ await client.documents.getXray("documentId");
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions` 
+**requestOptions:** `DocumentsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -932,7 +1000,7 @@ await client.documents.getProcesses({
 <dl>
 <dd>
 
-**requestOptions:** `Documents.RequestOptions` 
+**requestOptions:** `DocumentsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -1010,7 +1078,7 @@ await client.search.content(1, {
 <dl>
 <dd>
 
-**requestOptions:** `Search.RequestOptions` 
+**requestOptions:** `SearchClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -1080,7 +1148,7 @@ await client.search.documents({
 <dl>
 <dd>
 
-**requestOptions:** `Search.RequestOptions` 
+**requestOptions:** `SearchClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -1147,7 +1215,7 @@ await client.buckets.list({
 <dl>
 <dd>
 
-**requestOptions:** `Buckets.RequestOptions` 
+**requestOptions:** `BucketsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -1212,7 +1280,7 @@ await client.buckets.create({
 <dl>
 <dd>
 
-**requestOptions:** `Buckets.RequestOptions` 
+**requestOptions:** `BucketsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -1275,7 +1343,7 @@ await client.buckets.get(1);
 <dl>
 <dd>
 
-**requestOptions:** `Buckets.RequestOptions` 
+**requestOptions:** `BucketsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -1348,7 +1416,7 @@ await client.buckets.update(1, {
 <dl>
 <dd>
 
-**requestOptions:** `Buckets.RequestOptions` 
+**requestOptions:** `BucketsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -1411,7 +1479,7 @@ await client.buckets.delete(1);
 <dl>
 <dd>
 
-**requestOptions:** `Buckets.RequestOptions` 
+**requestOptions:** `BucketsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -1478,7 +1546,7 @@ await client.groups.list({
 <dl>
 <dd>
 
-**requestOptions:** `Groups.RequestOptions` 
+**requestOptions:** `GroupsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -1543,7 +1611,7 @@ await client.groups.create({
 <dl>
 <dd>
 
-**requestOptions:** `Groups.RequestOptions` 
+**requestOptions:** `GroupsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -1606,7 +1674,7 @@ await client.groups.get(1);
 <dl>
 <dd>
 
-**requestOptions:** `Groups.RequestOptions` 
+**requestOptions:** `GroupsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -1679,7 +1747,7 @@ await client.groups.update(1, {
 <dl>
 <dd>
 
-**requestOptions:** `Groups.RequestOptions` 
+**requestOptions:** `GroupsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -1742,7 +1810,7 @@ await client.groups.delete(1);
 <dl>
 <dd>
 
-**requestOptions:** `Groups.RequestOptions` 
+**requestOptions:** `GroupsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -1813,7 +1881,7 @@ await client.groups.addBucket(1, 1);
 <dl>
 <dd>
 
-**requestOptions:** `Groups.RequestOptions` 
+**requestOptions:** `GroupsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -1884,7 +1952,7 @@ await client.groups.removeBucket(1, 1);
 <dl>
 <dd>
 
-**requestOptions:** `Groups.RequestOptions` 
+**requestOptions:** `GroupsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -1940,7 +2008,7 @@ await client.workflows.list();
 <dl>
 <dd>
 
-**requestOptions:** `Workflows.RequestOptions` 
+**requestOptions:** `WorkflowsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -2003,7 +2071,7 @@ await client.workflows.create({});
 <dl>
 <dd>
 
-**requestOptions:** `Workflows.RequestOptions` 
+**requestOptions:** `WorkflowsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -2058,7 +2126,7 @@ await client.workflows.getAccount();
 <dl>
 <dd>
 
-**requestOptions:** `Workflows.RequestOptions` 
+**requestOptions:** `WorkflowsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -2123,7 +2191,7 @@ await client.workflows.addToAccount({
 <dl>
 <dd>
 
-**requestOptions:** `Workflows.RequestOptions` 
+**requestOptions:** `WorkflowsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -2178,7 +2246,7 @@ await client.workflows.removeFromAccount();
 <dl>
 <dd>
 
-**requestOptions:** `Workflows.RequestOptions` 
+**requestOptions:** `WorkflowsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -2251,7 +2319,7 @@ await client.workflows.addToId(1, {
 <dl>
 <dd>
 
-**requestOptions:** `Workflows.RequestOptions` 
+**requestOptions:** `WorkflowsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -2314,7 +2382,7 @@ await client.workflows.removeFromId(1);
 <dl>
 <dd>
 
-**requestOptions:** `Workflows.RequestOptions` 
+**requestOptions:** `WorkflowsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -2377,7 +2445,7 @@ await client.workflows.get(1);
 <dl>
 <dd>
 
-**requestOptions:** `Workflows.RequestOptions` 
+**requestOptions:** `WorkflowsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -2448,7 +2516,7 @@ await client.workflows.update("id", {});
 <dl>
 <dd>
 
-**requestOptions:** `Workflows.RequestOptions` 
+**requestOptions:** `WorkflowsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -2511,7 +2579,7 @@ await client.workflows.delete("id");
 <dl>
 <dd>
 
-**requestOptions:** `Workflows.RequestOptions` 
+**requestOptions:** `WorkflowsClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -2567,7 +2635,7 @@ await client.customer.get();
 <dl>
 <dd>
 
-**requestOptions:** `Customer.RequestOptions` 
+**requestOptions:** `CustomerClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -2623,7 +2691,7 @@ await client.health.list();
 <dl>
 <dd>
 
-**requestOptions:** `Health.RequestOptions` 
+**requestOptions:** `HealthClient.RequestOptions` 
     
 </dd>
 </dl>
@@ -2686,7 +2754,7 @@ await client.health.get("search");
 <dl>
 <dd>
 
-**requestOptions:** `Health.RequestOptions` 
+**requestOptions:** `HealthClient.RequestOptions` 
     
 </dd>
 </dl>

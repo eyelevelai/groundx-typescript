@@ -4,10 +4,10 @@ import * as GroundX from "../../src/api/index";
 import { GroundXClient } from "../../src/Client";
 import { mockServerPool } from "../mock-server/MockServerPool";
 
-describe("Health", () => {
+describe("HealthClient", () => {
     test("list", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             health: { services: [{ lastUpdate: "2023-10-03T08:59:39Z", service: "search", status: "healthy" }] },
@@ -30,7 +30,7 @@ describe("Health", () => {
 
     test("get (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             health: { services: [{ lastUpdate: "2023-10-03T08:59:39Z", service: "search", status: "healthy" }] },
@@ -53,7 +53,7 @@ describe("Health", () => {
 
     test("get (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/v1/health/service").respondWith().statusCode(400).jsonBody(rawResponseBody).build();

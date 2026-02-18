@@ -3,6 +3,11 @@
 export class GroundXTimeoutError extends Error {
     constructor(message: string) {
         super(message);
-        Object.setPrototypeOf(this, GroundXTimeoutError.prototype);
+        Object.setPrototypeOf(this, new.target.prototype);
+        if (Error.captureStackTrace) {
+            Error.captureStackTrace(this, this.constructor);
+        }
+
+        this.name = this.constructor.name;
     }
 }

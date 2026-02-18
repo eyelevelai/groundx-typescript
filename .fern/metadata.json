@@ -1,0 +1,16 @@
+{
+    "cliVersion": "3.79.2",
+    "generatorName": "fernapi/fern-typescript-node-sdk",
+    "generatorVersion": "3.46.3",
+    "generatorConfig": {
+        "namespaceExport": "GroundX",
+        "allowCustomFetcher": true,
+        "skipResponseValidation": true,
+        "includeApiReference": true,
+        "noSerdeLayer": true,
+        "extraDependencies": {
+            "url-join": ">=5.0.0"
+        }
+    },
+    "sdkVersion": "3.3.4"
+}

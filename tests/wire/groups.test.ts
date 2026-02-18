@@ -4,10 +4,10 @@ import * as GroundX from "../../src/api/index";
 import { GroundXClient } from "../../src/Client";
 import { mockServerPool } from "../mock-server/MockServerPool";
 
-describe("Groups", () => {
+describe("GroupsClient", () => {
     test("list", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             groups: [
@@ -65,7 +65,7 @@ describe("Groups", () => {
 
     test("create (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "your_group_name" };
         const rawResponseBody = {
             group: {
@@ -119,7 +119,7 @@ describe("Groups", () => {
 
     test("create (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
         const rawResponseBody = { key: "value" };
         server
@@ -140,7 +140,7 @@ describe("Groups", () => {
 
     test("get (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             group: {
@@ -185,7 +185,7 @@ describe("Groups", () => {
 
     test("get (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/v1/group/1").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
@@ -197,7 +197,7 @@ describe("Groups", () => {
 
     test("get (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/v1/group/1").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
@@ -209,7 +209,7 @@ describe("Groups", () => {
 
     test("update (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { newName: "your_group_name" };
         const rawResponseBody = {
             group: {
@@ -263,7 +263,7 @@ describe("Groups", () => {
 
     test("update (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { newName: "newName" };
         const rawResponseBody = { key: "value" };
         server
@@ -284,7 +284,7 @@ describe("Groups", () => {
 
     test("update (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { newName: "newName" };
         const rawResponseBody = { key: "value" };
         server
@@ -305,7 +305,7 @@ describe("Groups", () => {
 
     test("delete (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { message: "OK" };
         server.mockEndpoint().delete("/v1/group/1").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -318,7 +318,7 @@ describe("Groups", () => {
 
     test("delete (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().delete("/v1/group/1").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
@@ -330,7 +330,7 @@ describe("Groups", () => {
 
     test("delete (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server.mockEndpoint().delete("/v1/group/1").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
@@ -342,7 +342,7 @@ describe("Groups", () => {
 
     test("addBucket (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { message: "OK" };
         server
@@ -361,7 +361,7 @@ describe("Groups", () => {
 
     test("addBucket (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -379,7 +379,7 @@ describe("Groups", () => {
 
     test("addBucket (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -397,7 +397,7 @@ describe("Groups", () => {
 
     test("removeBucket (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { message: "OK" };
         server
@@ -416,7 +416,7 @@ describe("Groups", () => {
 
     test("removeBucket (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
@@ -434,7 +434,7 @@ describe("Groups", () => {
 
     test("removeBucket (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new GroundXClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
         server
