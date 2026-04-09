@@ -1,3 +1,4 @@
+export * as apiKey from "./apiKey/index.js";
 export * from "./buckets/client/requests/index.js";
 export * as buckets from "./buckets/index.js";
 export * as customer from "./customer/index.js";

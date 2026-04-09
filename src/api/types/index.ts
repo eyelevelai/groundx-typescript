@@ -1,3 +1,6 @@
+export * from "./ApiKeyDetail.js";
+export * from "./ApiKeyRequest.js";
+export * from "./ApiKeyResponse.js";
 export * from "./BoundingBoxDetail.js";
 export * from "./BucketDetail.js";
 export * from "./BucketListResponse.js";
@@ -13,6 +16,7 @@ export * from "./DocumentLocalIngestRequest.js";
 export * from "./DocumentLookupResponse.js";
 export * from "./DocumentResponse.js";
 export * from "./DocumentType.js";
+export * from "./DocumentUpdate.js";
 export * from "./GroupDetail.js";
 export * from "./GroupListResponse.js";
 export * from "./GroupResponse.js";

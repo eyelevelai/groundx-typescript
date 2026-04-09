@@ -551,6 +551,219 @@ describe("DocumentsClient", () => {
         });
     });
 
+    test("update (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { documents: [{ documentId: "documentId" }] };
+        const rawResponseBody = {
+            ingest: {
+                id: 1,
+                processId: "processId",
+                progress: {
+                    cancelled: {
+                        documents: [
+                            {
+                                documentId: "documentId",
+                                fileSize: "1.4MB",
+                                filter: { key: "value", another_key: { nested: "value" } },
+                            },
+                        ],
+                    },
+                    complete: {
+                        documents: [
+                            {
+                                documentId: "documentId",
+                                fileSize: "1.4MB",
+                                filter: { key: "value", another_key: { nested: "value" } },
+                            },
+                        ],
+                    },
+                    errors: {
+                        documents: [
+                            {
+                                documentId: "documentId",
+                                fileSize: "1.4MB",
+                                filter: { key: "value", another_key: { nested: "value" } },
+                            },
+                        ],
+                    },
+                    processing: {
+                        documents: [
+                            {
+                                documentId: "documentId",
+                                fileSize: "1.4MB",
+                                filter: { key: "value", another_key: { nested: "value" } },
+                            },
+                        ],
+                    },
+                    queued: {
+                        documents: [
+                            {
+                                documentId: "documentId",
+                                fileSize: "1.4MB",
+                                filter: { key: "value", another_key: { nested: "value" } },
+                            },
+                        ],
+                    },
+                },
+                status: "queued",
+                statusMessage: "statusMessage",
+            },
+        };
+        server
+            .mockEndpoint()
+            .put("/v1/ingest/documents")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.documents.update({
+            documents: [
+                {
+                    documentId: "documentId",
+                },
+            ],
+        });
+        expect(response).toEqual({
+            ingest: {
+                id: 1,
+                processId: "processId",
+                progress: {
+                    cancelled: {
+                        documents: [
+                            {
+                                documentId: "documentId",
+                                fileSize: "1.4MB",
+                                filter: {
+                                    key: "value",
+                                    another_key: {
+                                        nested: "value",
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                    complete: {
+                        documents: [
+                            {
+                                documentId: "documentId",
+                                fileSize: "1.4MB",
+                                filter: {
+                                    key: "value",
+                                    another_key: {
+                                        nested: "value",
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                    errors: {
+                        documents: [
+                            {
+                                documentId: "documentId",
+                                fileSize: "1.4MB",
+                                filter: {
+                                    key: "value",
+                                    another_key: {
+                                        nested: "value",
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                    processing: {
+                        documents: [
+                            {
+                                documentId: "documentId",
+                                fileSize: "1.4MB",
+                                filter: {
+                                    key: "value",
+                                    another_key: {
+                                        nested: "value",
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                    queued: {
+                        documents: [
+                            {
+                                documentId: "documentId",
+                                fileSize: "1.4MB",
+                                filter: {
+                                    key: "value",
+                                    another_key: {
+                                        nested: "value",
+                                    },
+                                },
+                            },
+                        ],
+                    },
+                },
+                status: "queued",
+                statusMessage: "statusMessage",
+            },
+        });
+    });
+
+    test("update (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { documents: [{ documentId: "documentId" }, { documentId: "documentId" }] };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/v1/ingest/documents")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.update({
+                documents: [
+                    {
+                        documentId: "documentId",
+                    },
+                    {
+                        documentId: "documentId",
+                    },
+                ],
+            });
+        }).rejects.toThrow(GroundX.BadRequestError);
+    });
+
+    test("update (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { documents: [{ documentId: "documentId" }, { documentId: "documentId" }] };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .put("/v1/ingest/documents")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.update({
+                documents: [
+                    {
+                        documentId: "documentId",
+                    },
+                    {
+                        documentId: "documentId",
+                    },
+                ],
+            });
+        }).rejects.toThrow(GroundX.UnauthorizedError);
+    });
+
     test("delete (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });

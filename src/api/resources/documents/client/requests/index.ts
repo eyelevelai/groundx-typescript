@@ -4,4 +4,5 @@ export type { DocumentsDeleteRequest } from "./DocumentsDeleteRequest.js";
 export type { DocumentsGetProcessesRequest } from "./DocumentsGetProcessesRequest.js";
 export type { DocumentsListRequest } from "./DocumentsListRequest.js";
 export type { DocumentsLookupRequest } from "./DocumentsLookupRequest.js";
+export type { DocumentUpdateRequest } from "./DocumentUpdateRequest.js";
 export type { WebsiteCrawlRequest } from "./WebsiteCrawlRequest.js";
