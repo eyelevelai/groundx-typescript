@@ -4,11 +4,11 @@ export interface WebsiteSource {
     /** The bucketId of the bucket which this website will be ingested into. */
     bucketId: number;
     /** The maximum number of pages to crawl */
-    cap?: number;
+    cap?: number | undefined;
     /** The maximum depth of linked pages to follow from the sourceUrl */
-    depth?: number;
+    depth?: number | undefined;
     /** Custom metadata which can be used to influence GroundX's search functionality. This data can be used to further hone GroundX search. */
-    searchData?: Record<string, unknown>;
+    searchData?: Record<string, unknown> | undefined;
     /** The URL from which the crawl is initiated. */
     sourceUrl: string;
 }

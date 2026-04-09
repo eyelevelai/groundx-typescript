@@ -4,15 +4,15 @@ import type * as GroundX from "../index.js";
 
 export interface GroupDetail {
     /** The content buckets associated with the group */
-    buckets?: GroundX.BucketDetail[];
+    buckets?: GroundX.BucketDetail[] | undefined;
     /** The data time when the group was created, in RFC3339 format */
-    created?: string;
+    created?: string | undefined;
     /** The number of files contained in the content buckets associated with the group */
-    fileCount?: number;
+    fileCount?: number | undefined;
     /** The total file size of files contained in the content buckets associated with the group */
-    fileSize?: string;
+    fileSize?: string | undefined;
     groupId: number;
-    name?: string;
+    name?: string | undefined;
     /** The data time when the group was last updated, in RFC3339 format */
-    updated?: string;
+    updated?: string | undefined;
 }

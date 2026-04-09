@@ -4,9 +4,9 @@ export interface DocumentUpdate {
     /** The document ID of the file you wish to update. */
     documentId: string;
     /** The name you wish to change for the file. */
-    fileName?: string;
+    fileName?: string | undefined;
     /** A dictionary of key-value pairs that will replace the existing filter. */
-    filter?: Record<string, unknown>;
+    filter?: Record<string, unknown> | undefined;
     /** A dictionary of key-value pairs that will replace the existing searchData. */
-    searchData?: Record<string, unknown>;
+    searchData?: Record<string, unknown> | undefined;
 }

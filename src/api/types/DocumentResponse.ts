@@ -3,5 +3,5 @@
 import type * as GroundX from "../index.js";
 
 export interface DocumentResponse {
-    document?: GroundX.DocumentDetail;
+    document?: GroundX.DocumentDetail | undefined;
 }

@@ -12,20 +12,11 @@ describe("HealthClient", () => {
         const rawResponseBody = {
             health: { services: [{ lastUpdate: "2023-10-03T08:59:39Z", service: "search", status: "healthy" }] },
         };
+
         server.mockEndpoint().get("/v1/health").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.health.list();
-        expect(response).toEqual({
-            health: {
-                services: [
-                    {
-                        lastUpdate: "2023-10-03T08:59:39Z",
-                        service: "search",
-                        status: "healthy",
-                    },
-                ],
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (1)", async () => {
@@ -35,20 +26,11 @@ describe("HealthClient", () => {
         const rawResponseBody = {
             health: { services: [{ lastUpdate: "2023-10-03T08:59:39Z", service: "search", status: "healthy" }] },
         };
+
         server.mockEndpoint().get("/v1/health/search").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.health.get("search");
-        expect(response).toEqual({
-            health: {
-                services: [
-                    {
-                        lastUpdate: "2023-10-03T08:59:39Z",
-                        service: "search",
-                        status: "healthy",
-                    },
-                ],
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -56,6 +38,7 @@ describe("HealthClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/v1/health/service").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {

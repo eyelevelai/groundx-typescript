@@ -3,46 +3,46 @@
 import type * as GroundX from "../index.js";
 
 export interface IngestStatus {
-    id?: number;
+    id?: number | undefined;
     processId: string;
-    progress?: IngestStatus.Progress;
+    progress?: IngestStatus.Progress | undefined;
     status: GroundX.ProcessingStatus;
-    statusMessage?: string;
+    statusMessage?: string | undefined;
 }
 
 export namespace IngestStatus {
     export interface Progress {
-        cancelled?: Progress.Cancelled;
-        complete?: Progress.Complete;
-        errors?: Progress.Errors;
-        processing?: Progress.Processing;
-        queued?: Progress.Queued;
+        cancelled?: Progress.Cancelled | undefined;
+        complete?: Progress.Complete | undefined;
+        errors?: Progress.Errors | undefined;
+        processing?: Progress.Processing | undefined;
+        queued?: Progress.Queued | undefined;
     }
 
     export namespace Progress {
         export interface Cancelled {
-            documents?: GroundX.DocumentDetail[];
-            total?: number;
+            documents?: GroundX.DocumentDetail[] | undefined;
+            total?: number | undefined;
         }
 
         export interface Complete {
-            documents?: GroundX.DocumentDetail[];
-            total?: number;
+            documents?: GroundX.DocumentDetail[] | undefined;
+            total?: number | undefined;
         }
 
         export interface Errors {
-            documents?: GroundX.DocumentDetail[];
-            total?: number;
+            documents?: GroundX.DocumentDetail[] | undefined;
+            total?: number | undefined;
         }
 
         export interface Processing {
-            documents?: GroundX.DocumentDetail[];
-            total?: number;
+            documents?: GroundX.DocumentDetail[] | undefined;
+            total?: number | undefined;
         }
 
         export interface Queued {
-            documents?: GroundX.DocumentDetail[];
-            total?: number;
+            documents?: GroundX.DocumentDetail[] | undefined;
+            total?: number | undefined;
         }
     }
 }

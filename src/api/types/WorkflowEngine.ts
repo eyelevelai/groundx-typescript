@@ -5,15 +5,15 @@
  */
 export interface WorkflowEngine {
     /** A token that is added to the header of a request as an authorization bearer token */
-    apiKey?: string;
+    apiKey?: string | undefined;
     /** The base URL that precedes '/chat/completion' for an OpenAI chat completion-compatible endpoint */
-    baseURL?: string;
+    baseURL?: string | undefined;
     /** The model name that will be included in the request */
-    engineID?: string;
+    engineID?: string | undefined;
     /** An enumerated value that conforms to OpenAI '/chat/completion' specifications */
-    reasoningEffort?: WorkflowEngine.ReasoningEffort;
+    reasoningEffort?: WorkflowEngine.ReasoningEffort | undefined;
     /** An enumerated descriptor of the service type, impacts how the requests are configured */
-    service?: WorkflowEngine.Service;
+    service?: WorkflowEngine.Service | undefined;
 }
 
 export namespace WorkflowEngine {

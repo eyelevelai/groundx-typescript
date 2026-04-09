@@ -10,18 +10,11 @@ describe("ApiKeyClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { apiKeys: [{ apiKey: "apiKey", created: "2023-10-03T08:59:39Z", name: "name" }] };
+
         server.mockEndpoint().get("/v1/apikey").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.apiKey.list();
-        expect(response).toEqual({
-            apiKeys: [
-                {
-                    apiKey: "apiKey",
-                    created: "2023-10-03T08:59:39Z",
-                    name: "name",
-                },
-            ],
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (1)", async () => {
@@ -29,6 +22,7 @@ describe("ApiKeyClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "your_apikey_name" };
         const rawResponseBody = { apiKeys: [{ apiKey: "apiKey", created: "2023-10-03T08:59:39Z", name: "name" }] };
+
         server
             .mockEndpoint()
             .post("/v1/apikey")
@@ -41,15 +35,7 @@ describe("ApiKeyClient", () => {
         const response = await client.apiKey.create({
             name: "your_apikey_name",
         });
-        expect(response).toEqual({
-            apiKeys: [
-                {
-                    apiKey: "apiKey",
-                    created: "2023-10-03T08:59:39Z",
-                    name: "name",
-                },
-            ],
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -57,6 +43,7 @@ describe("ApiKeyClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/v1/apikey")
@@ -78,6 +65,7 @@ describe("ApiKeyClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "your_apikey_name" };
         const rawResponseBody = { apiKeys: [{ apiKey: "apiKey", created: "2023-10-03T08:59:39Z", name: "name" }] };
+
         server
             .mockEndpoint()
             .put("/v1/apikey/apiKey")
@@ -90,15 +78,7 @@ describe("ApiKeyClient", () => {
         const response = await client.apiKey.update("apiKey", {
             name: "your_apikey_name",
         });
-        expect(response).toEqual({
-            apiKeys: [
-                {
-                    apiKey: "apiKey",
-                    created: "2023-10-03T08:59:39Z",
-                    name: "name",
-                },
-            ],
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("delete", async () => {
@@ -106,6 +86,7 @@ describe("ApiKeyClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { message: "OK" };
+
         server
             .mockEndpoint()
             .delete("/v1/apikey/apiKey")
@@ -115,8 +96,6 @@ describe("ApiKeyClient", () => {
             .build();
 
         const response = await client.apiKey.delete("apiKey");
-        expect(response).toEqual({
-            message: "OK",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 });

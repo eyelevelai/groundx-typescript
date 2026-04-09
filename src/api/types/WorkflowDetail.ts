@@ -6,21 +6,21 @@ import type * as GroundX from "../index.js";
  * Workflow information
  */
 export interface WorkflowDetail {
-    chunkStrategy?: WorkflowDetail.ChunkStrategy;
+    chunkStrategy?: WorkflowDetail.ChunkStrategy | undefined;
     /** The documentId associated with the workflow */
-    documentId?: string;
+    documentId?: string | undefined;
     /** The bucketId or groupId associated with the workflow */
-    id?: number;
+    id?: number | undefined;
     /** The human-readable name of the workflow */
-    name?: string;
+    name?: string | undefined;
     /** Extract agent definitions. */
-    extract?: Record<string, unknown>;
-    sectionStrategy?: WorkflowDetail.SectionStrategy;
-    steps?: GroundX.WorkflowSteps;
+    extract?: Record<string, unknown> | undefined;
+    sectionStrategy?: WorkflowDetail.SectionStrategy | undefined;
+    steps?: GroundX.WorkflowSteps | undefined;
     /** Information describing what the workflow is associated with */
-    relationships?: WorkflowDetail.Relationships;
+    relationships?: WorkflowDetail.Relationships | undefined;
     /** Unique system generated ID for the workflow */
-    workflowId?: string;
+    workflowId?: string | undefined;
 }
 
 export namespace WorkflowDetail {
@@ -40,10 +40,10 @@ export namespace WorkflowDetail {
      */
     export interface Relationships {
         /** A boolean indicating whether the workflow is associated with the account */
-        account?: boolean;
+        account?: boolean | undefined;
         /** An array of documentIds associated with the workflow */
-        documents?: string[];
+        documents?: string[] | undefined;
         /** An array of bucketIds or groupIds associated with the workflow */
-        ids?: number[];
+        ids?: number[] | undefined;
     }
 }

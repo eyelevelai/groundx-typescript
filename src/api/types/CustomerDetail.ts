@@ -7,10 +7,10 @@ import type * as GroundX from "../index.js";
  */
 export interface CustomerDetail {
     /** Email associated with the account */
-    email?: string;
+    email?: string | undefined;
     /** Given name associated with the account, if known */
-    first?: string;
+    first?: string | undefined;
     /** Family name associated with the account, if known */
-    last?: string;
-    subscription?: GroundX.SubscriptionDetail;
+    last?: string | undefined;
+    subscription?: GroundX.SubscriptionDetail | undefined;
 }

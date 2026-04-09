@@ -6,13 +6,13 @@ export interface Document {
     /** The bucketId of the bucket which this file will be ingested into. */
     bucketId: number;
     /** The name of the file being ingested. */
-    fileName?: string;
+    fileName?: string | undefined;
     /** The local file path or remote URL of the document being ingested by GroundX. */
     filePath: string;
-    fileType?: GroundX.DocumentType;
+    fileType?: GroundX.DocumentType | undefined;
     /** A dictionary of key-value pairs that can be used to pre-filter documents prior to a search. */
-    filter?: Record<string, unknown>;
-    processLevel?: GroundX.ProcessLevel;
+    filter?: Record<string, unknown> | undefined;
+    processLevel?: GroundX.ProcessLevel | undefined;
     /** Custom metadata which can be used to influence GroundX's search functionality. This data can be used to further hone GroundX search. */
-    searchData?: Record<string, unknown>;
+    searchData?: Record<string, unknown> | undefined;
 }

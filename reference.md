@@ -3089,3 +3089,4 @@ await client.health.get("search");
 </dd>
 </dl>
 </details>
+

@@ -64,6 +64,7 @@ describe("DocumentsClient", () => {
                 statusMessage: "statusMessage",
             },
         };
+
         server
             .mockEndpoint()
             .post("/v1/ingest/copy")
@@ -76,86 +77,7 @@ describe("DocumentsClient", () => {
         const response = await client.documents.copy({
             toBucket: 1234,
         });
-        expect(response).toEqual({
-            ingest: {
-                id: 1,
-                processId: "processId",
-                progress: {
-                    cancelled: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                    complete: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                    errors: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                    processing: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                    queued: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                },
-                status: "queued",
-                statusMessage: "statusMessage",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("ingestRemote (1)", async () => {
@@ -172,6 +94,7 @@ describe("DocumentsClient", () => {
             ],
         };
         const rawResponseBody = { ingest: { processId: "uuid", status: "queued" } };
+
         server
             .mockEndpoint()
             .post("/v1/ingest/documents/remote")
@@ -191,12 +114,7 @@ describe("DocumentsClient", () => {
                 },
             ],
         });
-        expect(response).toEqual({
-            ingest: {
-                processId: "uuid",
-                status: "queued",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("ingestRemote (2)", async () => {
@@ -209,6 +127,7 @@ describe("DocumentsClient", () => {
             ],
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/v1/ingest/documents/remote")
@@ -244,6 +163,7 @@ describe("DocumentsClient", () => {
             ],
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/v1/ingest/documents/remote")
@@ -276,6 +196,7 @@ describe("DocumentsClient", () => {
             { blob: "blob", metadata: { bucketId: 1234, fileName: "my_file1.txt", fileType: "txt" } },
         ];
         const rawResponseBody = { ingest: { processId: "uuid", status: "queued" } };
+
         server
             .mockEndpoint()
             .post("/v1/ingest/documents/local")
@@ -295,12 +216,7 @@ describe("DocumentsClient", () => {
                 },
             },
         ]);
-        expect(response).toEqual({
-            ingest: {
-                processId: "uuid",
-                status: "queued",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("ingestLocal (2)", async () => {
@@ -311,6 +227,7 @@ describe("DocumentsClient", () => {
             { blob: "blob", metadata: {} },
         ];
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/v1/ingest/documents/local")
@@ -342,6 +259,7 @@ describe("DocumentsClient", () => {
             { blob: "blob", metadata: {} },
         ];
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/v1/ingest/documents/local")
@@ -380,6 +298,7 @@ describe("DocumentsClient", () => {
             ],
         };
         const rawResponseBody = { ingest: { processId: "uuid", status: "queued" } };
+
         server
             .mockEndpoint()
             .post("/v1/ingest/documents/website")
@@ -402,12 +321,7 @@ describe("DocumentsClient", () => {
                 },
             ],
         });
-        expect(response).toEqual({
-            ingest: {
-                processId: "uuid",
-                status: "queued",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("crawlWebsite (2)", async () => {
@@ -420,6 +334,7 @@ describe("DocumentsClient", () => {
             ],
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/v1/ingest/documents/website")
@@ -455,6 +370,7 @@ describe("DocumentsClient", () => {
             ],
         };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/v1/ingest/documents/website")
@@ -505,6 +421,7 @@ describe("DocumentsClient", () => {
             ],
             nextToken: "nextToken",
         };
+
         server
             .mockEndpoint()
             .get("/v1/ingest/documents")
@@ -521,34 +438,7 @@ describe("DocumentsClient", () => {
             status: "queued",
             nextToken: "nextToken",
         });
-        expect(response).toEqual({
-            documents: [
-                {
-                    bucketId: 1,
-                    documentId: "documentId",
-                    fileName: "fileName",
-                    fileSize: "1.4MB",
-                    fileType: "bmp",
-                    filter: {
-                        key: "value",
-                        another_key: {
-                            nested: "value",
-                        },
-                    },
-                    processId: "processId",
-                    processLevel: "none",
-                    searchData: {
-                        key: "value",
-                    },
-                    sourceUrl: "sourceUrl",
-                    status: "queued",
-                    statusMessage: "statusMessage",
-                    textUrl: "textUrl",
-                    xrayUrl: "xrayUrl",
-                },
-            ],
-            nextToken: "nextToken",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (1)", async () => {
@@ -610,6 +500,7 @@ describe("DocumentsClient", () => {
                 statusMessage: "statusMessage",
             },
         };
+
         server
             .mockEndpoint()
             .put("/v1/ingest/documents")
@@ -626,86 +517,7 @@ describe("DocumentsClient", () => {
                 },
             ],
         });
-        expect(response).toEqual({
-            ingest: {
-                id: 1,
-                processId: "processId",
-                progress: {
-                    cancelled: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                    complete: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                    errors: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                    processing: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                    queued: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                },
-                status: "queued",
-                statusMessage: "statusMessage",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -713,6 +525,7 @@ describe("DocumentsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { documents: [{ documentId: "documentId" }, { documentId: "documentId" }] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/v1/ingest/documents")
@@ -741,6 +554,7 @@ describe("DocumentsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { documents: [{ documentId: "documentId" }, { documentId: "documentId" }] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/v1/ingest/documents")
@@ -769,6 +583,7 @@ describe("DocumentsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { ingest: { processId: "uuid", status: "queued" } };
+
         server
             .mockEndpoint()
             .delete("/v1/ingest/documents")
@@ -780,12 +595,7 @@ describe("DocumentsClient", () => {
         const response = await client.documents.delete({
             documentIds: "123e4567-e89b-12d3-a456-426614174000,9f7c11a6-24b8-4d52-a9f3-90a7e70a9e49",
         });
-        expect(response).toEqual({
-            ingest: {
-                processId: "uuid",
-                status: "queued",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("delete (2)", async () => {
@@ -793,6 +603,7 @@ describe("DocumentsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/v1/ingest/documents")
@@ -811,6 +622,7 @@ describe("DocumentsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/v1/ingest/documents")
@@ -883,6 +695,7 @@ describe("DocumentsClient", () => {
                 statusMessage: "statusMessage",
             },
         };
+
         server
             .mockEndpoint()
             .get("/v1/ingest/processId")
@@ -892,86 +705,7 @@ describe("DocumentsClient", () => {
             .build();
 
         const response = await client.documents.getProcessingStatusById("processId");
-        expect(response).toEqual({
-            ingest: {
-                id: 1,
-                processId: "processId",
-                progress: {
-                    cancelled: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                    complete: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                    errors: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                    processing: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                    queued: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                },
-                status: "queued",
-                statusMessage: "statusMessage",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("getProcessingStatusById (2)", async () => {
@@ -979,6 +713,7 @@ describe("DocumentsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/v1/ingest/processId")
@@ -997,6 +732,7 @@ describe("DocumentsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/v1/ingest/processId")
@@ -1069,6 +805,7 @@ describe("DocumentsClient", () => {
                 statusMessage: "statusMessage",
             },
         };
+
         server
             .mockEndpoint()
             .delete("/v1/ingest/processId")
@@ -1078,86 +815,7 @@ describe("DocumentsClient", () => {
             .build();
 
         const response = await client.documents.cancelProcess("processId");
-        expect(response).toEqual({
-            ingest: {
-                id: 1,
-                processId: "processId",
-                progress: {
-                    cancelled: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                    complete: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                    errors: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                    processing: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                    queued: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                },
-                status: "queued",
-                statusMessage: "statusMessage",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("cancelProcess (2)", async () => {
@@ -1165,6 +823,7 @@ describe("DocumentsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/v1/ingest/processId")
@@ -1183,6 +842,7 @@ describe("DocumentsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/v1/ingest/processId")
@@ -1224,6 +884,7 @@ describe("DocumentsClient", () => {
             remaining: 10,
             total: 30,
         };
+
         server
             .mockEndpoint()
             .get("/v1/ingest/documents/1")
@@ -1240,37 +901,7 @@ describe("DocumentsClient", () => {
             status: "queued",
             nextToken: "nextToken",
         });
-        expect(response).toEqual({
-            count: 20,
-            documents: [
-                {
-                    bucketId: 1,
-                    documentId: "documentId",
-                    fileName: "fileName",
-                    fileSize: "1.4MB",
-                    fileType: "bmp",
-                    filter: {
-                        key: "value",
-                        another_key: {
-                            nested: "value",
-                        },
-                    },
-                    processId: "processId",
-                    processLevel: "none",
-                    searchData: {
-                        key: "value",
-                    },
-                    sourceUrl: "sourceUrl",
-                    status: "queued",
-                    statusMessage: "statusMessage",
-                    textUrl: "textUrl",
-                    xrayUrl: "xrayUrl",
-                },
-            ],
-            nextToken: "nHXtu=",
-            remaining: 10,
-            total: 30,
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("lookup (2)", async () => {
@@ -1278,6 +909,7 @@ describe("DocumentsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/v1/ingest/documents/1")
@@ -1296,6 +928,7 @@ describe("DocumentsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/v1/ingest/documents/1")
@@ -1331,6 +964,7 @@ describe("DocumentsClient", () => {
                 xrayUrl: "xrayUrl",
             },
         };
+
         server
             .mockEndpoint()
             .get("/v1/ingest/document/documentId")
@@ -1340,31 +974,7 @@ describe("DocumentsClient", () => {
             .build();
 
         const response = await client.documents.get("documentId");
-        expect(response).toEqual({
-            document: {
-                bucketId: 1,
-                documentId: "documentId",
-                fileName: "fileName",
-                fileSize: "1.4MB",
-                fileType: "bmp",
-                filter: {
-                    key: "value",
-                    another_key: {
-                        nested: "value",
-                    },
-                },
-                processId: "processId",
-                processLevel: "none",
-                searchData: {
-                    key: "value",
-                },
-                sourceUrl: "sourceUrl",
-                status: "queued",
-                statusMessage: "statusMessage",
-                textUrl: "textUrl",
-                xrayUrl: "xrayUrl",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -1372,6 +982,7 @@ describe("DocumentsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/v1/ingest/document/documentId")
@@ -1390,6 +1001,7 @@ describe("DocumentsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/v1/ingest/document/documentId")
@@ -1462,6 +1074,7 @@ describe("DocumentsClient", () => {
                 statusMessage: "statusMessage",
             },
         };
+
         server
             .mockEndpoint()
             .delete("/v1/ingest/document/documentId")
@@ -1471,86 +1084,7 @@ describe("DocumentsClient", () => {
             .build();
 
         const response = await client.documents.deleteById("documentId");
-        expect(response).toEqual({
-            ingest: {
-                id: 1,
-                processId: "processId",
-                progress: {
-                    cancelled: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                    complete: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                    errors: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                    processing: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                    queued: {
-                        documents: [
-                            {
-                                documentId: "documentId",
-                                fileSize: "1.4MB",
-                                filter: {
-                                    key: "value",
-                                    another_key: {
-                                        nested: "value",
-                                    },
-                                },
-                            },
-                        ],
-                    },
-                },
-                status: "queued",
-                statusMessage: "statusMessage",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("deleteById (2)", async () => {
@@ -1558,6 +1092,7 @@ describe("DocumentsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/v1/ingest/document/documentId")
@@ -1576,6 +1111,7 @@ describe("DocumentsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/v1/ingest/document/documentId")
@@ -1594,6 +1130,7 @@ describe("DocumentsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/v1/ingest/document/extract/documentId")
@@ -1603,9 +1140,7 @@ describe("DocumentsClient", () => {
             .build();
 
         const response = await client.documents.getExtract("documentId");
-        expect(response).toEqual({
-            key: "value",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("getExtract (2)", async () => {
@@ -1613,6 +1148,7 @@ describe("DocumentsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/v1/ingest/document/extract/documentId")
@@ -1631,6 +1167,7 @@ describe("DocumentsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/v1/ingest/document/extract/documentId")
@@ -1649,6 +1186,7 @@ describe("DocumentsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/v1/ingest/document/xray/documentId")
@@ -1658,9 +1196,7 @@ describe("DocumentsClient", () => {
             .build();
 
         const response = await client.documents.getXray("documentId");
-        expect(response).toEqual({
-            key: "value",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("getXray (2)", async () => {
@@ -1668,6 +1204,7 @@ describe("DocumentsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/v1/ingest/document/xray/documentId")
@@ -1686,6 +1223,7 @@ describe("DocumentsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .get("/v1/ingest/document/xray/documentId")
@@ -1706,21 +1244,13 @@ describe("DocumentsClient", () => {
         const rawResponseBody = {
             processes: [{ id: 1, processId: "processId", status: "queued", statusMessage: "statusMessage" }],
         };
+
         server.mockEndpoint().get("/v1/ingest").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.documents.getProcesses({
             n: 1,
             status: "queued",
         });
-        expect(response).toEqual({
-            processes: [
-                {
-                    id: 1,
-                    processId: "processId",
-                    status: "queued",
-                    statusMessage: "statusMessage",
-                },
-            ],
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 });

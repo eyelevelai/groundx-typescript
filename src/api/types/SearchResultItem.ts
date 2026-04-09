@@ -4,29 +4,29 @@ import type * as GroundX from "../index.js";
 
 export interface SearchResultItem {
     /** Coordinates corresponding to the areas of the document where the chunk appears */
-    boundingBoxes?: GroundX.BoundingBoxDetail[];
+    boundingBoxes?: GroundX.BoundingBoxDetail[] | undefined;
     /** Content bucket the search result belongs to */
-    bucketId?: number;
+    bucketId?: number | undefined;
     /** Unique system generated ID for the chunk */
-    chunkId?: string;
+    chunkId?: string | undefined;
     /** Unique system generated ID for the document */
-    documentId?: string;
+    documentId?: string | undefined;
     /** Name of ingested file */
-    fileName?: string;
+    fileName?: string | undefined;
     /** An image clipping of the table or figure object from the document */
-    multimodalUrl?: string;
-    pageImages?: string[];
-    pages?: SearchResultItem.Pages.Item[];
+    multimodalUrl?: string | undefined;
+    pageImages?: string[] | undefined;
+    pages?: SearchResultItem.Pages.Item[] | undefined;
     /** Confidence score in the search result */
-    score?: number;
+    score?: number | undefined;
     /** Document, section, and chunk search data, both custom and system-generated */
-    searchData?: Record<string, unknown>;
+    searchData?: Record<string, unknown> | undefined;
     /** Source document URL */
-    sourceUrl?: string;
+    sourceUrl?: string | undefined;
     /** System-generated text, re-written for LLM completions */
-    suggestedText?: string;
+    suggestedText?: string | undefined;
     /** Original text from the source document */
-    text?: string;
+    text?: string | undefined;
 }
 
 export namespace SearchResultItem {
@@ -35,13 +35,13 @@ export namespace SearchResultItem {
     export namespace Pages {
         export interface Item {
             /** The height of the page image */
-            height?: number;
+            height?: number | undefined;
             /** A jpg of the page the chunk appears on */
-            imageUrl?: string;
+            imageUrl?: string | undefined;
             /** The page number */
-            number?: number;
+            number?: number | undefined;
             /** The width of the page image */
-            width?: number;
+            width?: number | undefined;
         }
     }
 }

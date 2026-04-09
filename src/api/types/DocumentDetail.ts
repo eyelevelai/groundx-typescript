@@ -3,25 +3,25 @@
 import type * as GroundX from "../index.js";
 
 export interface DocumentDetail {
-    bucketId?: number;
+    bucketId?: number | undefined;
     /** Unique system generated ID for the document */
     documentId: string;
-    fileName?: string;
+    fileName?: string | undefined;
     /** The file size of the file stored in GroundX */
-    fileSize?: string;
-    fileType?: GroundX.DocumentType;
+    fileSize?: string | undefined;
+    fileType?: GroundX.DocumentType | undefined;
     /** A dictionary of key-value pairs that can be used to pre-filter documents prior to a search. */
-    filter?: Record<string, unknown>;
+    filter?: Record<string, unknown> | undefined;
     /** Unique system generated ID for the ingest request */
-    processId?: string;
-    processLevel?: GroundX.ProcessLevel;
-    searchData?: Record<string, unknown>;
+    processId?: string | undefined;
+    processLevel?: GroundX.ProcessLevel | undefined;
+    searchData?: Record<string, unknown> | undefined;
     /** Source document URL */
-    sourceUrl?: string;
-    status?: GroundX.ProcessingStatus;
-    statusMessage?: string;
+    sourceUrl?: string | undefined;
+    status?: GroundX.ProcessingStatus | undefined;
+    statusMessage?: string | undefined;
     /** Extracted text URL, if using the extract agent */
-    textUrl?: string;
+    textUrl?: string | undefined;
     /** Document X-Ray results */
-    xrayUrl?: string;
+    xrayUrl?: string | undefined;
 }

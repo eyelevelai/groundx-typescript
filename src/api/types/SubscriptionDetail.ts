@@ -6,12 +6,12 @@ import type * as GroundX from "../index.js";
  * Subscription information for the user, including current usage and limits
  */
 export interface SubscriptionDetail {
-    meters?: SubscriptionDetail.Meters;
+    meters?: SubscriptionDetail.Meters | undefined;
 }
 
 export namespace SubscriptionDetail {
     export interface Meters {
-        fileTokens?: GroundX.MeterDetail;
-        searches?: GroundX.MeterDetail;
+        fileTokens?: GroundX.MeterDetail | undefined;
+        searches?: GroundX.MeterDetail | undefined;
     }
 }

@@ -6,11 +6,11 @@ import type * as GroundX from "../index.js";
  * Configurations for an agent, including LLM information and prompts
  */
 export interface WorkflowStepConfig {
-    engine?: GroundX.WorkflowEngine;
+    engine?: GroundX.WorkflowEngine | undefined;
     /** The field where agent output will be saved */
-    field?: WorkflowStepConfig.Field;
-    includes?: Record<string, boolean>;
-    prompt?: GroundX.WorkflowPromptGroup;
+    field?: WorkflowStepConfig.Field | undefined;
+    includes?: Record<string, boolean> | undefined;
+    prompt?: GroundX.WorkflowPromptGroup | undefined;
 }
 
 export namespace WorkflowStepConfig {

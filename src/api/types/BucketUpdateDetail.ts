@@ -2,5 +2,5 @@
 
 export interface BucketUpdateDetail {
     bucketId: number;
-    name?: string;
+    name?: string | undefined;
 }

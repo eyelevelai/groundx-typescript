@@ -6,13 +6,13 @@ import type * as GroundX from "../index.js";
  * A collection of workflow steps
  */
 export interface WorkflowSteps {
-    "chunk-instruct"?: GroundX.WorkflowStep;
-    "chunk-keys"?: GroundX.WorkflowStep;
-    "chunk-summary"?: GroundX.WorkflowStep;
-    "doc-keys"?: GroundX.WorkflowStep;
-    "doc-summary"?: GroundX.WorkflowStep;
-    "search-query"?: GroundX.WorkflowStep;
-    "sect-instruct"?: GroundX.WorkflowStep;
-    "sect-keys"?: GroundX.WorkflowStep;
-    "sect-summary"?: GroundX.WorkflowStep;
+    "chunk-instruct"?: GroundX.WorkflowStep | undefined;
+    "chunk-keys"?: GroundX.WorkflowStep | undefined;
+    "chunk-summary"?: GroundX.WorkflowStep | undefined;
+    "doc-keys"?: GroundX.WorkflowStep | undefined;
+    "doc-summary"?: GroundX.WorkflowStep | undefined;
+    "search-query"?: GroundX.WorkflowStep | undefined;
+    "sect-instruct"?: GroundX.WorkflowStep | undefined;
+    "sect-keys"?: GroundX.WorkflowStep | undefined;
+    "sect-summary"?: GroundX.WorkflowStep | undefined;
 }

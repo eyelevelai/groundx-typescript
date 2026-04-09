@@ -9,15 +9,10 @@ describe("CustomerClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { customer: { email: "email", first: "first", last: "last" } };
+
         server.mockEndpoint().get("/v1/customer").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.customer.get();
-        expect(response).toEqual({
-            customer: {
-                email: "email",
-                first: "first",
-                last: "last",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 });

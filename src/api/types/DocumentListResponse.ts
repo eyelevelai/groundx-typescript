@@ -3,6 +3,6 @@
 import type * as GroundX from "../index.js";
 
 export interface DocumentListResponse {
-    documents?: GroundX.DocumentDetail[];
-    nextToken?: string;
+    documents?: GroundX.DocumentDetail[] | undefined;
+    nextToken?: string | undefined;
 }

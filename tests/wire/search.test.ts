@@ -20,6 +20,7 @@ describe("SearchClient", () => {
                 nextToken: "nextToken",
             },
         };
+
         server
             .mockEndpoint()
             .post("/v1/search/1")
@@ -35,17 +36,7 @@ describe("SearchClient", () => {
             verbosity: 1,
             query: "my search query",
         });
-        expect(response).toEqual({
-            search: {
-                count: 1,
-                results: [{}],
-                query: "query",
-                score: 1.1,
-                searchQuery: "searchQuery",
-                text: "text",
-                nextToken: "nextToken",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("content (2)", async () => {
@@ -53,6 +44,7 @@ describe("SearchClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { query: "my search query" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/v1/search/1")
@@ -74,6 +66,7 @@ describe("SearchClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { query: "my search query" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/v1/search/1")
@@ -105,6 +98,7 @@ describe("SearchClient", () => {
                 nextToken: "nextToken",
             },
         };
+
         server
             .mockEndpoint()
             .post("/v1/search/documents")
@@ -121,17 +115,7 @@ describe("SearchClient", () => {
             query: "my search query",
             documentIds: ["docUUID1", "docUUID2"],
         });
-        expect(response).toEqual({
-            search: {
-                count: 1,
-                results: [{}],
-                query: "query",
-                score: 1.1,
-                searchQuery: "searchQuery",
-                text: "text",
-                nextToken: "nextToken",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("documents (2)", async () => {
@@ -139,6 +123,7 @@ describe("SearchClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { query: "my search query", documentIds: ["documentIds", "documentIds"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/v1/search/documents")
@@ -161,6 +146,7 @@ describe("SearchClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { query: "my search query", documentIds: ["documentIds", "documentIds"] };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/v1/search/documents")

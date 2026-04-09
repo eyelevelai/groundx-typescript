@@ -6,6 +6,6 @@ import type * as GroundX from "../index.js";
  * A grouping of system task and request prompts
  */
 export interface WorkflowPromptGroup {
-    request?: GroundX.WorkflowPrompt;
-    task?: GroundX.WorkflowPrompt;
+    request?: GroundX.WorkflowPrompt | undefined;
+    task?: GroundX.WorkflowPrompt | undefined;
 }

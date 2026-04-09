@@ -5,11 +5,11 @@
  */
 export interface WorkflowPrompt {
     /** A short version of the prompt that is included in historical chat transcripts as part of the prompt context */
-    abbreviated?: string;
+    abbreviated?: string | undefined;
     /** The prompt that is sent to the LLM */
-    prompt?: string;
+    prompt?: string | undefined;
     /** An enumerated value that conforms to OpenAI '/chat/completion' specifications */
-    role?: WorkflowPrompt.Role;
+    role?: WorkflowPrompt.Role | undefined;
 }
 
 export namespace WorkflowPrompt {

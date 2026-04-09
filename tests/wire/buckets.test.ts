@@ -24,27 +24,14 @@ describe("BucketsClient", () => {
             remaining: 10,
             total: 30,
         };
+
         server.mockEndpoint().get("/v1/bucket").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.buckets.list({
             n: 1,
             nextToken: "nextToken",
         });
-        expect(response).toEqual({
-            buckets: [
-                {
-                    bucketId: 1,
-                    created: "2023-10-03T08:59:39Z",
-                    fileCount: 1,
-                    fileSize: "3.1GB",
-                    name: "name",
-                    updated: "2023-10-03T08:59:39Z",
-                },
-            ],
-            count: 1,
-            remaining: 10,
-            total: 30,
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (1)", async () => {
@@ -61,6 +48,7 @@ describe("BucketsClient", () => {
                 updated: "2023-10-03T08:59:39Z",
             },
         };
+
         server
             .mockEndpoint()
             .post("/v1/bucket")
@@ -73,16 +61,7 @@ describe("BucketsClient", () => {
         const response = await client.buckets.create({
             name: "your_bucket_name",
         });
-        expect(response).toEqual({
-            bucket: {
-                bucketId: 1,
-                created: "2023-10-03T08:59:39Z",
-                fileCount: 1,
-                fileSize: "3.1GB",
-                name: "name",
-                updated: "2023-10-03T08:59:39Z",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -90,6 +69,7 @@ describe("BucketsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/v1/bucket")
@@ -120,19 +100,11 @@ describe("BucketsClient", () => {
                 updated: "2023-10-03T08:59:39Z",
             },
         };
+
         server.mockEndpoint().get("/v1/bucket/1").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.buckets.get(1);
-        expect(response).toEqual({
-            bucket: {
-                bucketId: 1,
-                created: "2023-10-03T08:59:39Z",
-                fileCount: 1,
-                fileSize: "3.1GB",
-                name: "name",
-                updated: "2023-10-03T08:59:39Z",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -140,6 +112,7 @@ describe("BucketsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/v1/bucket/1").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -152,6 +125,7 @@ describe("BucketsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/v1/bucket/1").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -164,6 +138,7 @@ describe("BucketsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { newName: "your_bucket_name" };
         const rawResponseBody = { bucket: { bucketId: 1, name: "name" } };
+
         server
             .mockEndpoint()
             .put("/v1/bucket/1")
@@ -176,12 +151,7 @@ describe("BucketsClient", () => {
         const response = await client.buckets.update(1, {
             newName: "your_bucket_name",
         });
-        expect(response).toEqual({
-            bucket: {
-                bucketId: 1,
-                name: "name",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -189,6 +159,7 @@ describe("BucketsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { newName: "newName" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/v1/bucket/1")
@@ -210,6 +181,7 @@ describe("BucketsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { newName: "newName" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/v1/bucket/1")
@@ -231,12 +203,11 @@ describe("BucketsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { message: "OK" };
+
         server.mockEndpoint().delete("/v1/bucket/1").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.buckets.delete(1);
-        expect(response).toEqual({
-            message: "OK",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("delete (2)", async () => {
@@ -244,6 +215,7 @@ describe("BucketsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/v1/bucket/1").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -256,6 +228,7 @@ describe("BucketsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/v1/bucket/1").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {

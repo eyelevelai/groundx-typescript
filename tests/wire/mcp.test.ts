@@ -9,6 +9,7 @@ describe("McpClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { key: "value" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/v1/mcp")
@@ -21,8 +22,6 @@ describe("McpClient", () => {
         const response = await client.mcp.mcp({
             key: "value",
         });
-        expect(response).toEqual({
-            key: "value",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 });

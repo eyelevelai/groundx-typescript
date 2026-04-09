@@ -13,7 +13,6 @@
     "types": "./dist/cjs/index.d.ts",
     "exports": {
         ".": {
-            "types": "./dist/cjs/index.d.ts",
             "import": {
                 "types": "./dist/esm/index.d.mts",
                 "default": "./dist/esm/index.mjs"
@@ -23,6 +22,105 @@
                 "default": "./dist/cjs/index.js"
             },
             "default": "./dist/cjs/index.js"
+        },
+        "./mcp": {
+            "import": {
+                "types": "./dist/esm/api/resources/mcp/exports.d.mts",
+                "default": "./dist/esm/api/resources/mcp/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/mcp/exports.d.ts",
+                "default": "./dist/cjs/api/resources/mcp/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/mcp/exports.js"
+        },
+        "./documents": {
+            "import": {
+                "types": "./dist/esm/api/resources/documents/exports.d.mts",
+                "default": "./dist/esm/api/resources/documents/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/documents/exports.d.ts",
+                "default": "./dist/cjs/api/resources/documents/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/documents/exports.js"
+        },
+        "./search": {
+            "import": {
+                "types": "./dist/esm/api/resources/search/exports.d.mts",
+                "default": "./dist/esm/api/resources/search/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/search/exports.d.ts",
+                "default": "./dist/cjs/api/resources/search/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/search/exports.js"
+        },
+        "./buckets": {
+            "import": {
+                "types": "./dist/esm/api/resources/buckets/exports.d.mts",
+                "default": "./dist/esm/api/resources/buckets/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/buckets/exports.d.ts",
+                "default": "./dist/cjs/api/resources/buckets/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/buckets/exports.js"
+        },
+        "./groups": {
+            "import": {
+                "types": "./dist/esm/api/resources/groups/exports.d.mts",
+                "default": "./dist/esm/api/resources/groups/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/groups/exports.d.ts",
+                "default": "./dist/cjs/api/resources/groups/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/groups/exports.js"
+        },
+        "./workflows": {
+            "import": {
+                "types": "./dist/esm/api/resources/workflows/exports.d.mts",
+                "default": "./dist/esm/api/resources/workflows/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/workflows/exports.d.ts",
+                "default": "./dist/cjs/api/resources/workflows/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/workflows/exports.js"
+        },
+        "./customer": {
+            "import": {
+                "types": "./dist/esm/api/resources/customer/exports.d.mts",
+                "default": "./dist/esm/api/resources/customer/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/customer/exports.d.ts",
+                "default": "./dist/cjs/api/resources/customer/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/customer/exports.js"
+        },
+        "./apiKey": {
+            "import": {
+                "types": "./dist/esm/api/resources/apiKey/exports.d.mts",
+                "default": "./dist/esm/api/resources/apiKey/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/apiKey/exports.d.ts",
+                "default": "./dist/cjs/api/resources/apiKey/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/apiKey/exports.js"
+        },
+        "./health": {
+            "import": {
+                "types": "./dist/esm/api/resources/health/exports.d.mts",
+                "default": "./dist/esm/api/resources/health/exports.mjs"
+            },
+            "require": {
+                "types": "./dist/cjs/api/resources/health/exports.d.ts",
+                "default": "./dist/cjs/api/resources/health/exports.js"
+            },
+            "default": "./dist/cjs/api/resources/health/exports.js"
         },
         "./package.json": "./package.json"
     },
@@ -50,21 +148,22 @@
         "url-join": ">=5.0.0"
     },
     "devDependencies": {
-        "webpack": "^5.97.1",
-        "ts-loader": "^9.5.1",
-        "vitest": "^3.2.4",
+        "webpack": "^5.105.4",
+        "ts-loader": "^9.5.4",
+        "vitest": "^4.1.1",
         "msw": "2.11.2",
         "@types/node": "^18.19.70",
-        "typescript": "~5.7.2",
-        "@biomejs/biome": "2.3.11"
+        "typescript": "~5.9.3",
+        "@biomejs/biome": "2.4.10"
     },
     "browser": {
         "fs": false,
         "os": false,
         "path": false,
-        "stream": false
+        "stream": false,
+        "crypto": false
     },
-    "packageManager": "pnpm@10.20.0",
+    "packageManager": "pnpm@10.33.0",
     "engines": {
         "node": ">=18.0.0"
     },

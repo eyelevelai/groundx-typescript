@@ -3,12 +3,12 @@
 export interface BucketDetail {
     bucketId: number;
     /** The data time when the bucket was created, in RFC3339 format */
-    created?: string;
+    created?: string | undefined;
     /** The number of files contained in the content bucket */
-    fileCount?: number;
+    fileCount?: number | undefined;
     /** The total file size of files contained in the content bucket */
-    fileSize?: string;
-    name?: string;
+    fileSize?: string | undefined;
+    name?: string | undefined;
     /** The data time when the bucket was last updated, in RFC3339 format */
-    updated?: string;
+    updated?: string | undefined;
 }

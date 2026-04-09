@@ -3,13 +3,13 @@
 import type * as GroundX from "../index.js";
 
 export interface WorkflowRequest {
-    chunkStrategy?: WorkflowRequest.ChunkStrategy;
+    chunkStrategy?: WorkflowRequest.ChunkStrategy | undefined;
     /** The name of the workflow being created. */
-    name?: string;
+    name?: string | undefined;
     /** Extract agent definitions. */
-    extract?: Record<string, unknown>;
-    sectionStrategy?: WorkflowRequest.SectionStrategy;
-    steps?: GroundX.WorkflowSteps;
+    extract?: Record<string, unknown> | undefined;
+    sectionStrategy?: WorkflowRequest.SectionStrategy | undefined;
+    steps?: GroundX.WorkflowSteps | undefined;
 }
 
 export namespace WorkflowRequest {

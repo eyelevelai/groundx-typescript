@@ -21,24 +21,11 @@ describe("WorkflowsClient", () => {
                 },
             ],
         };
+
         server.mockEndpoint().get("/v1/workflow").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.workflows.list();
-        expect(response).toEqual({
-            workflows: [
-                {
-                    chunkStrategy: "element",
-                    documentId: "documentId",
-                    id: 1,
-                    name: "name",
-                    extract: {
-                        key: "value",
-                    },
-                    sectionStrategy: "chunks",
-                    workflowId: "workflowId",
-                },
-            ],
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create", async () => {
@@ -57,6 +44,7 @@ describe("WorkflowsClient", () => {
                 workflowId: "workflowId",
             },
         };
+
         server
             .mockEndpoint()
             .post("/v1/workflow")
@@ -67,24 +55,7 @@ describe("WorkflowsClient", () => {
             .build();
 
         const response = await client.workflows.create({});
-        expect(response).toEqual({
-            workflow: {
-                chunkStrategy: "element",
-                documentId: "documentId",
-                id: 1,
-                name: "name",
-                extract: {
-                    key: "value",
-                },
-                sectionStrategy: "chunks",
-                relationships: {
-                    account: true,
-                    documents: ["documents"],
-                    ids: [1],
-                },
-                workflowId: "workflowId",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("getAccount", async () => {
@@ -103,6 +74,7 @@ describe("WorkflowsClient", () => {
                 workflowId: "workflowId",
             },
         };
+
         server
             .mockEndpoint()
             .get("/v1/workflow/relationship")
@@ -112,24 +84,7 @@ describe("WorkflowsClient", () => {
             .build();
 
         const response = await client.workflows.getAccount();
-        expect(response).toEqual({
-            workflow: {
-                chunkStrategy: "element",
-                documentId: "documentId",
-                id: 1,
-                name: "name",
-                extract: {
-                    key: "value",
-                },
-                sectionStrategy: "chunks",
-                relationships: {
-                    account: true,
-                    documents: ["documents"],
-                    ids: [1],
-                },
-                workflowId: "workflowId",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("addToAccount", async () => {
@@ -137,6 +92,7 @@ describe("WorkflowsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { workflowId: "workflowId" };
         const rawResponseBody = { message: "OK" };
+
         server
             .mockEndpoint()
             .post("/v1/workflow/relationship")
@@ -149,9 +105,7 @@ describe("WorkflowsClient", () => {
         const response = await client.workflows.addToAccount({
             workflowId: "workflowId",
         });
-        expect(response).toEqual({
-            message: "OK",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("removeFromAccount", async () => {
@@ -159,6 +113,7 @@ describe("WorkflowsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { message: "OK" };
+
         server
             .mockEndpoint()
             .delete("/v1/workflow/relationship")
@@ -168,9 +123,7 @@ describe("WorkflowsClient", () => {
             .build();
 
         const response = await client.workflows.removeFromAccount();
-        expect(response).toEqual({
-            message: "OK",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("addToId", async () => {
@@ -178,6 +131,7 @@ describe("WorkflowsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { workflowId: "workflowId" };
         const rawResponseBody = { message: "OK" };
+
         server
             .mockEndpoint()
             .post("/v1/workflow/relationship/1")
@@ -190,9 +144,7 @@ describe("WorkflowsClient", () => {
         const response = await client.workflows.addToId(1, {
             workflowId: "workflowId",
         });
-        expect(response).toEqual({
-            message: "OK",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("removeFromId", async () => {
@@ -200,6 +152,7 @@ describe("WorkflowsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { message: "OK" };
+
         server
             .mockEndpoint()
             .delete("/v1/workflow/relationship/1")
@@ -209,9 +162,7 @@ describe("WorkflowsClient", () => {
             .build();
 
         const response = await client.workflows.removeFromId(1);
-        expect(response).toEqual({
-            message: "OK",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get", async () => {
@@ -230,27 +181,11 @@ describe("WorkflowsClient", () => {
                 workflowId: "workflowId",
             },
         };
+
         server.mockEndpoint().get("/v1/workflow/1").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.workflows.get(1);
-        expect(response).toEqual({
-            workflow: {
-                chunkStrategy: "element",
-                documentId: "documentId",
-                id: 1,
-                name: "name",
-                extract: {
-                    key: "value",
-                },
-                sectionStrategy: "chunks",
-                relationships: {
-                    account: true,
-                    documents: ["documents"],
-                    ids: [1],
-                },
-                workflowId: "workflowId",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update", async () => {
@@ -269,6 +204,7 @@ describe("WorkflowsClient", () => {
                 workflowId: "workflowId",
             },
         };
+
         server
             .mockEndpoint()
             .put("/v1/workflow/id")
@@ -279,24 +215,7 @@ describe("WorkflowsClient", () => {
             .build();
 
         const response = await client.workflows.update("id", {});
-        expect(response).toEqual({
-            workflow: {
-                chunkStrategy: "element",
-                documentId: "documentId",
-                id: 1,
-                name: "name",
-                extract: {
-                    key: "value",
-                },
-                sectionStrategy: "chunks",
-                relationships: {
-                    account: true,
-                    documents: ["documents"],
-                    ids: [1],
-                },
-                workflowId: "workflowId",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("delete", async () => {
@@ -304,11 +223,10 @@ describe("WorkflowsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { message: "OK" };
+
         server.mockEndpoint().delete("/v1/workflow/id").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.workflows.delete("id");
-        expect(response).toEqual({
-            message: "OK",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 });

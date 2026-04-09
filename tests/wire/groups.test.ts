@@ -32,35 +32,14 @@ describe("GroupsClient", () => {
             remaining: 10,
             total: 30,
         };
+
         server.mockEndpoint().get("/v1/group").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.groups.list({
             n: 1,
             nextToken: "nextToken",
         });
-        expect(response).toEqual({
-            groups: [
-                {
-                    buckets: [
-                        {
-                            bucketId: 1,
-                            created: "2023-10-03T08:59:39Z",
-                            fileSize: "3.1GB",
-                            updated: "2023-10-03T08:59:39Z",
-                        },
-                    ],
-                    created: "2023-10-03T08:59:39Z",
-                    fileCount: 1,
-                    fileSize: "3.1GB",
-                    groupId: 1,
-                    name: "name",
-                    updated: "2023-10-03T08:59:39Z",
-                },
-            ],
-            count: 1,
-            remaining: 10,
-            total: 30,
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (1)", async () => {
@@ -85,6 +64,7 @@ describe("GroupsClient", () => {
                 updated: "2023-10-03T08:59:39Z",
             },
         };
+
         server
             .mockEndpoint()
             .post("/v1/group")
@@ -97,24 +77,7 @@ describe("GroupsClient", () => {
         const response = await client.groups.create({
             name: "your_group_name",
         });
-        expect(response).toEqual({
-            group: {
-                buckets: [
-                    {
-                        bucketId: 1,
-                        created: "2023-10-03T08:59:39Z",
-                        fileSize: "3.1GB",
-                        updated: "2023-10-03T08:59:39Z",
-                    },
-                ],
-                created: "2023-10-03T08:59:39Z",
-                fileCount: 1,
-                fileSize: "3.1GB",
-                groupId: 1,
-                name: "name",
-                updated: "2023-10-03T08:59:39Z",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("create (2)", async () => {
@@ -122,6 +85,7 @@ describe("GroupsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "name" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/v1/group")
@@ -160,27 +124,11 @@ describe("GroupsClient", () => {
                 updated: "2023-10-03T08:59:39Z",
             },
         };
+
         server.mockEndpoint().get("/v1/group/1").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.groups.get(1);
-        expect(response).toEqual({
-            group: {
-                buckets: [
-                    {
-                        bucketId: 1,
-                        created: "2023-10-03T08:59:39Z",
-                        fileSize: "3.1GB",
-                        updated: "2023-10-03T08:59:39Z",
-                    },
-                ],
-                created: "2023-10-03T08:59:39Z",
-                fileCount: 1,
-                fileSize: "3.1GB",
-                groupId: 1,
-                name: "name",
-                updated: "2023-10-03T08:59:39Z",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("get (2)", async () => {
@@ -188,6 +136,7 @@ describe("GroupsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/v1/group/1").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -200,6 +149,7 @@ describe("GroupsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().get("/v1/group/1").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -229,6 +179,7 @@ describe("GroupsClient", () => {
                 updated: "2023-10-03T08:59:39Z",
             },
         };
+
         server
             .mockEndpoint()
             .put("/v1/group/1")
@@ -241,24 +192,7 @@ describe("GroupsClient", () => {
         const response = await client.groups.update(1, {
             newName: "your_group_name",
         });
-        expect(response).toEqual({
-            group: {
-                buckets: [
-                    {
-                        bucketId: 1,
-                        created: "2023-10-03T08:59:39Z",
-                        fileSize: "3.1GB",
-                        updated: "2023-10-03T08:59:39Z",
-                    },
-                ],
-                created: "2023-10-03T08:59:39Z",
-                fileCount: 1,
-                fileSize: "3.1GB",
-                groupId: 1,
-                name: "name",
-                updated: "2023-10-03T08:59:39Z",
-            },
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
@@ -266,6 +200,7 @@ describe("GroupsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { newName: "newName" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/v1/group/1")
@@ -287,6 +222,7 @@ describe("GroupsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { newName: "newName" };
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .put("/v1/group/1")
@@ -308,12 +244,11 @@ describe("GroupsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { message: "OK" };
+
         server.mockEndpoint().delete("/v1/group/1").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.groups.delete(1);
-        expect(response).toEqual({
-            message: "OK",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("delete (2)", async () => {
@@ -321,6 +256,7 @@ describe("GroupsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/v1/group/1").respondWith().statusCode(400).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -333,6 +269,7 @@ describe("GroupsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server.mockEndpoint().delete("/v1/group/1").respondWith().statusCode(401).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -345,6 +282,7 @@ describe("GroupsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { message: "OK" };
+
         server
             .mockEndpoint()
             .post("/v1/group/1/bucket/1")
@@ -354,9 +292,7 @@ describe("GroupsClient", () => {
             .build();
 
         const response = await client.groups.addBucket(1, 1);
-        expect(response).toEqual({
-            message: "OK",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("addBucket (2)", async () => {
@@ -364,6 +300,7 @@ describe("GroupsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/v1/group/1/bucket/1")
@@ -382,6 +319,7 @@ describe("GroupsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .post("/v1/group/1/bucket/1")
@@ -400,6 +338,7 @@ describe("GroupsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { message: "OK" };
+
         server
             .mockEndpoint()
             .delete("/v1/group/1/bucket/1")
@@ -409,9 +348,7 @@ describe("GroupsClient", () => {
             .build();
 
         const response = await client.groups.removeBucket(1, 1);
-        expect(response).toEqual({
-            message: "OK",
-        });
+        expect(response).toEqual(rawResponseBody);
     });
 
     test("removeBucket (2)", async () => {
@@ -419,6 +356,7 @@ describe("GroupsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/v1/group/1/bucket/1")
@@ -437,6 +375,7 @@ describe("GroupsClient", () => {
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
+
         server
             .mockEndpoint()
             .delete("/v1/group/1/bucket/1")

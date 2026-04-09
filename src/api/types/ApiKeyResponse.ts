@@ -3,5 +3,5 @@
 import type * as GroundX from "../index.js";
 
 export interface ApiKeyResponse {
-    apiKeys?: GroundX.ApiKeyDetail[];
+    apiKeys?: GroundX.ApiKeyDetail[] | undefined;
 }

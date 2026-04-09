@@ -2,13 +2,13 @@
 
 export interface BoundingBoxDetail {
     /** The x coordinate of the lower right corner of the bounding box */
-    bottomRightX?: number;
+    bottomRightX?: number | undefined;
     /** The y coordinate of the lower right corner of the bounding box */
-    bottomRightY?: number;
+    bottomRightY?: number | undefined;
     /** The page number the bounding box appears on, using a 1-based array indexing (starts with page 1, not page 0) */
-    pageNumber?: number;
+    pageNumber?: number | undefined;
     /** The x coordinate of the upper left corner of the bounding box */
-    topLeftX?: number;
+    topLeftX?: number | undefined;
     /** The y coordinate of the upper left corner of the bounding box */
-    topLeftY?: number;
+    topLeftY?: number | undefined;
 }

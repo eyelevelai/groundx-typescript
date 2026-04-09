@@ -4,11 +4,11 @@ import type * as GroundX from "../index.js";
 
 export interface DocumentLookupResponse {
     /** The number of results returned in the current response */
-    count?: number;
-    documents?: GroundX.DocumentDetail[];
-    nextToken?: string;
+    count?: number | undefined;
+    documents?: GroundX.DocumentDetail[] | undefined;
+    nextToken?: string | undefined;
     /** The number of results that have not been returned yet. Will be null if there are no remaining results. */
-    remaining?: number;
+    remaining?: number | undefined;
     /** The total number of results found */
-    total?: number;
+    total?: number | undefined;
 }

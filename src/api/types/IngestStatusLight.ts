@@ -3,8 +3,8 @@
 import type * as GroundX from "../index.js";
 
 export interface IngestStatusLight {
-    id?: number;
+    id?: number | undefined;
     processId: string;
     status: GroundX.ProcessingStatus;
-    statusMessage?: string;
+    statusMessage?: string | undefined;
 }

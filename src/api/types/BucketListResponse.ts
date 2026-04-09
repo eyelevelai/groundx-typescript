@@ -3,11 +3,11 @@
 import type * as GroundX from "../index.js";
 
 export interface BucketListResponse {
-    buckets?: GroundX.BucketDetail[];
+    buckets?: GroundX.BucketDetail[] | undefined;
     /** The number of buckets returned in the current response */
-    count?: number;
+    count?: number | undefined;
     /** The number of buckets that have not been returned yet, will be null if there are no remaining buckets */
-    remaining?: number;
+    remaining?: number | undefined;
     /** The total number of buckets found */
-    total?: number;
+    total?: number | undefined;
 }

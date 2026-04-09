@@ -9,18 +9,18 @@ export interface SearchResponse {
 export namespace SearchResponse {
     export interface Search {
         /** Total results */
-        count?: number;
+        count?: number | undefined;
         /** Search results */
-        results?: GroundX.SearchResultItem[];
+        results?: GroundX.SearchResultItem[] | undefined;
         /** The original search request query */
-        query?: string;
+        query?: string | undefined;
         /** Confidence score in the search results */
-        score?: number;
+        score?: number | undefined;
         /** The actual search query, if the search request query was re-written */
-        searchQuery?: string;
+        searchQuery?: string | undefined;
         /** Suggested context for LLM completion */
-        text?: string;
+        text?: string | undefined;
         /** For paginated results */
-        nextToken?: string;
+        nextToken?: string | undefined;
     }
 }
