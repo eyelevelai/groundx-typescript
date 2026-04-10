@@ -17,13 +17,14 @@ export class GroundXClient extends FernClient {
         documents: GroundX.Document[],
         callbackUrl?: string,
         callbackData?: string,
-        requestOptions?: FernClient.RequestOptions
+        requestOptions?: FernClient.RequestOptions,
+        uploadApi: string = "https://api.eyelevel.ai/upload/file"
     ): Promise<GroundX.IngestResponse> {
         if (documents.length === 0) {
             throw new Error("No documents provided for ingestion.");
         }
 
-        const localDocuments = [];
+        const localDocuments: GroundX.Document[] = [];
         const remoteDocuments: GroundX.IngestRemoteDocument[] = [];
 
         for (const document of documents) {
@@ -32,136 +33,166 @@ export class GroundXClient extends FernClient {
             }
 
             if (this.isUrl(document.filePath)) {
-                remoteDocuments.push(
-                    {
-                        bucketId: document.bucketId,
-                        fileName: document.fileName,
-                        fileType: document.fileType,
-                        filter: document.filter,
-                        processLevel: document.processLevel,
-                        searchData: document.searchData,
-                        sourceUrl: document.filePath,
-                    }
-                );
-            } else if (this.isValidLocalPath(document.filePath)) {
-                const expandedPath = this.expandedPath(document.filePath)
-                let fileName = this.getFileName(expandedPath);
-                if (!fileName) {
-                    throw new Error(`Invalid file path: ${document.filePath}`);
-                }
-
-                let mimeType = this.guessMimeType(fileName);
-                let fileType = this.getDocumentTypeFromMimeType(mimeType);
-                if (document.fileType) {
-                    fileType = document.fileType
-                    mimeType = this.getMimeTypeFromDocumentType(fileType);
-                }
-
-                if (document.fileName) {
-                    fileName = document.fileName;
-                }
-
-                const meta: Record<string, any> = {
+                remoteDocuments.push({
                     bucketId: document.bucketId,
-                    fileName,
-                    fileType: fileType,
-                };
-                if (document.processLevel) {
-                    meta.processLevel = document.processLevel;
-                }
-                if (document.searchData) {
-                    meta.searchData = document.searchData;
-                }
-                if (document.filter) {
-                    meta.filter = document.filter;
-                }
-
-                localDocuments.push({
-                    fileName,
-                    filePath: document.filePath,
-                    mimeType,
-                    metadata: meta,
+                    fileName: document.fileName,
+                    fileType: document.fileType,
+                    filter: document.filter,
+                    processLevel: document.processLevel,
+                    searchData: document.searchData,
+                    sourceUrl: document.filePath,
                 });
+            } else if (this.isValidLocalPath(document.filePath)) {
+                localDocuments.push(document);
             } else {
                 throw new Error(`Invalid file path: ${document.filePath}`);
             }
         }
 
-        if (localDocuments.length > 0 && remoteDocuments.length > 0) {
-            throw new Error("Documents must all be either local or remote, not a mix.");
-        }
+        const uploadedLocalDocuments = await this.processLocalDocuments(localDocuments, uploadApi);
+        remoteDocuments.push(...uploadedLocalDocuments);
 
-        if (remoteDocuments.length > 0) {
-            // Handle remote documents
-            return this.documents.ingestRemote({ documents: remoteDocuments, callbackData: callbackData, callbackUrl: callbackUrl }, requestOptions);
-        }
+        return this.documents.ingestRemote(
+            {
+                documents: remoteDocuments,
+                callbackData,
+                callbackUrl,
+            },
+            requestOptions
+        );
+    }
 
-        // Handle local documents
-        const formData = new FormData();
-        for (const { fileName, filePath, mimeType, metadata } of localDocuments) {
-            formData.append(
-                "blob",
-                new Blob([new Uint8Array(this.readFile(filePath))], { type: mimeType }),
-                fileName
-            );
-            formData.append(
-                "metadata",
-                new Blob([JSON.stringify(metadata)], { type: "application/json" }),
-                "data.json"
-            );
-        }
+    private async getPresignedUrl(
+        endpoint: string,
+        fileName: string,
+        fileExtension: string
+    ): Promise<Record<string, any>> {
+        const url = new URL(endpoint);
+        url.searchParams.set("name", fileName);
+        url.searchParams.set("type", fileExtension);
 
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.GroundXEnvironment.Default,
-                "v1/ingest/documents/local"
-            ),
-            method: "POST",
+        const response = await (this._options.fetcher ?? core.fetcher)({
+            url: url.toString(),
+            method: "GET",
             headers: {
                 ...(await this._getCustomAuthorizationHeaders()),
-                ...requestOptions?.headers,
             },
-            body: formData,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
         });
 
-        if (_response.ok) {
-            return _response.body as GroundX.IngestResponse;
+        if (!response.ok) {
+            if (response.error.reason === "status-code") {
+                throw new Error(`Failed to get presigned URL: ${response.error.statusCode}`);
+            }
+            if (response.error.reason === "non-json") {
+                throw new Error(`Failed to get presigned URL: ${response.error.rawBody}`);
+            }
+            if (response.error.reason === "timeout") {
+                throw new Error("Timeout exceeded when requesting presigned URL.");
+            }
+            if (response.error.reason === "unknown") {
+                throw new Error(response.error.errorMessage);
+            }
+            throw new Error("Failed to get presigned URL.");
         }
 
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new GroundX.BadRequestError(_response.error.body as unknown);
-                case 401:
-                    throw new GroundX.UnauthorizedError(_response.error.body as unknown);
-                default:
-                    throw new errors.GroundXError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                    });
+        return response.body as Record<string, any>;
+    }
+
+    private stripQueryParams(inputUrl: string): string {
+        const parsed = new URL(inputUrl);
+        parsed.search = "";
+        parsed.hash = "";
+        return parsed.toString();
+    }
+
+    private getFileExtension(fileName: string): string {
+        const extension = fileName.split(".").pop()?.toLowerCase() ?? "";
+        return DOCUMENT_TYPE_ALIASES[extension] ?? extension;
+    }
+
+    private async uploadFile(endpoint: string, filePath: string): Promise<string> {
+        const expandedPath = this.expandedPath(filePath);
+        const fileName = this.getFileName(expandedPath);
+        if (!fileName) {
+            throw new Error(`Invalid file path: ${filePath}`);
+        }
+
+        const fileExtension = this.getFileExtension(fileName);
+        const presignedInfo = await this.getPresignedUrl(endpoint, fileName, fileExtension);
+
+        const uploadUrl = presignedInfo["URL"];
+        const headerData = presignedInfo["Header"] ?? {};
+        const method = String(presignedInfo["Method"] ?? "PUT").toUpperCase();
+
+        const headers: Record<string, string> = {};
+        for (const [key, value] of Object.entries(headerData)) {
+            if (Array.isArray(value) && value.length > 0) {
+                headers[key.toUpperCase()] = String(value[0]);
+            } else if (typeof value === "string") {
+                headers[key.toUpperCase()] = value;
             }
         }
 
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.GroundXError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                });
-            case "timeout":
-                throw new errors.GroundXTimeoutError("Timeout exceeded when calling POST /v1/ingest/documents/local.");
-            case "unknown":
-                throw new errors.GroundXError({
-                    message: _response.error.errorMessage,
-                });
-            default:
-                throw new errors.GroundXError({
-                    message: "Unhandled error reason",
-                });
+        if (method !== "PUT") {
+            throw new Error(`Unsupported HTTP method: ${method}`);
         }
+
+        const uploadResponse = await fetch(uploadUrl, {
+            method: "PUT",
+            headers,
+            body: new Uint8Array(this.readFile(filePath)),
+        });
+
+        if (!uploadResponse.ok) {
+            throw new Error(`Upload failed: ${uploadResponse.status} - ${await uploadResponse.text()}`);
+        }
+
+        if (headers["GX-HOSTED-URL"]) {
+            return headers["GX-HOSTED-URL"];
+        }
+
+        return this.stripQueryParams(uploadUrl);
+    }
+
+    private async processLocalDocuments(
+        localDocuments: GroundX.Document[],
+        uploadApi: string
+    ): Promise<GroundX.IngestRemoteDocument[]> {
+        const remoteDocuments: GroundX.IngestRemoteDocument[] = [];
+
+        for (const document of localDocuments) {
+            const expandedPath = this.expandedPath(document.filePath);
+            let fileName = this.getFileName(expandedPath);
+            if (!fileName) {
+                throw new Error(`Invalid file path: ${document.filePath}`);
+            }
+
+            const sourceUrl = await this.uploadFile(uploadApi, document.filePath);
+
+            if (document.fileName) {
+                fileName = document.fileName;
+            }
+
+            let fileType = document.fileType;
+            if (!fileType) {
+                const extension = this.getFileExtension(fileName);
+                fileType = this.getDocumentTypeFromMimeType(
+                    this.getMimeTypeFromDocumentType(extension)
+                );
+            }
+
+            remoteDocuments.push({
+                bucketId: document.bucketId,
+                fileName,
+                fileType,
+                filter: document.filter,
+                processLevel: document.processLevel,
+                searchData: document.searchData,
+                sourceUrl,
+            });
+        }
+
+        return remoteDocuments;
     }
 
     private expandedPath(filePath: string): string {
@@ -170,11 +201,11 @@ export class GroundXClient extends FernClient {
         : path.resolve(filePath);
     }
 
-    private getDocumentTypeFromMimeType(mimeType: string): string {
-        return MIME_TO_DOCUMENT_TYPE[mimeType] || "txt";
+    private getDocumentTypeFromMimeType(mimeType: string): GroundX.DocumentType {
+        return (MIME_TO_DOCUMENT_TYPE[mimeType] || "txt") as GroundX.DocumentType;
     }
 
-    private getMimeTypeFromDocumentType(documentType: string): string {
+    private getMimeTypeFromDocumentType(documentType: GroundX.DocumentType | string): string {
         return DOCUMENT_TYPE_TO_MIME[documentType] || "application/octet-stream";
     }
 
@@ -202,39 +233,6 @@ export class GroundXClient extends FernClient {
         return filePath.split("/").pop() || null;
     }
 
-
-    private guessMimeType(fileName: string): string {
-        const extension = fileName.split(".").pop()?.toLowerCase();
-        switch (extension) {
-            case "txt":
-                return "text/plain";
-            case "docx":
-                return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-            case "pptx":
-                return "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-            case "xlsx":
-                return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            case "pdf":
-                return "application/pdf";
-            case "png":
-                return "image/png";
-            case "jfi":
-            case "jfif":
-            case "jpe":
-            case "jpg":
-            case "jpeg":
-                return "image/jpeg";
-            case "csv":
-                return "text/csv";
-            case "tsv":
-                return "text/tab-separated-values";
-            case "json":
-                return "application/json";
-        }
-
-        return "application/octet-stream";
-    }
-
     private readFile(filePath: string): Buffer {
         const expandedPath = this.expandedPath(filePath);
 
@@ -248,23 +246,38 @@ export class GroundXClient extends FernClient {
 
 }
 
+const DOCUMENT_TYPE_ALIASES: Record<string, string> = {
+    jfi: "jpg",
+    jfif: "jpg",
+    jpe: "jpg",
+    jpeg: "jpg",
+    heic: "heif",
+    tif: "tiff",
+    md: "txt",
+};
+
+
 const DOCUMENT_TYPE_TO_MIME: Record<string, string> = {
+    bmp: "image/bmp",
+    gif: "image/gif",
+    heif: "image/heif",
+    hwp: "application/x-hwp",
+    ico: "image/vnd.microsoft.icon",
+    svg: "image/svg",
+    tiff: "image/tiff",
+    webp: "image/webp",
     txt: "text/plain",
     docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
     xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     pdf: "application/pdf",
     png: "image/png",
-    jfi: "image/jpeg",
-    jfif: "image/jpeg",
-    jpe: "image/jpeg",
     jpg: "image/jpeg",
-    jpeg: "image/jpeg",
     csv: "text/csv",
     tsv: "text/tab-separated-values",
     json: "application/json",
 };
 
-const MIME_TO_DOCUMENT_TYPE: Record<string, string> = Object.fromEntries(
-    Object.entries(DOCUMENT_TYPE_TO_MIME).map(([key, value]) => [value, key])
-);
+const MIME_TO_DOCUMENT_TYPE: Record<string, GroundX.DocumentType> = Object.fromEntries(
+    Object.entries(DOCUMENT_TYPE_TO_MIME).map(([key, value]) => [value, key as GroundX.DocumentType])
+) as Record<string, GroundX.DocumentType>;
