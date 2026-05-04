@@ -6,7 +6,6 @@ import { CustomerClient } from "./api/resources/customer/client/Client.js";
 import { DocumentsClient } from "./api/resources/documents/client/Client.js";
 import { GroupsClient } from "./api/resources/groups/client/Client.js";
 import { HealthClient } from "./api/resources/health/client/Client.js";
-import { McpClient } from "./api/resources/mcp/client/Client.js";
 import { SearchClient } from "./api/resources/search/client/Client.js";
 import { WorkflowsClient } from "./api/resources/workflows/client/Client.js";
 import type { BaseClientOptions, BaseRequestOptions } from "./BaseClient.js";
@@ -21,7 +20,6 @@ export declare namespace GroundXClient {
 
 export class GroundXClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<GroundXClient.Options>;
-    protected _mcp: McpClient | undefined;
     protected _documents: DocumentsClient | undefined;
     protected _search: SearchClient | undefined;
     protected _buckets: BucketsClient | undefined;
@@ -33,10 +31,6 @@ export class GroundXClient {
 
     constructor(options: GroundXClient.Options) {
         this._options = normalizeClientOptionsWithAuth(options);
-    }
-
-    public get mcp(): McpClient {
-        return (this._mcp ??= new McpClient(this._options));
     }
 
     public get documents(): DocumentsClient {

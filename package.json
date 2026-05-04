@@ -23,17 +23,6 @@
             },
             "default": "./dist/cjs/index.js"
         },
-        "./mcp": {
-            "import": {
-                "types": "./dist/esm/api/resources/mcp/exports.d.mts",
-                "default": "./dist/esm/api/resources/mcp/exports.mjs"
-            },
-            "require": {
-                "types": "./dist/cjs/api/resources/mcp/exports.d.ts",
-                "default": "./dist/cjs/api/resources/mcp/exports.js"
-            },
-            "default": "./dist/cjs/api/resources/mcp/exports.js"
-        },
         "./documents": {
             "import": {
                 "types": "./dist/esm/api/resources/documents/exports.d.mts",

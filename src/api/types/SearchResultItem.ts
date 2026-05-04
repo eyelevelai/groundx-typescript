@@ -17,6 +17,8 @@ export interface SearchResultItem {
     multimodalUrl?: string | undefined;
     pageImages?: string[] | undefined;
     pages?: SearchResultItem.Pages.Item[] | undefined;
+    /** Unique system generated ID for the ingest process that included this document */
+    processId?: string | undefined;
     /** Confidence score in the search result */
     score?: number | undefined;
     /** Document, section, and chunk search data, both custom and system-generated */
