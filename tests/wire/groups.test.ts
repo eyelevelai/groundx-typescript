@@ -25,6 +25,7 @@ describe("GroupsClient", () => {
                     fileSize: "3.1GB",
                     groupId: 1,
                     name: "name",
+                    prompt: "prompt",
                     updated: "2023-10-03T08:59:39Z",
                 },
             ],
@@ -61,6 +62,7 @@ describe("GroupsClient", () => {
                 fileSize: "3.1GB",
                 groupId: 1,
                 name: "name",
+                prompt: "prompt",
                 updated: "2023-10-03T08:59:39Z",
             },
         };
@@ -121,6 +123,7 @@ describe("GroupsClient", () => {
                 fileSize: "3.1GB",
                 groupId: 1,
                 name: "name",
+                prompt: "prompt",
                 updated: "2023-10-03T08:59:39Z",
             },
         };
@@ -176,6 +179,7 @@ describe("GroupsClient", () => {
                 fileSize: "3.1GB",
                 groupId: 1,
                 name: "name",
+                prompt: "prompt",
                 updated: "2023-10-03T08:59:39Z",
             },
         };
