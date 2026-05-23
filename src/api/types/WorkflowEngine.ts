@@ -12,6 +12,8 @@ export interface WorkflowEngine {
     engineID?: string | undefined;
     /** An enumerated value that conforms to OpenAI '/chat/completion' specifications */
     reasoningEffort?: WorkflowEngine.ReasoningEffort | undefined;
+    /** A JSON object merged into the LLM request body after GroundX builds the standard request. Values in this object override generated request fields on key conflicts. */
+    requestPassthrough?: Record<string, unknown> | undefined;
     /** An enumerated descriptor of the service type, impacts how the requests are configured */
     service?: WorkflowEngine.Service | undefined;
 }

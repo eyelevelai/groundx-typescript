@@ -12,6 +12,6 @@
             "url-join": ">=5.0.0"
         }
     },
-    "originGitCommit": "c6494597000d4f5cdb1bdd9940a2b5cd48721c07",
-    "sdkVersion": "3.5.2"
+    "originGitCommit": "9ca2af6d0383681cf53607f3e693e87bd627718a",
+    "sdkVersion": "3.5.3"
 }
