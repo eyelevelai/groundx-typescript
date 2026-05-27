@@ -13,6 +13,8 @@ export interface SearchResultItem {
     documentId?: string | undefined;
     /** Name of ingested file */
     fileName?: string | undefined;
+    /** System-generated summary of the source document */
+    fileSummary?: string | undefined;
     /** An image clipping of the table or figure object from the document */
     multimodalUrl?: string | undefined;
     pageImages?: string[] | undefined;
@@ -23,6 +25,8 @@ export interface SearchResultItem {
     score?: number | undefined;
     /** Document, section, and chunk search data, both custom and system-generated */
     searchData?: Record<string, unknown> | undefined;
+    /** System-generated summary of the document section containing this result */
+    sectionSummary?: string | undefined;
     /** Source document URL */
     sourceUrl?: string | undefined;
     /** System-generated text, re-written for LLM completions */

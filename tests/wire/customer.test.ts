@@ -8,7 +8,7 @@ describe("CustomerClient", () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { customer: { email: "email", first: "first", last: "last" } };
+        const rawResponseBody = { customer: { email: "email", first: "first", last: "last", status: "admin" } };
 
         server.mockEndpoint().get("/v1/customer").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 

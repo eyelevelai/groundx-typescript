@@ -12,5 +12,23 @@ export interface CustomerDetail {
     first?: string | undefined;
     /** Family name associated with the account, if known */
     last?: string | undefined;
+    /** Account status associated with the customer, if known */
+    status?: CustomerDetail.Status | undefined;
     subscription?: GroundX.SubscriptionDetail | undefined;
+}
+
+export namespace CustomerDetail {
+    /** Account status associated with the customer, if known */
+    export const Status = {
+        Admin: "admin",
+        ApiKey: "apiKey",
+        Archived: "archived",
+        Invalid: "invalid",
+        PartnerApiKey: "partnerApiKey",
+        PartnerModUser: "partnerModUser",
+        Partner: "partner",
+        Test: "test",
+        User: "user",
+    } as const;
+    export type Status = (typeof Status)[keyof typeof Status];
 }
