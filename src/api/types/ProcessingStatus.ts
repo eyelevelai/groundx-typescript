@@ -2,6 +2,7 @@
 
 export const ProcessingStatus = {
     Queued: "queued",
+    Training: "training",
     Processing: "processing",
     Error: "error",
     Complete: "complete",

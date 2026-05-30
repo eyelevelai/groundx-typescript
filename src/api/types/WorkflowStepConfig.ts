@@ -10,6 +10,7 @@ export interface WorkflowStepConfig {
     /** The field where agent output will be saved */
     field?: WorkflowStepConfig.Field | undefined;
     includes?: Record<string, boolean> | undefined;
+    /** Prompt group for this step config. On workflow update, omit prompt or send an empty object to use the default prompt group, send an object to customize supplied prompt members, and send null to use no prompt group. */
     prompt?: GroundX.WorkflowPromptGroup | undefined;
 }
 

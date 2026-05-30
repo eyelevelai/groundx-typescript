@@ -3,9 +3,11 @@
 import type * as GroundX from "../index.js";
 
 /**
- * A grouping of system task and request prompts
+ * A grouping of system task and request prompts. On workflow update, omitted prompt members use defaults and explicit null removes that member.
  */
 export interface WorkflowPromptGroup {
+    /** The request prompt. On workflow update, omit this member to use the default and send null to remove it. */
     request?: GroundX.WorkflowPrompt | undefined;
+    /** The task prompt. On workflow update, omit this member to use the default and send null to remove it. */
     task?: GroundX.WorkflowPrompt | undefined;
 }
