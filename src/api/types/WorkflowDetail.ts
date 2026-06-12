@@ -17,6 +17,7 @@ export interface WorkflowDetail {
     extract?: Record<string, unknown> | undefined;
     sectionStrategy?: WorkflowDetail.SectionStrategy | undefined;
     steps?: GroundX.WorkflowSteps | undefined;
+    template?: GroundX.WorkflowTemplate | undefined;
     /** Information describing what the workflow is associated with */
     relationships?: WorkflowDetail.Relationships | undefined;
     /** Unique system generated ID for the workflow */

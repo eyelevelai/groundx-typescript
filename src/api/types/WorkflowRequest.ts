@@ -10,6 +10,7 @@ export interface WorkflowRequest {
     extract?: Record<string, unknown> | undefined;
     sectionStrategy?: WorkflowRequest.SectionStrategy | undefined;
     steps?: GroundX.WorkflowSteps | undefined;
+    template?: GroundX.WorkflowTemplate | undefined;
 }
 
 export namespace WorkflowRequest {

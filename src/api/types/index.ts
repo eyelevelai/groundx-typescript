@@ -50,3 +50,4 @@ export * from "./WorkflowStep.js";
 export * from "./WorkflowStepConfig.js";
 export * from "./WorkflowSteps.js";
 export * from "./WorkflowsResponse.js";
+export * from "./WorkflowTemplate.js";
