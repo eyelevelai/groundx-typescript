@@ -1,0 +1,89 @@
+# service.yaml — groundx-typescript. Conforms to service.schema v1.2.0.
+apiVersion: v1
+
+repo:
+  name: groundx-typescript
+  workspace: groundx
+  role: library
+  description: Official GroundX TypeScript SDK (npm `groundx`) — the twin of groundx-python. Fern-generated client + a thin hand-written ingest() convenience layer.
+  package: groundx                     # npm
+  version: 3.5.8
+
+stack:
+  language: typescript
+  language_version: "~5.9"
+  package_manager: pnpm                # 10.33, workspace; CI uses --frozen-lockfile
+  runtime: "Node 18+ (also Vercel, Cloudflare Workers, Deno, Bun, React Native)"
+  output: "dual CJS + ESM"
+  key_runtime: [url-join]              # the ONLY runtime dep
+  tooling: [biome, vitest, msw]        # Biome 2.4 lint+format; Vitest 4 + MSW wire tests
+  codegen: { tool: fern-cli, version: "5.37.9", generator: "fern-typescript-node-sdk 3.69.0" }
+
+entrypoints:
+  model: generated-base-plus-handwritten-subclass
+  public: "import { GroundXClient } from 'groundx' -> src/index.ts -> src/Wrapper.ts"
+  note: "GroundXClient = the class users instantiate (hand-written, extends generated FernClient); GroundX = the types namespace"
+
+dependencies:
+  internal: []                         # imports no other groundx repo
+  external:
+    - name: groundx-api
+      kind: http-api
+      direction: outbound
+      via: "generated resource clients (documents.ingestRemote, etc.)"
+      endpoint: "base URL from environments.ts (generated)"
+      auth: x-api-key
+      schematized: false               # noSerdeLayer + skipResponseValidation — success bodies cast, not validated
+    - name: groundx-upload-service
+      kind: object-store
+      direction: outbound
+      endpoint: "https://api.eyelevel.ai/upload/file (separate from API base URL)"
+      auth: presigned-url
+      via: "Wrapper.ts ingest() — getPresignedUrl then raw PUT"
+      note: "byte-upload PUT uses RAW global fetch — no retries/timeout/auth-provider/logging (bypasses the core fetch pipeline)"
+
+generated_from:
+  source: eyelevel-fern-config         # the OpenAPI spec + generators; symmetric with fern-config's generates: block
+  via: "fern generate --group ts-sdk (manual workflow_dispatch; fern-api direct-push to main + npm)"
+  provenance_file: .fern/metadata.json # pins generator versions + origin spec commit
+  agent_editable: false                # for the GENERATED surface; the hand-written .fernignore layer IS editable (see agent_boundaries)
+  note: "Most of the repo is generated. Unlike a fully-derived artifact, this repo has a real hand-written layer (Wrapper.ts) committed alongside generated code. Twin of groundx-python."
+
+contracts:
+  - kind: npm-package
+    surface: "GroundXClient (Wrapper.ts) + GroundX types namespace"
+    schematized: false
+    note: "neighbours import the package; the public surface is one hand-written method (ingest) plus the generated resource clients"
+
+agent_boundaries:
+  - zone: "hand-written layer — src/Wrapper.ts, src/index.ts, README.md"
+    rule: "editable by hand; these are the ONLY files Fern won't overwrite. New convenience methods/files must be added to .fernignore or they're clobbered on regen."
+    gate: "pnpm build + pnpm test (BUT: no test currently exercises Wrapper.ts/ingest — see known_gaps)"
+  - zone: "generated surface — Client.ts, BaseClient.ts, src/api/**, src/core/**, environments.ts, src/auth/**, generated tests"
+    rule: "never hand-edit — regenerated and clobbered on next fern generate"
+    gate: "fern generate overwrites; .fern/metadata.json pins origin"
+  - zone: "API-surface changes (new endpoints, request/response shapes)"
+    rule: "belong UPSTREAM in eyelevel-fern-config, not here — same two-tier rule as groundx-python"
+    gate: "n/a — wrong repo; route to eyelevel-fern-config"
+
+quality_gates:
+  - "pnpm build (build:cjs + build:esm)"
+  - "pnpm test (vitest — unit + wire/MSW); test:unit / test:wire subsets"
+  - "pnpm check (biome lint + format)"
+  - "CI: compile + test on every push; publish to npm on tag push"
+
+conversion:
+  status: onboarded
+  onboarded_at: 2026-06-12
+  architecture_notes: ARCHITECTURE_NOTES.md
+  agents_md: none                       # NOT YET present — author from scratch (unlike groundx-python, which had one)
+  openspec: none                        # NOT YET initialized — unlike groundx-python (which has 4 archived changes)
+  ai_first_readiness: MED               # clean structure + tiny editable surface, BUT zero tests on the hand-written layer and no conversion done yet
+  upstream_to_convert_first: [eyelevel-fern-config]   # generation source; spec should be solid first
+  known_gaps:
+    - "ZERO test coverage on the hand-written layer — no test imports Wrapper.ts or calls ingest(); custom.test.ts is a placeholder. CI won't catch ingest() regressions. (Candidate first proof ticket: add tests.)"
+    - "byte-upload PUT (ingest step 2b) is unguarded — raw global fetch, no retries/timeout/auth-provider/logging. Mirrors the groundx-python blocking _upload_file smell."
+    - "two parallel auth paths — generated uses AuthProvider; wrapper upload uses its own _getCustomAuthorizationHeaders(). Both emit X-API-Key; a change must touch both."
+    - "Python-parity gap: groundx-python's hand layer has batching (MAX_BATCH_SIZE=50/50MB), ingest_directory(), CSV splitting, an extract subsystem, and async variants — TS has NONE. Single unbatched serial ingest(). Feature-backlog candidates, not conversion blockers."
+    - "no response validation (noSerdeLayer + skipResponseValidation) — success bodies cast as R, never schema-checked."
+    - "as an SDK twin of groundx-python, conversion follows the same generated-repo rule: openspec/ at root + on .fernignore; specs target the hand-written layer only; API-surface changes go upstream to eyelevel-fern-config."
