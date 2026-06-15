@@ -8,9 +8,15 @@ export interface WorkflowRequest {
     name?: string | undefined;
     /** Extract agent definitions. */
     extract?: Record<string, unknown> | undefined;
+    template?: GroundX.WorkflowTemplate | undefined;
     sectionStrategy?: WorkflowRequest.SectionStrategy | undefined;
     steps?: GroundX.WorkflowSteps | undefined;
-    template?: GroundX.WorkflowTemplate | undefined;
+    /** Workflow-level custom extraction steps. Legacy fixed steps remain under steps. */
+    customSteps?: GroundX.CustomWorkflowStep[] | undefined;
+    /** Custom output routes. Each record must have exactly one matching leafFields record on finalPath, workflowGroup, workflowField, stepName, level, and outputKey. */
+    outputRoutes?: GroundX.CustomWorkflowOutputRoute[] | undefined;
+    /** Custom leaf-field metadata used to validate route integrity and executable-step field counts. */
+    leafFields?: GroundX.CustomWorkflowLeafField[] | undefined;
 }
 
 export namespace WorkflowRequest {

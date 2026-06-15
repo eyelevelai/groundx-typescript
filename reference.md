@@ -882,7 +882,7 @@ await client.documents.getExtract("documentId");
 </dl>
 </details>
 
-<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">getXray</a>(documentId) -> Record&lt;string, unknown&gt;</code></summary>
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">getXray</a>(documentId) -> GroundX.DocumentXray</code></summary>
 <dl>
 <dd>
 
