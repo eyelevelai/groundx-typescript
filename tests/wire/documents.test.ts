@@ -1185,7 +1185,13 @@ describe("DocumentsClient", () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { key: "value" };
+        const rawResponseBody = {
+            chunks: [
+                { customChunkOutputs: { key: { key: "value" } }, customSectionOutputs: { key: { key: "value" } } },
+            ],
+            customDocumentOutputs: { key: { key: "value" } },
+            documentPages: [{ chunks: [{}] }],
+        };
 
         server
             .mockEndpoint()

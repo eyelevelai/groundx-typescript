@@ -1011,14 +1011,14 @@ export class DocumentsClient {
     public getXray(
         documentId: string,
         requestOptions?: DocumentsClient.RequestOptions,
-    ): core.HttpResponsePromise<Record<string, unknown>> {
+    ): core.HttpResponsePromise<GroundX.DocumentXray> {
         return core.HttpResponsePromise.fromPromise(this.__getXray(documentId, requestOptions));
     }
 
     private async __getXray(
         documentId: string,
         requestOptions?: DocumentsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Record<string, unknown>>> {
+    ): Promise<core.WithRawResponse<GroundX.DocumentXray>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -1042,7 +1042,7 @@ export class DocumentsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as Record<string, unknown>, rawResponse: _response.rawResponse };
+            return { data: _response.body as GroundX.DocumentXray, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
