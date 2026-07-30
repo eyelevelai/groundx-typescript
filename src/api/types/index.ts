@@ -9,6 +9,8 @@ export * from "./BucketUpdateDetail.js";
 export * from "./BucketUpdateResponse.js";
 export * from "./CustomerDetail.js";
 export * from "./CustomerResponse.js";
+export * from "./CustomerUsageDetail.js";
+export * from "./CustomerUsageResponse.js";
 export * from "./CustomWorkflowLeafField.js";
 export * from "./CustomWorkflowOutputMap.js";
 export * from "./CustomWorkflowOutputRoute.js";

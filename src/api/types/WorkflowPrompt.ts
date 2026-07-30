@@ -6,6 +6,8 @@
 export interface WorkflowPrompt {
     /** A short version of the prompt that is included in historical chat transcripts as part of the prompt context */
     abbreviated?: string | undefined;
+    /** Supplemental context appended to the default full request or task prompt. Server validation authoritatively limits this value to 4096 UTF-8 bytes. When omitted, rendered prompt output is unchanged. Workflow-level template.CUSTOM_INSTRUCTIONS remains a global fallback, and a prompt-member additionalContext takes precedence for that member. It is supported only on fixed workflow default request/task prompt members for GPT and EyeLevel workflows; because this shared schema also appears under custom workflow prompt shapes, server validation rejects additionalContext under customSteps, useExtras, or prompt members that replace the full prompt. */
+    additionalContext?: string | undefined;
     /** The prompt that is sent to the LLM */
     prompt?: string | undefined;
     /** An enumerated value that conforms to OpenAI '/chat/completion' specifications */

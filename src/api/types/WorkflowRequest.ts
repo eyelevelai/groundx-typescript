@@ -6,6 +6,8 @@ export interface WorkflowRequest {
     chunkStrategy?: WorkflowRequest.ChunkStrategy | undefined;
     /** The name of the workflow being created. */
     name?: string | undefined;
+    /** Authored workflow YAML source. When set, the server compiles it into the canonical workflow structures (steps, prompts, routes) — the other definition fields (extract, customSteps, outputRoutes, leafFields, steps) are derived from it and must be omitted. An extraction-definition-only YAML (groups + field prompts, no workflow block) has its workflow definitions scaffolded server-side. */
+    yaml?: string | undefined;
     /** Extract agent definitions. */
     extract?: Record<string, unknown> | undefined;
     template?: GroundX.WorkflowTemplate | undefined;

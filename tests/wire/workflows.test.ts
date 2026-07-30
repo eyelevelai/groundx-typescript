@@ -15,6 +15,7 @@ describe("WorkflowsClient", () => {
                     documentId: "documentId",
                     id: 1,
                     name: "name",
+                    updatedAt: "2024-01-15T09:30:00Z",
                     extract: { key: "value" },
                     template: { key: "value" },
                     sectionStrategy: "chunks",
@@ -65,6 +66,7 @@ describe("WorkflowsClient", () => {
                 documentId: "documentId",
                 id: 1,
                 name: "name",
+                updatedAt: "2024-01-15T09:30:00Z",
                 extract: { key: "value" },
                 template: { key: "value" },
                 sectionStrategy: "chunks",
@@ -112,6 +114,64 @@ describe("WorkflowsClient", () => {
         expect(response).toEqual(rawResponseBody);
     });
 
+    test("validate", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {};
+        const rawResponseBody = {
+            workflow: {
+                chunkStrategy: "element",
+                documentId: "documentId",
+                id: 1,
+                name: "name",
+                updatedAt: "2024-01-15T09:30:00Z",
+                extract: { key: "value" },
+                template: { key: "value" },
+                sectionStrategy: "chunks",
+                customSteps: [{ name: "name", level: "chunk", kind: "instruct" }],
+                outputRoutes: [
+                    {
+                        workflowGroup: "workflowGroup",
+                        workflowField: "workflowField",
+                        finalPath: "finalPath",
+                        stepName: "stepName",
+                        level: "chunk",
+                        outputMap: "customChunkOutputs",
+                        outputKey: "outputKey",
+                        readbackPath: "readbackPath",
+                    },
+                ],
+                leafFields: [
+                    {
+                        finalPath: "finalPath",
+                        workflowGroup: "workflowGroup",
+                        workflowField: "workflowField",
+                        stepName: "stepName",
+                        level: "chunk",
+                        outputKey: "outputKey",
+                        fieldType: "fieldType",
+                        isRepeated: true,
+                        repetitionScope: "none",
+                    },
+                ],
+                relationships: { account: true, documents: ["documents"], ids: [1] },
+                workflowId: "workflowId",
+            },
+        };
+
+        server
+            .mockEndpoint()
+            .post("/v1/workflow/validate")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.workflows.validate({});
+        expect(response).toEqual(rawResponseBody);
+    });
+
     test("getAccount", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
@@ -122,6 +182,7 @@ describe("WorkflowsClient", () => {
                 documentId: "documentId",
                 id: 1,
                 name: "name",
+                updatedAt: "2024-01-15T09:30:00Z",
                 extract: { key: "value" },
                 template: { key: "value" },
                 sectionStrategy: "chunks",
@@ -256,6 +317,7 @@ describe("WorkflowsClient", () => {
                 documentId: "documentId",
                 id: 1,
                 name: "name",
+                updatedAt: "2024-01-15T09:30:00Z",
                 extract: { key: "value" },
                 template: { key: "value" },
                 sectionStrategy: "chunks",
@@ -292,7 +354,10 @@ describe("WorkflowsClient", () => {
 
         server.mockEndpoint().get("/v1/workflow/1").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
-        const response = await client.workflows.get(1);
+        const response = await client.workflows.get(1, {
+            format: "json",
+            metadataOnly: true,
+        });
         expect(response).toEqual(rawResponseBody);
     });
 
@@ -306,6 +371,7 @@ describe("WorkflowsClient", () => {
                 documentId: "documentId",
                 id: 1,
                 name: "name",
+                updatedAt: "2024-01-15T09:30:00Z",
                 extract: { key: "value" },
                 template: { key: "value" },
                 sectionStrategy: "chunks",

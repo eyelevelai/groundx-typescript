@@ -7,7 +7,7 @@ import * as core from "../../../../core/index.js";
 import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
-import type * as GroundX from "../../../index.js";
+import * as GroundX from "../../../index.js";
 
 export declare namespace CustomerClient {
     export type Options = BaseClientOptions;
@@ -72,5 +72,88 @@ export class CustomerClient {
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v1/customer");
+    }
+
+    /**
+     * Get aggregate usage for the authenticated customer over a requested time period.
+     *
+     * The API resolves the account subscription and usage meter from the authenticated account. Do not provide customer ids, subscription ids, or meter ids. `startTime` is inclusive, `endTime` is exclusive, and both timestamps must be RFC3339 values aligned to minute boundaries. Timestamps are normalized to UTC. `endTime` cannot be in the future, windows longer than 366 days are rejected, and `usageAsOf` reflects the latest usage summary available to GroundX.
+     *
+     * @param {GroundX.CustomerGetUsageRequest} request
+     * @param {CustomerClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link GroundX.BadRequestError}
+     * @throws {@link GroundX.NotFoundError}
+     *
+     * @example
+     *     await client.customer.getUsage({
+     *         metric: "searches",
+     *         startTime: "2026-07-15T00:00:00Z",
+     *         endTime: "2026-07-29T00:00:00Z"
+     *     })
+     */
+    public getUsage(
+        request: GroundX.CustomerGetUsageRequest,
+        requestOptions?: CustomerClient.RequestOptions,
+    ): core.HttpResponsePromise<GroundX.CustomerUsageResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__getUsage(request, requestOptions));
+    }
+
+    private async __getUsage(
+        request: GroundX.CustomerGetUsageRequest,
+        requestOptions?: CustomerClient.RequestOptions,
+    ): Promise<core.WithRawResponse<GroundX.CustomerUsageResponse>> {
+        const { metric, startTime, endTime } = request;
+        const _queryParams: Record<string, unknown> = {
+            metric,
+            startTime,
+            endTime,
+        };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.GroundXEnvironment.Default,
+                "v1/customer/usage",
+            ),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url
+                .queryBuilder()
+                .addMany(_queryParams)
+                .mergeAdditional(requestOptions?.queryParams)
+                .build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as GroundX.CustomerUsageResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new GroundX.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new GroundX.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v1/customer/usage");
     }
 }

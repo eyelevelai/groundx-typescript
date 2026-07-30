@@ -6,6 +6,12 @@ import type * as GroundX from "../index.js";
  * Subscription information for the user, including current usage and limits
  */
 export interface SubscriptionDetail {
+    /** Billing cycle anchor for the current subscription. */
+    billingCycleAnchor?: string | undefined;
+    /** Start of the billing period used for current usage values. */
+    billingStart?: string | undefined;
+    /** End of the billing period used for current usage values, when available. */
+    billingEnd?: string | undefined;
     meters?: SubscriptionDetail.Meters | undefined;
 }
 

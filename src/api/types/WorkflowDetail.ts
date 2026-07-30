@@ -13,6 +13,8 @@ export interface WorkflowDetail {
     id?: number | undefined;
     /** The human-readable name of the workflow */
     name?: string | undefined;
+    /** The UTC timestamp when the workflow row was last updated. */
+    updatedAt?: string | undefined;
     /** Extract agent definitions. */
     extract?: Record<string, unknown> | undefined;
     template?: GroundX.WorkflowTemplate | undefined;

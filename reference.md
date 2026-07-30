@@ -2082,6 +2082,69 @@ await client.workflows.create({});
 </dl>
 </details>
 
+<details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">validate</a>({ ...params }) -> GroundX.WorkflowResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Validate a workflow definition without creating or modifying anything — a distinct operation from create/update. Accepts the same request body as workflow create, including the `yaml` field (authored workflow YAML source, compiled server-side). Returns the compiled workflow; validation failures return the same structured errors as create.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.workflows.validate({});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `GroundX.WorkflowRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `WorkflowsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">getAccount</a>() -> GroundX.WorkflowResponse</code></summary>
 <dl>
 <dd>
@@ -2393,7 +2456,7 @@ await client.workflows.removeFromId(1);
 </dl>
 </details>
 
-<details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">get</a>(id) -> GroundX.WorkflowResponse</code></summary>
+<details><summary><code>client.workflows.<a href="/src/api/resources/workflows/client/Client.ts">get</a>(id, { ...params }) -> GroundX.WorkflowResponse</code></summary>
 <dl>
 <dd>
 
@@ -2420,7 +2483,10 @@ look up a specific workflow by groupId, bucketId, or workflowId.
 <dd>
 
 ```typescript
-await client.workflows.get(1);
+await client.workflows.get(1, {
+    format: "json",
+    metadataOnly: true
+});
 
 ```
 </dd>
@@ -2437,6 +2503,14 @@ await client.workflows.get(1);
 <dd>
 
 **id:** `GroundX.WorkflowsGetRequestId` — The id of the group, bucket, or workflow to look up.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `GroundX.WorkflowsGetRequest` 
     
 </dd>
 </dl>
@@ -2630,6 +2704,75 @@ await client.customer.get();
 
 <dl>
 <dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `CustomerClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.customer.<a href="/src/api/resources/customer/client/Client.ts">getUsage</a>({ ...params }) -> GroundX.CustomerUsageResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get aggregate usage for the authenticated customer over a requested time period.
+
+The API resolves the account subscription and usage meter from the authenticated account. Do not provide customer ids, subscription ids, or meter ids. `startTime` is inclusive, `endTime` is exclusive, and both timestamps must be RFC3339 values aligned to minute boundaries. Timestamps are normalized to UTC. `endTime` cannot be in the future, windows longer than 366 days are rejected, and `usageAsOf` reflects the latest usage summary available to GroundX.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.customer.getUsage({
+    metric: "searches",
+    startTime: "2026-07-15T00:00:00Z",
+    endTime: "2026-07-29T00:00:00Z"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `GroundX.CustomerGetUsageRequest` 
+    
+</dd>
+</dl>
 
 <dl>
 <dd>

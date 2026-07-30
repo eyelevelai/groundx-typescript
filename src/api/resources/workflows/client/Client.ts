@@ -135,6 +135,66 @@ export class WorkflowsClient {
     }
 
     /**
+     * Validate a workflow definition without creating or modifying anything — a distinct operation from create/update. Accepts the same request body as workflow create, including the `yaml` field (authored workflow YAML source, compiled server-side). Returns the compiled workflow; validation failures return the same structured errors as create.
+     *
+     * @param {GroundX.WorkflowRequest} request
+     * @param {WorkflowsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @example
+     *     await client.workflows.validate({})
+     */
+    public validate(
+        request: GroundX.WorkflowRequest,
+        requestOptions?: WorkflowsClient.RequestOptions,
+    ): core.HttpResponsePromise<GroundX.WorkflowResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__validate(request, requestOptions));
+    }
+
+    private async __validate(
+        request: GroundX.WorkflowRequest,
+        requestOptions?: WorkflowsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<GroundX.WorkflowResponse>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.GroundXEnvironment.Default,
+                "v1/workflow/validate",
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: request,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as GroundX.WorkflowResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            throw new errors.GroundXError({
+                statusCode: _response.error.statusCode,
+                body: _response.error.body,
+                rawResponse: _response.rawResponse,
+            });
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v1/workflow/validate");
+    }
+
+    /**
      * Get the workflow associated with customer account.
      *
      * @param {WorkflowsClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -440,22 +500,33 @@ export class WorkflowsClient {
      * look up a specific workflow by groupId, bucketId, or workflowId.
      *
      * @param {GroundX.WorkflowsGetRequestId} id - The id of the group, bucket, or workflow to look up.
+     * @param {GroundX.WorkflowsGetRequest} request
      * @param {WorkflowsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @example
-     *     await client.workflows.get(1)
+     *     await client.workflows.get(1, {
+     *         format: "json",
+     *         metadataOnly: true
+     *     })
      */
     public get(
         id: GroundX.WorkflowsGetRequestId,
+        request: GroundX.WorkflowsGetRequest = {},
         requestOptions?: WorkflowsClient.RequestOptions,
     ): core.HttpResponsePromise<GroundX.WorkflowResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__get(id, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__get(id, request, requestOptions));
     }
 
     private async __get(
         id: GroundX.WorkflowsGetRequestId,
+        request: GroundX.WorkflowsGetRequest = {},
         requestOptions?: WorkflowsClient.RequestOptions,
     ): Promise<core.WithRawResponse<GroundX.WorkflowResponse>> {
+        const { format, metadataOnly } = request;
+        const _queryParams: Record<string, unknown> = {
+            format: format != null ? format : undefined,
+            metadataOnly,
+        };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -471,7 +542,11 @@ export class WorkflowsClient {
             ),
             method: "GET",
             headers: _headers,
-            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            queryString: core.url
+                .queryBuilder()
+                .addMany(_queryParams)
+                .mergeAdditional(requestOptions?.queryParams)
+                .build(),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
