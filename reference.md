@@ -1976,7 +1976,7 @@ await client.groups.removeBucket(1, 1);
 <dl>
 <dd>
 
-Get all workflows associated with the API key.
+List workflow IDs, names, update times, and attachments. Use GET /v1/workflow/{id} to get the full workflow.
 </dd>
 </dl>
 </dd>

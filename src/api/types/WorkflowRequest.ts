@@ -6,7 +6,7 @@ export interface WorkflowRequest {
     chunkStrategy?: WorkflowRequest.ChunkStrategy | undefined;
     /** The name of the workflow being created. */
     name?: string | undefined;
-    /** Authored workflow YAML source. When set, the server compiles it into the canonical workflow structures (steps, prompts, routes) — the other definition fields (extract, customSteps, outputRoutes, leafFields, steps) are derived from it and must be omitted. An extraction-definition-only YAML (groups + field prompts, no workflow block) has its workflow definitions scaffolded server-side. */
+    /** Workflow YAML. GroundX validates it and creates the workflow settings. When yaml is supplied, omit extract, customSteps, outputRoutes, leafFields, and steps. A v1 workflow declares extraction_policy_version, workflow.custom_steps, workflow.agent_chain, a workflow_step and role for each group, and a workflow_output_key for each routed field. repeats: true declares an array of records; unique_attrs names fields used to identify the same record. For related lists, match_attrs names the shared fields and passthrough.from names the parent group. String matching ignores capitalization and surrounding whitespace. Blank or missing values do not match. When several parents match, GroundX uses the first. Group names and workflow_output_key values become output names. */
     yaml?: string | undefined;
     /** Extract agent definitions. */
     extract?: Record<string, unknown> | undefined;

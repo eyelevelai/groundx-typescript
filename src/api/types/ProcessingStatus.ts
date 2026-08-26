@@ -3,6 +3,7 @@
 export const ProcessingStatus = {
     Queued: "queued",
     Training: "training",
+    Generating: "generating",
     Processing: "processing",
     Error: "error",
     Complete: "complete",

@@ -23,7 +23,7 @@ export class WorkflowsClient {
     }
 
     /**
-     * Get all workflows associated with the API key.
+     * List workflow IDs, names, update times, and attachments. Use GET /v1/workflow/{id} to get the full workflow.
      *
      * @param {WorkflowsClient.RequestOptions} requestOptions - Request-specific configuration.
      *

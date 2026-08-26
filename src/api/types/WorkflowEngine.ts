@@ -10,8 +10,12 @@ export interface WorkflowEngine {
     baseURL?: string | undefined;
     /** The model name that will be included in the request */
     engineID?: string | undefined;
+    /** Maximum number of image attachments sent in one request using this workflow engine. GroundX removes earlier images when the request exceeds the limit, while preserving text and later images. Omit to leave image count uncapped. Workflow and step engine settings follow normal engine precedence; no separate route-specific image-count value overrides the selected engine. The independent openai-base64 serialized request-size guard still applies. */
+    maxImages?: number | undefined;
     /** An enumerated value that conforms to OpenAI '/chat/completion' specifications */
     reasoningEffort?: WorkflowEngine.ReasoningEffort | undefined;
+    /** Headers added to the LLM request, for example 'OpenAI-Project' to attribute usage. Values must be strings. Your header wins if it collides with one GroundX sets. Requires apiKey on the same engine: without it the request uses GroundX's credential, so a workflow create or update that sets requestHeaders and omits apiKey is rejected. Headers are sent as-is; GroundX does not guarantee a provider acts on any given header. */
+    requestHeaders?: Record<string, string> | undefined;
     /** A JSON object merged into the LLM request body after GroundX builds the standard request. Values in this object override generated request fields on key conflicts. */
     requestPassthrough?: Record<string, unknown> | undefined;
     /** An enumerated descriptor of the service type, impacts how the requests are configured */
@@ -34,6 +38,7 @@ export namespace WorkflowEngine {
         Azure: "azure",
         DeepInfra: "deep-infra",
         Hosted: "hosted",
+        Bedrock: "bedrock",
     } as const;
     export type Service = (typeof Service)[keyof typeof Service];
 }
