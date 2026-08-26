@@ -49,6 +49,9 @@ jobs:
     needs: [ compile, test ]
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
+    permissions:
+      contents: read   # Required for checkout
+      id-token: write  # Required for OIDC
     steps:
       - name: Checkout repo
         uses: actions/checkout@v6
@@ -67,7 +70,6 @@ jobs:
 
       - name: Publish to npm
         run: |
-          npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
           publish() {  # use latest npm to ensure OIDC support
             npx -y npm@latest publish "$@"
           }
@@ -86,5 +88,3 @@ jobs:
               publish --access public
             fi
           fi
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
