@@ -1,5 +1,8 @@
 # GroundX TypeScript Library
 
+For repository changes, follow [CONTRIBUTING.md](CONTRIBUTING.md) and inspect
+`.fernignore` before editing generated or preserved paths.
+
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2Feyelevelai%2Fgroundx-typescript)
 [![npm shield](https://img.shields.io/npm/v/groundx)](https://www.npmjs.com/package/groundx)
 
