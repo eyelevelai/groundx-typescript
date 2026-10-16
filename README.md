@@ -178,3 +178,20 @@ a proof of concept, but know that we will not be able to merge it as-is. We sugg
 an issue first to discuss with us!
 
 On the other hand, contributions to the README are always very welcome!
+
+## File access and private uploads
+
+These features require an SDK release with file-access models/operations and a compatible deployment with the file gateway and private origins enabled. Confirm support before uploading protected content.
+
+`client.ingest()` reads the destination bucket's effective policy before uploading each local file. It uses the bucket-owned private upload operation when the inherited policy or the input file's initial override is protected, including protected files in public buckets. Lookup or private-upload failures stop the request without falling back to public staging. Public/default files retain the existing broker path. The lookup adds one API request per local file.
+
+```typescript
+await client.ingest([
+    { bucketId: 1234, filePath: "invoice.pdf", fileType: "pdf", fileAccess: { mode: "protected", urlTtlSeconds: 120 } },
+    { bucketId: 1234, filePath: "other.pdf", fileType: "pdf", fileAccess: { mode: "protected", urlTtlSeconds: 300 } },
+]);
+```
+
+Each item keeps its own policy in ingest submission. Omitted or null initial `fileAccess` inherits; creation needs no previous revision. Later policy changes use the existing resource update with the current `fileAccessRevision`. This wrapper does not split files or ingest directories; callers preparing multiple files must preserve the originating policy on every derived item.
+
+Use `client.buckets.fileUpload()` for a native private PUT reservation and `client.documents.fileLink()` for a finite recipient GET grant. Follow the returned method, required headers and expiry exactly; never forward GroundX credentials to native storage. Stable protected hosted URLs need owner authentication on every read. Refresh expired search links through authorized search or link issuance. See [File Access and Sharing](https://docs.groundx.ai/documentation/fundamentals/file-access-and-sharing) for inheritance, X-Ray presentation and on-prem prerequisites.

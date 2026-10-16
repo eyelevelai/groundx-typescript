@@ -3,3 +3,4 @@ src/Wrapper.ts
 src/index.ts
 README.md
 CONTRIBUTING.md
+tests/custom.test.ts

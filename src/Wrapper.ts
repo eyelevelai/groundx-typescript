@@ -35,6 +35,7 @@ export class GroundXClient extends FernClient {
             if (this.isUrl(document.filePath)) {
                 remoteDocuments.push({
                     bucketId: document.bucketId,
+                    fileAccess: document.fileAccess,
                     fileName: document.fileName,
                     fileType: document.fileType,
                     filter: document.filter,
@@ -49,7 +50,7 @@ export class GroundXClient extends FernClient {
             }
         }
 
-        const uploadedLocalDocuments = await this.processLocalDocuments(localDocuments, uploadApi);
+        const uploadedLocalDocuments = await this.processLocalDocuments(localDocuments, uploadApi, requestOptions);
         remoteDocuments.push(...uploadedLocalDocuments);
 
         return this.documents.ingestRemote(
@@ -154,9 +155,45 @@ export class GroundXClient extends FernClient {
         return this.stripQueryParams(uploadUrl);
     }
 
+    private async uploadPrivateFile(
+        document: GroundX.Document,
+        fileType: GroundX.DocumentType,
+        requestOptions?: FernClient.RequestOptions
+    ): Promise<string> {
+        const reservation = await this.buckets.fileUpload(document.bucketId, {
+            fileName: document.fileName ?? this.getFileName(this.expandedPath(document.filePath)) ?? "document",
+            fileType,
+        }, requestOptions);
+        const expiry = Date.parse(reservation.expiresAt);
+        if (!Number.isFinite(expiry) || expiry <= Date.now()) {
+            throw new Error("Private upload reservation has expired.");
+        }
+        const target = new URL(reservation.uploadUrl);
+        if (reservation.method !== "PUT" || target.protocol !== "https:" || target.username || target.password) {
+            throw new Error("Invalid private upload target.");
+        }
+        for (const name of Object.keys(reservation.headers)) {
+            if (["x-api-key", "x-customer-key", "authorization", "proxy-authorization", "cookie", "gx-hosted-url", "host"].includes(name.toLowerCase())) {
+                throw new Error("Unexpected credential or metadata header on private upload.");
+            }
+        }
+        const response = await (this._options.fetch ?? fetch)(reservation.uploadUrl, {
+            method: "PUT",
+            headers: reservation.headers,
+            body: new Uint8Array(this.readFile(document.filePath)),
+            redirect: "error",
+            signal: requestOptions?.abortSignal,
+        });
+        if (!response.ok) {
+            throw new Error(`Private upload failed: ${response.status}`);
+        }
+        return reservation.hostedUrl;
+    }
+
     private async processLocalDocuments(
         localDocuments: GroundX.Document[],
-        uploadApi: string
+        uploadApi: string,
+        requestOptions?: FernClient.RequestOptions
     ): Promise<GroundX.IngestRemoteDocument[]> {
         const remoteDocuments: GroundX.IngestRemoteDocument[] = [];
 
@@ -166,8 +203,6 @@ export class GroundXClient extends FernClient {
             if (!fileName) {
                 throw new Error(`Invalid file path: ${document.filePath}`);
             }
-
-            const sourceUrl = await this.uploadFile(uploadApi, document.filePath);
 
             if (document.fileName) {
                 fileName = document.fileName;
@@ -181,8 +216,19 @@ export class GroundXClient extends FernClient {
                 );
             }
 
+            const bucket = (await this.buckets.get(document.bucketId, requestOptions)).bucket;
+            const inherited = bucket.effectiveFileAccess?.mode ?? bucket.fileAccess?.mode;
+            if (inherited !== undefined && inherited !== "public" && inherited !== "protected") {
+                throw new Error("Invalid destination file access policy.");
+            }
+            const privateUpload = inherited === "protected" || document.fileAccess?.mode === "protected";
+            const sourceUrl = privateUpload
+                ? await this.uploadPrivateFile(document, fileType, requestOptions)
+                : await this.uploadFile(uploadApi, document.filePath);
+
             remoteDocuments.push({
                 bucketId: document.bucketId,
+                fileAccess: document.fileAccess,
                 fileName,
                 fileType,
                 filter: document.filter,
