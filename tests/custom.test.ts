@@ -23,6 +23,8 @@ describe("ingest file policies", () => {
     let uploadResponse: typeof reservation;
     let calls: { url: string; init: RequestInit }[];
     let client: GroundXClient;
+    let nativeUploadMs: number;
+    let timedGrants: number;
 
     beforeEach(() => {
         directory = fs.mkdtempSync(path.join(os.tmpdir(), "groundx-upload-test-"));
@@ -33,6 +35,8 @@ describe("ingest file policies", () => {
         protectAfterPublicUpload = false;
         uploadResponse = structuredClone(reservation);
         calls = [];
+        nativeUploadMs = 0;
+        timedGrants = 0;
         const mockFetch = vi.fn(async (input: RequestInfo | URL, init: RequestInit = {}) => {
             const url = String(input);
             calls.push({ url, init });
@@ -42,6 +46,10 @@ describe("ingest file policies", () => {
                     : { error: "unavailable" }, { status: lookupStatus });
             }
             if (url === "https://api.test/v1/bucket/7/file-upload") {
+                if (nativeUploadMs) {
+                    const id = ++timedGrants;
+                    uploadResponse = { ...uploadResponse, uploadUrl: `https://storage.test/${id}?X-Amz-Signature=exact`, hostedUrl: `https://files.test/${id}.pdf`, expiresAt: new Date(Date.now() + 900000).toISOString() };
+                }
                 return Response.json(uploadResponse, { status: 201 });
             }
             if (url.startsWith("https://api.eyelevel.ai/upload/file?")) {
@@ -50,6 +58,7 @@ describe("ingest file policies", () => {
                 } });
             }
             if (url.startsWith("https://storage.test/")) {
+                if (nativeUploadMs) vi.setSystemTime(Date.now() + nativeUploadMs);
                 if (protectAfterPublicUpload) bucketMode = "protected";
                 return new Response(null, { status: 200 });
             }
@@ -64,6 +73,7 @@ describe("ingest file policies", () => {
 
     afterEach(() => {
         vi.unstubAllGlobals();
+        vi.useRealTimers();
         fs.rmSync(directory, { recursive: true });
     });
 
@@ -147,5 +157,37 @@ describe("ingest file policies", () => {
         expect(calls.some((call) => call.url.includes("api.eyelevel.ai/upload/file?"))).toBe(true);
         expect(calls.some((call) => call.url.endsWith("/file-upload"))).toBe(false);
         expect(submittedDocuments()[0].fileAccess).toBeNull();
+    });
+
+    it.each([
+        { mode: "protected", count: 29, reject: false },
+        { mode: "protected", count: 30, reject: true },
+        { mode: "public", count: 30, reject: false },
+        { mode: "mixed", count: 29, reject: false },
+        { mode: "mixed", count: 30, reject: true },
+    ])("checks $mode batch expiry immediately before ingest ($count files)", async ({ mode, count, reject }) => {
+        vi.useFakeTimers({ toFake: ["Date"] });
+        vi.setSystemTime("2026-10-16T00:00:00Z");
+        nativeUploadMs = 31000;
+        bucketMode = mode === "protected" ? "protected" : "public";
+        const documents = Array.from({ length: count }, (_, index) => ({
+            bucketId: 7,
+            filePath,
+            fileAccess: mode === "protected" ? { urlTtlSeconds: 120 }
+                : mode === "mixed" && index < 16 ? { mode: "protected" as const, urlTtlSeconds: 120 } : null,
+        }));
+        const result = client.ingest(documents, "https://callback.test", "callback-data");
+        if (reject) {
+            await expect(result).rejects.toThrow(/expired before submission.*smaller batch/i);
+            expect(calls.filter(call => call.url.endsWith("/ingest/documents/remote"))).toHaveLength(0);
+        } else {
+            await expect(result).resolves.toMatchObject({ ingest: { processId: "process" } });
+            expect(calls.filter(call => call.url.endsWith("/ingest/documents/remote"))).toHaveLength(1);
+            expect(submittedDocuments().map(doc => doc.fileAccess)).toEqual(documents.map(doc => doc.fileAccess));
+            const submitted = calls.find(call => call.url.endsWith("/ingest/documents/remote"));
+            expect(JSON.parse(String(submitted?.init.body))).toMatchObject({ callbackUrl: "https://callback.test", callbackData: "callback-data" });
+        }
+        expect(calls.filter(call => call.url.startsWith("https://storage.test/"))).toHaveLength(count);
+        expect(timedGrants).toBe(mode === "public" ? 0 : mode === "mixed" ? 16 : count);
     });
 });

@@ -194,4 +194,6 @@ await client.ingest([
 
 Each item keeps its own policy in ingest submission. Omitted or null initial `fileAccess` inherits; creation needs no previous revision. Later policy changes use the existing resource update with the current `fileAccessRevision`. This wrapper does not split files or ingest directories; callers preparing multiple files must preserve the originating policy on every derived item.
 
+Private reservations last at most fifteen minutes. `ingest()` rejects the batch before submission if any private reservation has expired. Retry with fewer files per call. The wrapper does not renew or partially submit the batch, and its local check does not extend the deadline.
+
 Use `client.buckets.fileUpload()` for a native private PUT reservation and `client.documents.fileLink()` for a finite recipient GET grant. Follow the returned method, required headers and expiry exactly; never forward GroundX credentials to native storage. Stable protected hosted URLs need owner authentication on every read. Refresh expired search links through authorized search or link issuance. See [File Access and Sharing](https://docs.groundx.ai/documentation/fundamentals/file-access-and-sharing) for inheritance, X-Ray presentation and on-prem prerequisites.

@@ -26,6 +26,7 @@ export class GroundXClient extends FernClient {
 
         const localDocuments: GroundX.Document[] = [];
         const remoteDocuments: GroundX.IngestRemoteDocument[] = [];
+        const privateUploadExpiries: number[] = [];
 
         for (const document of documents) {
             if (!document.filePath) {
@@ -50,9 +51,12 @@ export class GroundXClient extends FernClient {
             }
         }
 
-        const uploadedLocalDocuments = await this.processLocalDocuments(localDocuments, uploadApi, requestOptions);
+        const uploadedLocalDocuments = await this.processLocalDocuments(localDocuments, uploadApi, requestOptions, privateUploadExpiries);
         remoteDocuments.push(...uploadedLocalDocuments);
 
+        if (privateUploadExpiries.some(expiry => expiry <= Date.now())) {
+            throw new Error("Private upload reservation expired before submission. Retry with a smaller batch.");
+        }
         return this.documents.ingestRemote(
             {
                 documents: remoteDocuments,
@@ -158,6 +162,7 @@ export class GroundXClient extends FernClient {
     private async uploadPrivateFile(
         document: GroundX.Document,
         fileType: GroundX.DocumentType,
+        privateUploadExpiries: number[],
         requestOptions?: FernClient.RequestOptions
     ): Promise<string> {
         const reservation = await this.buckets.fileUpload(document.bucketId, {
@@ -168,6 +173,7 @@ export class GroundXClient extends FernClient {
         if (!Number.isFinite(expiry) || expiry <= Date.now()) {
             throw new Error("Private upload reservation has expired.");
         }
+        privateUploadExpiries.push(expiry);
         const target = new URL(reservation.uploadUrl);
         if (reservation.method !== "PUT" || target.protocol !== "https:" || target.username || target.password) {
             throw new Error("Invalid private upload target.");
@@ -193,7 +199,8 @@ export class GroundXClient extends FernClient {
     private async processLocalDocuments(
         localDocuments: GroundX.Document[],
         uploadApi: string,
-        requestOptions?: FernClient.RequestOptions
+        requestOptions?: FernClient.RequestOptions,
+        privateUploadExpiries: number[] = []
     ): Promise<GroundX.IngestRemoteDocument[]> {
         const remoteDocuments: GroundX.IngestRemoteDocument[] = [];
 
@@ -223,7 +230,7 @@ export class GroundXClient extends FernClient {
             }
             const privateUpload = inherited === "protected" || document.fileAccess?.mode === "protected";
             const sourceUrl = privateUpload
-                ? await this.uploadPrivateFile(document, fileType, requestOptions)
+                ? await this.uploadPrivateFile(document, fileType, privateUploadExpiries, requestOptions)
                 : await this.uploadFile(uploadApi, document.filePath);
 
             remoteDocuments.push({
