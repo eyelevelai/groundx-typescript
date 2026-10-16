@@ -524,7 +524,7 @@ export class WorkflowsClient {
     ): Promise<core.WithRawResponse<GroundX.WorkflowResponse>> {
         const { format, metadataOnly } = request;
         const _queryParams: Record<string, unknown> = {
-            format: format != null ? format : undefined,
+            format: format !== undefined ? format : undefined,
             metadataOnly,
         };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();

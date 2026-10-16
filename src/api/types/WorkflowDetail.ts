@@ -51,7 +51,7 @@ export namespace WorkflowDetail {
         /** A boolean indicating whether the workflow is associated with the account */
         account?: boolean | undefined;
         /** An array of documentIds associated with the workflow */
-        documents?: string[] | undefined;
+        documents?: (string[] | null) | undefined;
         /** An array of bucketIds or groupIds associated with the workflow */
         ids?: number[] | undefined;
     }

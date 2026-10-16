@@ -3,6 +3,8 @@
 import type * as GroundX from "../index.js";
 
 export interface Document {
+    /** Initial per-file override carried by SDK ingest helpers through batching and splitting. Omitted or null inherits; new resources require no policy revision. Select private staging before sending protected bytes. */
+    fileAccess?: (GroundX.FileAccessPolicy | null) | undefined;
     /** The bucketId of the bucket which this file will be ingested into. */
     bucketId: number;
     /** The name of the file being ingested. */

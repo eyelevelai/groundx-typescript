@@ -3,9 +3,23 @@
 import type * as GroundX from "../index.js";
 
 export interface DocumentDetail {
+    /** Confirmed override. Null means inherited; omitted on clients without this feature. Pending changes remain internal. */
+    fileAccess?: (GroundX.FileAccessPolicy | null) | undefined;
+    /** Confirmed revision. Required with fileAccess on writes; stale revisions return 409. */
+    fileAccessRevision?: number | undefined;
+    effectiveFileAccess?: GroundX.EffectivePolicy | undefined;
     bucketId?: number | undefined;
+    /** Document creation time in RFC 3339 format, when available. */
+    created?: string | undefined;
+    /** Current-run required customer delivery confirmation. Failed confirmation does not prove nonreceipt; unknown means saved evidence is insufficient. */
+    deliveryStatus?: DocumentDetail.DeliveryStatus | undefined;
     /** Unique system generated ID for the document */
     documentId: string;
+    extractionProvenance?: GroundX.ExtractionProvenance | undefined;
+    /** Whether the current run's final extraction is published after required review and transformations. Null means saved evidence is insufficient. */
+    extractionReady?: boolean | undefined;
+    /** Whether the document can currently restart its failed HTTP callback. Returned by document detail only. GroundX rechecks eligibility when retry is requested. */
+    retryAvailable?: boolean | undefined;
     fileName?: string | undefined;
     /** The file size of the file stored in GroundX */
     fileSize?: string | undefined;
@@ -18,10 +32,24 @@ export interface DocumentDetail {
     searchData?: Record<string, unknown> | undefined;
     /** Source document URL */
     sourceUrl?: string | undefined;
+    /** GroundX-hosted stored source URL, when available. Returned by document detail only; access still requires normal document authorization. */
+    hostedSourceUrl?: string | undefined;
     status?: GroundX.ProcessingStatus | undefined;
     statusMessage?: string | undefined;
     /** Extracted text URL, if using the extract agent */
     textUrl?: string | undefined;
     /** Document X-Ray results */
     xrayUrl?: string | undefined;
+}
+
+export namespace DocumentDetail {
+    /** Current-run required customer delivery confirmation. Failed confirmation does not prove nonreceipt; unknown means saved evidence is insufficient. */
+    export const DeliveryStatus = {
+        NotConfigured: "not_configured",
+        Pending: "pending",
+        Succeeded: "succeeded",
+        Failed: "failed",
+        Unknown: "unknown",
+    } as const;
+    export type DeliveryStatus = (typeof DeliveryStatus)[keyof typeof DeliveryStatus];
 }

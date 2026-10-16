@@ -6,6 +6,11 @@ import type * as GroundX from "../index.js";
  * Account information for the user
  */
 export interface CustomerDetail {
+    /** Confirmed override. Null means inherited; omitted on clients without this feature. Pending changes remain internal. */
+    fileAccess?: (GroundX.FileAccessPolicy | null) | undefined;
+    /** Confirmed revision. Required with fileAccess on writes; stale revisions return 409. */
+    fileAccessRevision?: number | undefined;
+    effectiveFileAccess?: GroundX.EffectivePolicy | undefined;
     /** Email associated with the account */
     email?: string | undefined;
     /** Given name associated with the account, if known */

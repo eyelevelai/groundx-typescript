@@ -9,7 +9,7 @@
  */
 export interface GroupsListRequest {
     /** The maximum number of returned groups. Accepts 1-100 with a default of 20. */
-    n?: number;
+    n?: number | null;
     /** A token for pagination. If the number of groups for a given query is larger than n, the response will include a "nextToken" value. That token can be included in this field to retrieve the next batch of n groups. */
-    nextToken?: string;
+    nextToken?: string | null;
 }

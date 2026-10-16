@@ -3,6 +3,8 @@
 import type * as GroundX from "../index.js";
 
 export interface IngestLocalDocumentMetadata {
+    /** Initial override for this new resource. Omitted or null inherits. No fileAccessRevision is required on creation. Protected ancestors cannot be reopened or their share lifetime exceeded. Choose private staging before uploading bytes for a protected file, including in a public bucket. */
+    fileAccess?: (GroundX.FileAccessPolicy | null) | undefined;
     /** The bucketId of the bucket which this local file will be ingested into. */
     bucketId?: number | undefined;
     /** The name of the file being ingested */

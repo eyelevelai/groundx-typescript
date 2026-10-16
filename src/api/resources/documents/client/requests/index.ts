@@ -5,4 +5,5 @@ export type { DocumentsGetProcessesRequest } from "./DocumentsGetProcessesReques
 export type { DocumentsListRequest } from "./DocumentsListRequest.js";
 export type { DocumentsLookupRequest } from "./DocumentsLookupRequest.js";
 export type { DocumentUpdateRequest } from "./DocumentUpdateRequest.js";
+export type { FileLinkRequest } from "./FileLinkRequest.js";
 export type { WebsiteCrawlRequest } from "./WebsiteCrawlRequest.js";

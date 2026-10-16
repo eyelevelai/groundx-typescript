@@ -4,13 +4,13 @@
  * Configurations for the LLM an agent uses in a workflow
  */
 export interface WorkflowEngine {
-    /** A token that is added to the header of a request as an authorization bearer token */
+    /** Credential sent using the selected service's authentication scheme */
     apiKey?: string | undefined;
-    /** The base URL that precedes '/chat/completion' for an OpenAI chat completion-compatible endpoint */
+    /** The provider base URL used for requests by the selected service */
     baseURL?: string | undefined;
     /** The model name that will be included in the request */
     engineID?: string | undefined;
-    /** Maximum number of image attachments sent in one request using this workflow engine. GroundX removes earlier images when the request exceeds the limit, while preserving text and later images. Omit to leave image count uncapped. Workflow and step engine settings follow normal engine precedence; no separate route-specific image-count value overrides the selected engine. The independent openai-base64 serialized request-size guard still applies. */
+    /** Maximum number of image attachments sent in one request using this workflow engine. GroundX removes earlier images when the request exceeds the limit, while preserving text and later images. Omit to use the default limit of 50. An explicit value takes precedence. Workflow and step engine settings follow normal engine precedence; no separate route-specific image-count value overrides the selected engine. The independent openai-base64 serialized request-size guard still applies. */
     maxImages?: number | undefined;
     /** An enumerated value that conforms to OpenAI '/chat/completion' specifications */
     reasoningEffort?: WorkflowEngine.ReasoningEffort | undefined;
@@ -18,7 +18,7 @@ export interface WorkflowEngine {
     requestHeaders?: Record<string, string> | undefined;
     /** A JSON object merged into the LLM request body after GroundX builds the standard request. Values in this object override generated request fields on key conflicts. */
     requestPassthrough?: Record<string, unknown> | undefined;
-    /** An enumerated descriptor of the service type, impacts how the requests are configured */
+    /** Selects how requests are configured for the provider. Anthropic uses the native Messages API with baseURL, apiKey, engineID, requestHeaders, and requestPassthrough. */
     service?: WorkflowEngine.Service | undefined;
 }
 
@@ -31,7 +31,7 @@ export namespace WorkflowEngine {
         High: "high",
     } as const;
     export type ReasoningEffort = (typeof ReasoningEffort)[keyof typeof ReasoningEffort];
-    /** An enumerated descriptor of the service type, impacts how the requests are configured */
+    /** Selects how requests are configured for the provider. Anthropic uses the native Messages API with baseURL, apiKey, engineID, requestHeaders, and requestPassthrough. */
     export const Service = {
         Openai: "openai",
         OpenaiBase64: "openai-base64",
@@ -39,6 +39,7 @@ export namespace WorkflowEngine {
         DeepInfra: "deep-infra",
         Hosted: "hosted",
         Bedrock: "bedrock",
+        Anthropic: "anthropic",
     } as const;
     export type Service = (typeof Service)[keyof typeof Service];
 }

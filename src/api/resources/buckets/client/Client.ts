@@ -101,7 +101,11 @@ export class BucketsClient {
      *
      * @example
      *     await client.buckets.create({
-     *         name: "your_bucket_name"
+     *         name: "private-documents",
+     *         fileAccess: {
+     *             mode: "protected",
+     *             urlTtlSeconds: 300
+     *         }
      *     })
      */
     public create(
@@ -238,13 +242,27 @@ export class BucketsClient {
      * @throws {@link GroundX.UnauthorizedError}
      *
      * @example
-     *     await client.buckets.update(1, {
+     *     await client.buckets.update(7, {
      *         newName: "your_bucket_name"
+     *     })
+     *
+     * @example
+     *     await client.buckets.update(7, {
+     *         fileAccess: {
+     *             mode: "protected",
+     *             urlTtlSeconds: 300
+     *         },
+     *         fileAccessRevision: 0
+     *     })
+     *
+     * @example
+     *     await client.buckets.update(7, {
+     *         fileAccessRevision: 1
      *     })
      */
     public update(
         bucketId: number,
-        request: GroundX.BucketUpdateRequest,
+        request: GroundX.BucketUpdateRequest = {},
         requestOptions?: BucketsClient.RequestOptions,
     ): core.HttpResponsePromise<GroundX.BucketUpdateResponse> {
         return core.HttpResponsePromise.fromPromise(this.__update(bucketId, request, requestOptions));
@@ -252,7 +270,7 @@ export class BucketsClient {
 
     private async __update(
         bucketId: number,
-        request: GroundX.BucketUpdateRequest,
+        request: GroundX.BucketUpdateRequest = {},
         requestOptions?: BucketsClient.RequestOptions,
     ): Promise<core.WithRawResponse<GroundX.BucketUpdateResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
@@ -367,5 +385,98 @@ export class BucketsClient {
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "DELETE", "/v1/bucket/{bucketId}");
+    }
+
+    /**
+     * Reserve a private bucket-owned source before issuing a native PUT grant, lasting at most 900 seconds. Use hostedUrl with the existing ingest operation.
+     *
+     * @param {number} bucketId
+     * @param {GroundX.FileUploadRequest} request
+     * @param {BucketsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link GroundX.BadRequestError}
+     * @throws {@link GroundX.UnauthorizedError}
+     * @throws {@link GroundX.ForbiddenError}
+     * @throws {@link GroundX.NotFoundError}
+     * @throws {@link GroundX.ConflictError}
+     * @throws {@link GroundX.ServiceUnavailableError}
+     *
+     * @example
+     *     await client.buckets.fileUpload(1234, {
+     *         fileName: "invoice.pdf",
+     *         fileType: "pdf"
+     *     })
+     */
+    public fileUpload(
+        bucketId: number,
+        request: GroundX.FileUploadRequest,
+        requestOptions?: BucketsClient.RequestOptions,
+    ): core.HttpResponsePromise<GroundX.FileUploadResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__fileUpload(bucketId, request, requestOptions));
+    }
+
+    private async __fileUpload(
+        bucketId: number,
+        request: GroundX.FileUploadRequest,
+        requestOptions?: BucketsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<GroundX.FileUploadResponse>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.GroundXEnvironment.Default,
+                `v1/bucket/${core.url.encodePathParam(bucketId)}/file-upload`,
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: request,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as GroundX.FileUploadResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new GroundX.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new GroundX.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new GroundX.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new GroundX.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new GroundX.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                case 503:
+                    throw new GroundX.ServiceUnavailableError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "POST",
+            "/v1/bucket/{bucketId}/file-upload",
+        );
     }
 }

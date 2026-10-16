@@ -12,11 +12,11 @@
  */
 export interface SearchDocumentsRequest {
     /** The maximum number of returned search results. Accepts 1-100 with a default of 20. */
-    n?: number;
+    n?: number | null;
     /** A token for pagination. If the number of search results for a given query is larger than n, the response will include a "nextToken" value. That token can be included in this field to retrieve the next batch of n search results. */
-    nextToken?: string;
+    nextToken?: string | null;
     /** The amount of data returned with each search result. 0 == no search results, only the recommended context. 1 == search results but no searchData. 2 == search results and searchData. */
-    verbosity?: number;
+    verbosity?: number | null;
     /** The search query to be used to find relevant documentation. */
     query: string;
     /** An array of unique documentIds to be searched. */
