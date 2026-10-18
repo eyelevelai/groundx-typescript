@@ -135,7 +135,7 @@ export class WorkflowsClient {
     }
 
     /**
-     * Validate a workflow definition without creating or modifying anything — a distinct operation from create/update. Accepts the same request body as workflow create, including the `yaml` field (authored workflow YAML source, compiled server-side). Returns the compiled workflow; validation failures return the same structured errors as create.
+     * Validate a workflow without saving changes. Accepts the workflow-create request body, including authored YAML in yaml. Returns the compiled workflow or the same structured validation errors as create.
      *
      * @param {GroundX.WorkflowRequest} request
      * @param {WorkflowsClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -569,7 +569,7 @@ export class WorkflowsClient {
     }
 
     /**
-     * Update an existing workflow. The request body is the desired custom overlay relative to GroundX defaults, not a delta against the currently stored custom workflow. Omitted steps and omitted step config fields return to defaults. Step null disables or clears that default step. For step configs, omitted prompt and prompt: {} use the default prompt group; prompt: null intentionally uses no prompt group. A name-only update is not metadata-only; include custom processing settings again if they should remain in effect.
+     * Replace an existing workflow's custom settings relative to GroundX defaults. Omitted steps and step settings return to defaults. A null step disables or clears it. For step settings, omit prompt or send prompt: {} to use default prompts; prompt: null removes the prompt group. A name-only request also resets custom processing settings. Include every custom setting you want to keep.
      *
      * @param {string} id - The workflowId of the workflow being updated.
      * @param {GroundX.WorkflowRequest} request

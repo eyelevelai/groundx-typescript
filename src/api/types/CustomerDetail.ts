@@ -6,9 +6,9 @@ import type * as GroundX from "../index.js";
  * Account information for the user
  */
 export interface CustomerDetail {
-    /** Confirmed override. Null means inherited; omitted on clients without this feature. Pending changes remain internal. */
+    /** Applied settings for this resource. Null means it inherits settings. Deployments without file access omit this field. Pending changes are not returned. */
     fileAccess?: (GroundX.FileAccessPolicy | null) | undefined;
-    /** Confirmed revision. Required with fileAccess on writes; stale revisions return 409. */
+    /** Current settings revision. Include it when updating fileAccess. A stale revision returns 409. */
     fileAccessRevision?: number | undefined;
     effectiveFileAccess?: GroundX.EffectivePolicy | undefined;
     /** Email associated with the account */

@@ -26,7 +26,7 @@ export interface WorkflowDetail {
     outputRoutes?: GroundX.CustomWorkflowOutputRoute[] | undefined;
     /** Custom leaf-field metadata used to validate route integrity and executable-step field counts. */
     leafFields?: GroundX.CustomWorkflowLeafField[] | undefined;
-    /** Information describing what the workflow is associated with */
+    /** Resources associated with this workflow. */
     relationships?: WorkflowDetail.Relationships | undefined;
     /** Unique system generated ID for the workflow */
     workflowId?: string | undefined;
@@ -45,7 +45,7 @@ export namespace WorkflowDetail {
     export type SectionStrategy = (typeof SectionStrategy)[keyof typeof SectionStrategy];
 
     /**
-     * Information describing what the workflow is associated with
+     * Resources associated with this workflow.
      */
     export interface Relationships {
         /** A boolean indicating whether the workflow is associated with the account */

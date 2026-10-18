@@ -3,20 +3,20 @@
 import type * as GroundX from "../index.js";
 
 export interface DocumentDetail {
-    /** Confirmed override. Null means inherited; omitted on clients without this feature. Pending changes remain internal. */
+    /** Applied settings for this resource. Null means it inherits settings. Deployments without file access omit this field. Pending changes are not returned. */
     fileAccess?: (GroundX.FileAccessPolicy | null) | undefined;
-    /** Confirmed revision. Required with fileAccess on writes; stale revisions return 409. */
+    /** Current settings revision. Include it when updating fileAccess. A stale revision returns 409. */
     fileAccessRevision?: number | undefined;
     effectiveFileAccess?: GroundX.EffectivePolicy | undefined;
     bucketId?: number | undefined;
     /** Document creation time in RFC 3339 format, when available. */
     created?: string | undefined;
-    /** Current-run required customer delivery confirmation. Failed confirmation does not prove nonreceipt; unknown means saved evidence is insufficient. */
+    /** Delivery confirmation for the current run. Failure does not prove the receiver received nothing. Unknown means the saved evidence cannot confirm delivery. */
     deliveryStatus?: DocumentDetail.DeliveryStatus | undefined;
     /** Unique system generated ID for the document */
     documentId: string;
     extractionProvenance?: GroundX.ExtractionProvenance | undefined;
-    /** Whether the current run's final extraction is published after required review and transformations. Null means saved evidence is insufficient. */
+    /** Whether the current run's final extraction was published after required review and transformations. Null means saved evidence cannot confirm publication. */
     extractionReady?: boolean | undefined;
     /** Whether the document can currently restart its failed HTTP callback. Returned by document detail only. GroundX rechecks eligibility when retry is requested. */
     retryAvailable?: boolean | undefined;
@@ -24,7 +24,7 @@ export interface DocumentDetail {
     /** The file size of the file stored in GroundX */
     fileSize?: string | undefined;
     fileType?: GroundX.DocumentType | undefined;
-    /** A dictionary of key-value pairs that can be used to pre-filter documents prior to a search. */
+    /** Key-value metadata used to filter documents before searching. */
     filter?: Record<string, unknown> | undefined;
     /** Unique system generated ID for the ingest request */
     processId?: string | undefined;
@@ -43,7 +43,7 @@ export interface DocumentDetail {
 }
 
 export namespace DocumentDetail {
-    /** Current-run required customer delivery confirmation. Failed confirmation does not prove nonreceipt; unknown means saved evidence is insufficient. */
+    /** Delivery confirmation for the current run. Failure does not prove the receiver received nothing. Unknown means the saved evidence cannot confirm delivery. */
     export const DeliveryStatus = {
         NotConfigured: "not_configured",
         Pending: "pending",

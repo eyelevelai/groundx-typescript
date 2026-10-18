@@ -6,7 +6,7 @@ export interface GroupListResponse {
     groups?: GroundX.GroupDetail[] | undefined;
     /** The number of groups returned in the current response */
     count?: number | undefined;
-    /** The number of groups that have not been returned yet, will be null if there are no remaining groups */
+    /** Number of groups not yet returned, or null if none remain. */
     remaining?: number | undefined;
     /** The total number of groups found */
     total?: number | undefined;

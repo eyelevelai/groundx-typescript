@@ -23,7 +23,7 @@ export class DocumentsClient {
     }
 
     /**
-     * copy documents from one bucket to another
+     * Copy documents from one bucket to another.
      *
      * @param {GroundX.DocumentCopyRequest} request
      * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -261,12 +261,7 @@ export class DocumentsClient {
     }
 
     /**
-     * Upload the content of a publicly accessible website for ingestion into a GroundX bucket. This is done by following links within a specified URL, recursively, up to a specified depth or number of pages.
-     *
-     * Note1: This endpoint is currently not supported for on-prem deployments.
-     * Note2: The `source_url` must include the protocol, http:// or https://.
-     *
-     * [Supported Document Types and Ingest Capacities](https://docs.eyelevel.ai/documentation/fundamentals/document-types-and-ingest-capacities)
+     * Ingest a public website by following links from a starting URL, up to the requested depth or page limit. The source_url must start with http:// or https://. Website crawling is not supported on-prem. [Supported Document Types and Ingest Capacities](https://docs.eyelevel.ai/documentation/fundamentals/document-types-and-ingest-capacities)
      *
      * @param {GroundX.WebsiteCrawlRequest} request
      * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -963,7 +958,7 @@ export class DocumentsClient {
     }
 
     /**
-     * Restart the document at its currently failed HTTP callback using its saved output and callback settings. No request body is required. Active or successfully delivered documents and other failed stages return 409. HTTP 202 means the retry was accepted. Get the document to check deliveryStatus. Post-processing and manual retries must be enabled. An earlier unconfirmed delivery may still have reached the receiver.
+     * Retry a failed HTTP callback using its saved output and settings. No request body is needed. Post-processing and manual retries must be enabled. Active or successfully delivered documents and other failed stages return 409. A 202 response confirms acceptance; get the document to check deliveryStatus. An earlier unconfirmed delivery may already have reached the receiver.
      *
      * @param {string} documentId
      * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -1254,7 +1249,7 @@ export class DocumentsClient {
     }
 
     /**
-     * Issue a native storage GET link for a saved owned asset. Returns 404 when file access is disabled; enabled temporary failures return 503 with Retry-After. The bearer can reuse or forward it until expiresAt. Key revocation and policy changes do not revoke existing native grants. No GroundX key is carried in the URL.
+     * Create a storage-signed download link for a saved asset you own. Anyone with the link can use or forward it until expiresAt. Revoking an API key or changing policy does not cancel issued links. The URL contains no GroundX API key. Returns 404 if file access is disabled, or 503 with Retry-After for temporary file-access failures.
      *
      * @param {string} documentId
      * @param {GroundX.FileLinkRequest} request

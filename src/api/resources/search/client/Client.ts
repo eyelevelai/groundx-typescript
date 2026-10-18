@@ -23,8 +23,7 @@ export class SearchClient {
     }
 
     /**
-     * Search documents on GroundX for the most relevant information to a given query.
-     * The result of this query is typically used in one of two ways; `result.search.text` can be used to provide context to a language model, facilitating RAG, or `result.search.results` can be used to observe chunks of text which are relevant to the query, facilitating citation.
+     * Search a bucket, group or document for information relevant to a query. Use result.search.text as context for a language model and result.search.results for matching text and citations.
      *
      * @param {GroundX.SearchContentRequestId} id - The bucketId, groupId, or documentId to be searched. The document or documents within the specified container will be compared to the query, and relevant information will be extracted.
      * @param {GroundX.SearchRequest} request
@@ -112,8 +111,7 @@ export class SearchClient {
     }
 
     /**
-     * Search documents on GroundX for the most relevant information to a given query by documentId(s).
-     * The result of this query is typically used in one of two ways; `result.search.text` can be used to provide context to a language model, facilitating RAG, or `result.search.results` can be used to observe chunks of text which are relevant to the query, facilitating citation.
+     * Search the specified document IDs for information relevant to a query. Use result.search.text as context for a language model and result.search.results for matching text and citations.
      *
      * @param {GroundX.SearchDocumentsRequest} request
      * @param {SearchClient.RequestOptions} requestOptions - Request-specific configuration.

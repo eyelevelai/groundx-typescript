@@ -3,7 +3,7 @@
 import type * as GroundX from "../index.js";
 
 export interface WebsiteSource {
-    /** Initial override for this new resource. Omitted or null inherits. No fileAccessRevision is required on creation. Protected ancestors cannot be reopened or their share lifetime exceeded. Choose private staging before uploading bytes for a protected file, including in a public bucket. */
+    /** Initial settings for this resource. Omit or send null to inherit. Creation needs no fileAccessRevision. These settings cannot make a protected parent public or exceed its sharing time limit. Use private staging before uploading a protected file, even in a public bucket. Returns 403 if file access is disabled. */
     fileAccess?: (GroundX.FileAccessPolicy | null) | undefined;
     /** The bucketId of the bucket which this website will be ingested into. */
     bucketId: number;
@@ -11,7 +11,7 @@ export interface WebsiteSource {
     cap?: number | undefined;
     /** The maximum depth of linked pages to follow from the sourceUrl */
     depth?: number | undefined;
-    /** Custom metadata which can be used to influence GroundX's search functionality. This data can be used to further hone GroundX search. */
+    /** Custom metadata used to improve search results. */
     searchData?: Record<string, unknown> | undefined;
     /** The URL from which the crawl is initiated. */
     sourceUrl: string;

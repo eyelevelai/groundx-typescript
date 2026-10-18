@@ -15,8 +15,8 @@ import type * as GroundX from "../../../../index.js";
  */
 export interface DocumentRemoteIngestRequest {
     documents: GroundX.IngestRemoteDocument[];
-    /** An endpoint that will receive processing event updates as POST. */
+    /** URL that receives processing updates as POST requests. */
     callbackUrl?: string;
-    /** A string that is returned, along with processing event updates, to the callback URL. */
+    /** Custom string included in processing updates sent to the callback URL. */
     callbackData?: string;
 }

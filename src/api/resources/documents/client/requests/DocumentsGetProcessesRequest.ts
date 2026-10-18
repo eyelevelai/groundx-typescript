@@ -12,6 +12,6 @@ import type * as GroundX from "../../../../index.js";
 export interface DocumentsGetProcessesRequest {
     /** The maximum number of returned processes. Accepts 1-100 with a default of 20. */
     n?: number | null;
-    /** A status filter on the processing status. If this value is set, then only processes with this status will be returned in the results. */
+    /** Return only processes with this status. */
     status?: GroundX.ProcessingStatus | null;
 }

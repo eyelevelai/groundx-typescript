@@ -3,7 +3,7 @@
 import type * as GroundX from "../index.js";
 
 export interface Document {
-    /** Initial per-file override carried by SDK ingest helpers through batching and splitting. Omitted or null inherits; new resources require no policy revision. Select private staging before sending protected bytes. */
+    /** Initial file settings, preserved by SDK batching and splitting. Omit or send null to inherit. New files need no policy revision. Use private staging before uploading a protected file. Returns 403 if file access is disabled. */
     fileAccess?: (GroundX.FileAccessPolicy | null) | undefined;
     /** The bucketId of the bucket which this file will be ingested into. */
     bucketId: number;
@@ -12,9 +12,9 @@ export interface Document {
     /** The local file path or remote URL of the document being ingested by GroundX. */
     filePath: string;
     fileType?: GroundX.DocumentType | undefined;
-    /** A dictionary of key-value pairs that can be used to pre-filter documents prior to a search. */
+    /** Key-value metadata used to filter documents before searching. */
     filter?: Record<string, unknown> | undefined;
     processLevel?: GroundX.ProcessLevel | undefined;
-    /** Custom metadata which can be used to influence GroundX's search functionality. This data can be used to further hone GroundX search. */
+    /** Custom metadata used to improve search results. */
     searchData?: Record<string, unknown> | undefined;
 }

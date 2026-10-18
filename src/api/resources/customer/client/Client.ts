@@ -75,7 +75,7 @@ export class CustomerClient {
     }
 
     /**
-     * Replace or clear confirmed own-account file access settings. fileAccessRevision is required; 400 means missing or invalid input, 409 means stale revision, and 503 with Retry-After means application is incomplete. Stable protected links require X-API-Key on each read.
+     * Replace or clear your account's file-access settings. Include fileAccessRevision. Invalid or missing input returns 400; disabled or forbidden access returns 403; a stale revision returns 409. If settings or ownership cannot be verified, returns 503 with Retry-After. After an uncertain outcome, read the applied settings before retrying. Protected stable links require X-API-Key on every read.
      *
      * @param {GroundX.FileAccessUpdate} request
      * @param {CustomerClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -168,9 +168,7 @@ export class CustomerClient {
     }
 
     /**
-     * Get aggregate usage for the authenticated customer over a requested time period.
-     *
-     * The API resolves the account subscription and usage meter from the authenticated account. Do not provide customer ids, subscription ids, or meter ids. `startTime` is inclusive, `endTime` is exclusive, and both timestamps must be RFC3339 values aligned to minute boundaries. Timestamps are normalized to UTC. `endTime` cannot be in the future, windows longer than 366 days are rejected, and `usageAsOf` reflects the latest usage summary available to GroundX.
+     * Get usage for the authenticated account over a time period. GroundX selects its subscription and usage meter; do not supply their IDs or a customer ID. startTime is inclusive and endTime is exclusive. Both must be RFC3339 timestamps on minute boundaries and are converted to UTC. endTime cannot be in the future. The window cannot exceed 366 days. usageAsOf identifies the latest usage summary available to GroundX.
      *
      * @param {GroundX.CustomerGetUsageRequest} request
      * @param {CustomerClient.RequestOptions} requestOptions - Request-specific configuration.

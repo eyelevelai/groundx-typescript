@@ -13,7 +13,7 @@ import type * as GroundX from "../../../../index.js";
  *     }
  */
 export interface BucketCreateRequest {
-    /** Initial override for this new resource. Omitted or null inherits. No fileAccessRevision is required on creation. Protected ancestors cannot be reopened or their share lifetime exceeded. Choose private staging before uploading bytes for a protected file, including in a public bucket. */
+    /** Initial settings for this resource. Omit or send null to inherit. Creation needs no fileAccessRevision. These settings cannot make a protected parent public or exceed its sharing time limit. Use private staging before uploading a protected file, even in a public bucket. Returns 403 if file access is disabled. */
     fileAccess?: GroundX.FileAccessPolicy | null;
     name: string;
 }

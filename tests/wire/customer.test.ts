@@ -11,6 +11,9 @@ describe("CustomerClient", () => {
 
         const rawResponseBody = {
             customer: {
+                fileAccess: { mode: "public", urlTtlSeconds: 1 },
+                fileAccessRevision: 1,
+                effectiveFileAccess: { mode: "public", urlTtlSeconds: 1 },
                 email: "email",
                 first: "first",
                 last: "last",
@@ -27,6 +30,192 @@ describe("CustomerClient", () => {
 
         const response = await client.customer.get();
         expect(response).toEqual(rawResponseBody);
+    });
+
+    test("update (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { fileAccess: { mode: "protected", urlTtlSeconds: 300 }, fileAccessRevision: 0 };
+        const rawResponseBody = {
+            customer: {
+                fileAccess: { mode: "protected", urlTtlSeconds: 300 },
+                fileAccessRevision: 1,
+                effectiveFileAccess: { mode: "protected", urlTtlSeconds: 300 },
+            },
+        };
+
+        server
+            .mockEndpoint()
+            .put("/v1/customer")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.customer.update({
+            fileAccess: {
+                mode: "protected",
+                urlTtlSeconds: 300,
+            },
+            fileAccessRevision: 0,
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("update (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { fileAccessRevision: 1 };
+        const rawResponseBody = {
+            customer: { fileAccessRevision: 2, effectiveFileAccess: { mode: "public", urlTtlSeconds: 300 } },
+        };
+
+        server
+            .mockEndpoint()
+            .put("/v1/customer")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.customer.update({
+            fileAccessRevision: 1,
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("update (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { fileAccessRevision: 1 };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/v1/customer")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.update({
+                fileAccessRevision: 1,
+            });
+        }).rejects.toThrow(GroundX.BadRequestError);
+    });
+
+    test("update (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { fileAccessRevision: 1 };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/v1/customer")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.update({
+                fileAccessRevision: 1,
+            });
+        }).rejects.toThrow(GroundX.UnauthorizedError);
+    });
+
+    test("update (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { fileAccessRevision: 1 };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/v1/customer")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.update({
+                fileAccessRevision: 1,
+            });
+        }).rejects.toThrow(GroundX.ForbiddenError);
+    });
+
+    test("update (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { fileAccessRevision: 1 };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/v1/customer")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.update({
+                fileAccessRevision: 1,
+            });
+        }).rejects.toThrow(GroundX.NotFoundError);
+    });
+
+    test("update (7)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { fileAccessRevision: 1 };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/v1/customer")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.update({
+                fileAccessRevision: 1,
+            });
+        }).rejects.toThrow(GroundX.ConflictError);
+    });
+
+    test("update (8)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { fileAccessRevision: 1 };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/v1/customer")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(503)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.customer.update({
+                fileAccessRevision: 1,
+            });
+        }).rejects.toThrow(GroundX.ServiceUnavailableError);
     });
 
     test("getUsage (1)", async () => {

@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GroundXClient } from "../src/Wrapper";
-import { ConflictError, ForbiddenError, NotFoundError, ServiceUnavailableError, type FileUploadResponse, type FileUploadRequest } from "../src/api";
+import { BadRequestError, ConflictError, ForbiddenError, NotFoundError, ServiceUnavailableError, UnauthorizedError, type FileUploadResponse, type FileUploadRequest } from "../src/api";
 
 const reservation: FileUploadResponse = {
     uploadId: "reservation",
@@ -240,6 +240,12 @@ describe("ingest file policies", () => {
 
 const policyOperations = [
     {
+        name: "buckets.rename",
+        statuses: [400, 401],
+        call: (client: GroundXClient) =>
+            client.buckets.update(1, { newName: "newName" }, { maxRetries: 0 }),
+    },
+    {
         name: "customer.update",
         statuses: [403, 404, 409, 503],
         call: (client: GroundXClient) =>
@@ -303,6 +309,8 @@ describe("policy error dispatch", () => {
     for (const { name, call, statuses } of policyOperations) {
         it.each(statuses)(`${name} raises the typed %i error`, async (status) => {
             const errors = {
+                400: BadRequestError,
+                401: UnauthorizedError,
                 403: ForbiddenError,
                 404: NotFoundError,
                 409: ConflictError,
@@ -322,6 +330,8 @@ describe("policy error dispatch", () => {
             expect(error).toBeInstanceOf(errors[status as keyof typeof errors]);
             if (
                 !(
+                    error instanceof BadRequestError ||
+                    error instanceof UnauthorizedError ||
                     error instanceof ForbiddenError ||
                     error instanceof NotFoundError ||
                     error instanceof ConflictError ||
@@ -333,6 +343,9 @@ describe("policy error dispatch", () => {
             expect(error.body).toEqual(body);
             expect(error.rawResponse?.headers.get("Retry-After")).toBe("1");
             expect(requests).toHaveLength(1);
+            if (name === "buckets.rename") {
+                expect(JSON.parse(String(requests[0].body))).toEqual({ newName: "newName" });
+            }
             if (name.endsWith("update")) {
                 const sent = JSON.parse(String(requests[0].body));
                 expect(name.startsWith("documents") ? sent.documents[0] : sent).toMatchObject({
@@ -342,4 +355,26 @@ describe("policy error dispatch", () => {
             }
         });
     }
+});
+
+describe("legacy bucket responses", () => {
+    it("creates a bucket without policy fields and retains its metadata", async () => {
+        const body = { bucket: {
+            bucketId: 1, created: "2023-10-03T08:59:39Z", fileCount: 1,
+            fileSize: "3.1GB", name: "name", updated: "2023-10-03T08:59:39Z",
+        } };
+        const requests: { url: string; init: RequestInit }[] = [];
+        const client = new GroundXClient({
+            apiKey: "test", environment: "https://api.test", maxRetries: 0,
+            fetch: async (url, init = {}) => {
+                requests.push({ url: String(url), init });
+                return Response.json(body);
+            },
+        });
+        await expect(client.buckets.create({ name: "your_bucket_name" })).resolves.toEqual(body);
+        expect(requests).toHaveLength(1);
+        expect(requests[0].url).toBe("https://api.test/v1/bucket");
+        expect(requests[0].init.method).toBe("POST");
+        expect(JSON.parse(String(requests[0].init.body))).toEqual({ name: "your_bucket_name" });
+    });
 });

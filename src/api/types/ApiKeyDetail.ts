@@ -3,7 +3,7 @@
 export interface ApiKeyDetail {
     /** The GroundX API key */
     apiKey: string;
-    /** The data time when the API key was created, in RFC3339 format */
+    /** API key creation time in RFC3339 format. */
     created?: string | undefined;
     name?: string | undefined;
 }
