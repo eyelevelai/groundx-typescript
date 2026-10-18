@@ -12,10 +12,10 @@
             "url-join": ">=5.0.0"
         }
     },
-    "originGitCommit": "0793e797f33817d5274cb0b763e2fba792212aea",
+    "originGitCommit": "1abb4dbdcf448d9da6c30fa8154ae89b3e4d04bf",
     "originGitCommitIsDirty": false,
     "invokedBy": "ci",
-    "requestedVersion": "4.1.0",
+    "requestedVersion": "4.1.1",
     "ciProvider": "github",
-    "sdkVersion": "4.1.0"
+    "sdkVersion": "4.1.1"
 }
