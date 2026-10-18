@@ -143,6 +143,8 @@ By contributing to this project, you agree that your contributions will be licen
 
 ## File-access maintenance
 
+Local regeneration must request a full project with Fern's configured `groundx` package name and the repository's existing version. Source-only downloads omit package identity headers.
+
 `src/Wrapper.ts` owns local-file staging and initial-policy propagation; generated clients/models come from Fern. `tests/custom.test.ts` exercises real generated HTTP dispatch, private native PUT, distinct item policies, expiry, delegated headers and legacy public behavior. Both files are preserved by `.fernignore`. The wrapper has no split or directory-preparation layer; derived inputs supplied by a caller retain their own `fileAccess`.
 
 Public file-access changes require the same-change assessment of Fern schemas/human documentation, installed API/MCP guidance and downstream consumers. Read the destination policy before bytes, fail closed on lookup/private-upload errors, and keep API credentials out of native storage requests. Package release and deployed acceptance are separate from local generation and transport tests.

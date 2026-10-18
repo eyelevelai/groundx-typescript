@@ -141,9 +141,14 @@ describe("ingest file policies", () => {
         await client.ingest([{ bucketId: 7, filePath }], "https://callback.test", "callback-data", {
             headers: { "X-Customer-Key": "selected-customer" },
         });
+        const packageVersion = JSON.parse(fs.readFileSync(path.join(__dirname, "../package.json"), "utf8")).version;
         for (const call of calls.filter((call) => call.url.startsWith("https://api.test/"))) {
-            expect(new Headers(call.init.headers).get("X-Customer-Key")).toBe("selected-customer");
-            expect(new Headers(call.init.headers).get("X-API-Key")).toBe("test-key");
+            const headers = new Headers(call.init.headers);
+            expect(headers.get("X-Customer-Key")).toBe("selected-customer");
+            expect(headers.get("X-API-Key")).toBe("test-key");
+            expect(headers.get("X-Fern-SDK-Name")).toBe("groundx");
+            expect(headers.get("X-Fern-SDK-Version")).toBe(packageVersion);
+            expect(headers.get("User-Agent")).toBe(`groundx/${packageVersion}`);
         }
         const native = calls.find((call) => call.url.startsWith("https://storage.test/"));
         expect(native?.init.headers).toEqual(reservation.headers);
