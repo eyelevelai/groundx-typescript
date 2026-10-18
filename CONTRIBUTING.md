@@ -140,3 +140,13 @@ If you have questions or run into issues:
 ## License
 
 By contributing to this project, you agree that your contributions will be licensed under the same license as the project.
+
+## File-access maintenance
+
+Local regeneration must request a full project with Fern's configured `groundx` package name and the repository's existing version. Source-only downloads omit package identity headers.
+
+`src/Wrapper.ts` owns local-file staging and initial-policy propagation; generated clients/models come from Fern. `tests/custom.test.ts` exercises real generated HTTP dispatch, private native PUT, distinct item policies, expiry, delegated headers and legacy public behavior. Both files are preserved by `.fernignore`. The wrapper has no split or directory-preparation layer; derived inputs supplied by a caller retain their own `fileAccess`.
+
+Public file-access changes require the same-change assessment of Fern schemas/human documentation, installed API/MCP guidance and downstream consumers. Use the configured API's bucket upload operation for all local files. Pass each document's initial policy through the generated upload request's optional `fileAccess` field; the server validates protection before bytes. Regenerate request types and clients from Fern rather than editing them by hand. Do not read policy to choose a signer or fall back to a hosted endpoint. Explicit legacy `uploadApi` overrides remain available for public destinations, after an ownership/policy lookup; reject them for inherited or requested protection. Keep API credentials out of native storage requests. Package release and deployed acceptance are separate from local generation and transport tests.
+
+Check upload expiry before PUT. Do not treat a completed public upload as expired when its PUT grant expires. Existing server ingest admission enforces protected reservation deadlines; preserve its status and body. Preserve explicit legacy transport, per-file policies, callbacks and the existing ingest request without renewal or automatic splitting.
