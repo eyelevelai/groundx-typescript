@@ -126,9 +126,12 @@ describe("ingest file policies", () => {
         expect(calls.some((call) => call.url.startsWith("https://storage.test"))).toBe(false);
     });
 
-    it("accepts initial protection through the generated upload request type", async () => {
-        const request: FileUploadRequest = { fileName: "private.pdf", fileType: "pdf", fileAccess: { mode: "protected", urlTtlSeconds: 120 } };
-        expect(await client.buckets.fileUpload(7, request)).toEqual(reservation);
+    it.each([undefined, { mode: "public" as const, urlTtlSeconds: 300 }, { mode: "protected" as const, urlTtlSeconds: 120 }])("reads optional upload policy metadata %s through generated types", async (effectiveFileAccess) => {
+        uploadResponse = { ...reservation, ...(effectiveFileAccess ? { effectiveFileAccess } : {}) };
+        const request: FileUploadRequest = { fileName: "private.pdf", fileType: "pdf", ...(effectiveFileAccess?.mode === "public" ? {} : { fileAccess: { mode: "protected", urlTtlSeconds: 120 } }) };
+        const response = await client.buckets.fileUpload(7, request);
+        expect(response).toEqual(uploadResponse);
+        expect(response.effectiveFileAccess).toEqual(effectiveFileAccess);
         expect(calls.map(call => call.url)).toEqual(["https://api.test/v1/bucket/7/file-upload"]);
         expect(JSON.parse(String(calls[0].init.body))).toEqual(request);
     });
