@@ -26,7 +26,6 @@ export class GroundXClient extends FernClient {
 
         const localDocuments: GroundX.Document[] = [];
         const remoteDocuments: GroundX.IngestRemoteDocument[] = [];
-        const uploadExpiries: number[] = [];
 
         for (const document of documents) {
             if (!document.filePath) {
@@ -51,12 +50,9 @@ export class GroundXClient extends FernClient {
             }
         }
 
-        const uploadedLocalDocuments = await this.processLocalDocuments(localDocuments, uploadApi, requestOptions, uploadExpiries);
+        const uploadedLocalDocuments = await this.processLocalDocuments(localDocuments, uploadApi, requestOptions);
         remoteDocuments.push(...uploadedLocalDocuments);
 
-        if (uploadExpiries.some(expiry => expiry <= Date.now())) {
-            throw new Error("Upload reservation expired before submission. Retry with a smaller batch.");
-        }
         return this.documents.ingestRemote(
             {
                 documents: remoteDocuments,
@@ -118,7 +114,6 @@ export class GroundXClient extends FernClient {
     private async uploadFile(
         document: GroundX.Document,
         fileType: GroundX.DocumentType,
-        uploadExpiries: number[],
         requestOptions?: FernClient.RequestOptions,
         uploadApi?: string
     ): Promise<string> {
@@ -147,12 +142,12 @@ export class GroundXClient extends FernClient {
                 else headers[key] = String(header);
             }
         } else {
-            const grant = await this.buckets.fileUpload(document.bucketId, { fileName, fileType }, requestOptions);
+            const request = { fileName, fileType, fileAccess: document.fileAccess };
+            const grant = await this.buckets.fileUpload(document.bucketId, request, requestOptions);
             const expiry = Date.parse(grant.expiresAt);
             if (!Number.isFinite(expiry) || expiry <= Date.now()) {
                 throw new Error("Upload reservation has expired.");
             }
-            uploadExpiries.push(expiry);
             if (grant.method !== "PUT") throw new Error(`Unsupported HTTP method: ${grant.method}`);
             for (const name of Object.keys(grant.headers)) {
                 if (["x-api-key", "x-customer-key", "authorization", "proxy-authorization", "cookie", "gx-hosted-url", "host"].includes(name.toLowerCase())) {
@@ -181,8 +176,7 @@ export class GroundXClient extends FernClient {
     private async processLocalDocuments(
         localDocuments: GroundX.Document[],
         uploadApi: string | undefined,
-        requestOptions?: FernClient.RequestOptions,
-        uploadExpiries: number[] = []
+        requestOptions?: FernClient.RequestOptions
     ): Promise<GroundX.IngestRemoteDocument[]> {
         const remoteDocuments: GroundX.IngestRemoteDocument[] = [];
 
@@ -205,7 +199,7 @@ export class GroundXClient extends FernClient {
                 );
             }
 
-            const sourceUrl = await this.uploadFile(document, fileType, uploadExpiries, requestOptions, uploadApi);
+            const sourceUrl = await this.uploadFile(document, fileType, requestOptions, uploadApi);
 
             remoteDocuments.push({
                 bucketId: document.bucketId,

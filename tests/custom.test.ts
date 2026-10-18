@@ -19,6 +19,7 @@ describe("ingest file policies", () => {
     let filePath: string;
     let bucketMode: "public" | "protected";
     let issuanceStatus: number;
+    let ingestStatus: number;
     let uploadResponse: typeof reservation;
     let calls: { url: string; init: RequestInit }[];
     let client: GroundXClient;
@@ -31,6 +32,7 @@ describe("ingest file policies", () => {
         fs.writeFileSync(filePath, "private source bytes");
         bucketMode = "protected";
         issuanceStatus = 201;
+        ingestStatus = 200;
         uploadResponse = structuredClone(reservation);
         calls = [];
         nativeUploadMs = 0;
@@ -58,7 +60,7 @@ describe("ingest file policies", () => {
                 return new Response(null, { status: 200 });
             }
             if (url === "https://api.test/v1/ingest/documents/remote") {
-                return Response.json({ ingest: { processId: "process", status: "queued" } });
+                return Response.json(ingestStatus === 200 ? { ingest: { processId: "process", status: "queued" } } : { message: "source reservation expired" }, { status: ingestStatus });
             }
             throw new Error(`Unexpected request: ${url}`);
         });
@@ -101,6 +103,7 @@ describe("ingest file policies", () => {
         expect(calls.some((call) => call.url.includes("api.eyelevel.ai"))).toBe(false);
         const documents = submittedDocuments();
         expect(documents.find((doc) => doc.sourceUrl === reservation.hostedUrl)?.fileAccess).toEqual({ mode: "protected", urlTtlSeconds: 120 });
+        expect(JSON.parse(String(calls.find(call => call.url.endsWith("/file-upload"))?.init.body))).toMatchObject({ fileAccess: { mode: "protected", urlTtlSeconds: 120 } });
         expect(documents.find((doc) => doc.sourceUrl === "https://files.test/other.pdf")?.fileAccess).toEqual({ urlTtlSeconds: 300 });
     });
 
@@ -121,6 +124,13 @@ describe("ingest file policies", () => {
         uploadResponse.headers = { ...uploadResponse.headers, "X-API-Key": "must-not-leave" };
         await expect(client.ingest([{ bucketId: 7, filePath }])).rejects.toThrow(/header/i);
         expect(calls.some((call) => call.url.startsWith("https://storage.test"))).toBe(false);
+    });
+
+    it("sends initial protection to admission and stops before bytes when unavailable", async () => {
+        issuanceStatus = 403;
+        await expect(client.ingest([{ bucketId: 7, filePath, fileAccess: { mode: "protected" } }])).rejects.toBeInstanceOf(ForbiddenError);
+        expect(calls.map(call => call.url)).toEqual(["https://api.test/v1/bucket/7/file-upload"]);
+        expect(JSON.parse(String(calls[0].init.body))).toMatchObject({ fileAccess: { mode: "protected" } });
     });
 
     it("requests each upload from the configured API without reading policy", async () => {
@@ -187,10 +197,10 @@ describe("ingest file policies", () => {
     it.each([
         { mode: "protected", count: 29, reject: false },
         { mode: "protected", count: 30, reject: true },
-        { mode: "public", count: 30, reject: true },
+        { mode: "public", count: 30, reject: false },
         { mode: "mixed", count: 29, reject: false },
         { mode: "mixed", count: 30, reject: true },
-    ])("checks $mode batch expiry immediately before ingest ($count files)", async ({ mode, count, reject }) => {
+    ])("preserves $mode batch submission and upstream admission errors ($count files)", async ({ mode, count, reject }) => {
         vi.useFakeTimers({ toFake: ["Date"] });
         vi.setSystemTime("2026-10-16T00:00:00Z");
         nativeUploadMs = 31000;
@@ -201,10 +211,11 @@ describe("ingest file policies", () => {
             fileAccess: mode === "protected" ? { urlTtlSeconds: 120 }
                 : mode === "mixed" && index < 16 ? { mode: "protected" as const, urlTtlSeconds: 120 } : null,
         }));
+        ingestStatus = reject ? 409 : 200;
         const result = client.ingest(documents, "https://callback.test", "callback-data");
         if (reject) {
-            await expect(result).rejects.toThrow(/expired before submission.*smaller batch/i);
-            expect(calls.filter(call => call.url.endsWith("/ingest/documents/remote"))).toHaveLength(0);
+            await expect(result).rejects.toMatchObject({ statusCode: 409, body: { message: "source reservation expired" } });
+            expect(calls.filter(call => call.url.endsWith("/ingest/documents/remote"))).toHaveLength(1);
         } else {
             await expect(result).resolves.toMatchObject({ ingest: { processId: "process" } });
             expect(calls.filter(call => call.url.endsWith("/ingest/documents/remote"))).toHaveLength(1);
