@@ -11,7 +11,7 @@ import type * as GroundX from "../../../../index.js";
  */
 export interface WorkflowsGetRequest {
     /** Response format. `yaml` returns the stored authored workflow YAML source verbatim (absent for workflows created via compiled JSON). */
-    format?: GroundX.WorkflowsGetRequestFormat;
+    format?: GroundX.WorkflowsGetRequestFormat | null;
     /** When true, return workflow metadata such as workflowId and updatedAt without returning the workflow extract/settings body. */
-    metadataOnly?: boolean;
+    metadataOnly?: boolean | null;
 }

@@ -12,7 +12,7 @@
 <dl>
 <dd>
 
-copy documents from one bucket to another
+Copy documents from one bucket to another.
 </dd>
 </dl>
 </dd>
@@ -221,12 +221,7 @@ await client.documents.ingestLocal([{
 <dl>
 <dd>
 
-Upload the content of a publicly accessible website for ingestion into a GroundX bucket. This is done by following links within a specified URL, recursively, up to a specified depth or number of pages.
-
-Note1: This endpoint is currently not supported for on-prem deployments. 
-Note2: The `source_url` must include the protocol, http:// or https://.
-
-[Supported Document Types and Ingest Capacities](https://docs.eyelevel.ai/documentation/fundamentals/document-types-and-ingest-capacities)
+Ingest a public website by following links from a starting URL, up to the requested depth or page limit. The source_url must start with http:// or https://. Website crawling is not supported on-prem. [Supported Document Types and Ingest Capacities](https://docs.eyelevel.ai/documentation/fundamentals/document-types-and-ingest-capacities)
 </dd>
 </dl>
 </dd>
@@ -370,6 +365,8 @@ await client.documents.list({
 <dd>
 
 Update the attributes of documents that have been uploaded to GroundX.
+Policy-bearing updates return 403 when file access is disabled; enabled
+temporary failures return 503 with Retry-After.
 </dd>
 </dl>
 </dd>
@@ -819,7 +816,70 @@ await client.documents.deleteById("documentId");
 </dl>
 </details>
 
-<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">getExtract</a>(documentId) -> Record&lt;string, unknown&gt;</code></summary>
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">retryFailedStage</a>(documentId) -> GroundX.RetryFailedStageResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retry a failed HTTP callback using its saved output and settings. No request body is needed. Post-processing and manual retries must be enabled. Active or successfully delivered documents and other failed stages return 409. A 202 response confirms acceptance; get the document to check deliveryStatus. An earlier unconfirmed delivery may already have reached the receiver.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.documents.retryFailedStage("documentId");
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**documentId:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `DocumentsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">getExtract</a>(documentId) -> GroundX.DocumentsGetExtractResponse</code></summary>
 <dl>
 <dd>
 
@@ -1011,6 +1071,84 @@ await client.documents.getProcesses({
 </dl>
 </details>
 
+<details><summary><code>client.documents.<a href="/src/api/resources/documents/client/Client.ts">fileLink</a>(documentId, { ...params }) -> GroundX.FileLinkResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a storage-signed download link for a saved asset you own. Anyone with the link can use or forward it until expiresAt. Revoking an API key or changing policy does not cancel issued links. The URL contains no GroundX API key. Returns 404 if file access is disabled, or 503 with Retry-After for temporary file-access failures.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.documents.fileLink("11111111-1111-4111-8111-111111111111", {
+    asset: {
+        kind: "page",
+        pageNumber: 1,
+        corrected: false
+    },
+    expiresInSeconds: 120
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**documentId:** `string` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `GroundX.FileLinkRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `DocumentsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Search
 <details><summary><code>client.search.<a href="/src/api/resources/search/client/Client.ts">content</a>(id, { ...params }) -> GroundX.SearchResponse</code></summary>
 <dl>
@@ -1024,8 +1162,7 @@ await client.documents.getProcesses({
 <dl>
 <dd>
 
-Search documents on GroundX for the most relevant information to a given query.
-The result of this query is typically used in one of two ways; `result.search.text` can be used to provide context to a language model, facilitating RAG, or `result.search.results` can be used to observe chunks of text which are relevant to the query, facilitating citation.
+Search a bucket, group or document for information relevant to a query. Use result.search.text as context for a language model and result.search.results for matching text and citations.
 </dd>
 </dl>
 </dd>
@@ -1101,8 +1238,7 @@ await client.search.content(1, {
 <dl>
 <dd>
 
-Search documents on GroundX for the most relevant information to a given query by documentId(s).
-The result of this query is typically used in one of two ways; `result.search.text` can be used to provide context to a language model, facilitating RAG, or `result.search.results` can be used to observe chunks of text which are relevant to the query, facilitating citation.
+Search the specified document IDs for information relevant to a query. Use result.search.text as context for a language model and result.search.results for matching text and citations.
 </dd>
 </dl>
 </dd>
@@ -1254,7 +1390,11 @@ Create a new bucket.
 
 ```typescript
 await client.buckets.create({
-    name: "your_bucket_name"
+    name: "private-documents",
+    fileAccess: {
+        mode: "protected",
+        urlTtlSeconds: 300
+    }
 });
 
 ```
@@ -1366,7 +1506,7 @@ await client.buckets.get(1);
 <dl>
 <dd>
 
-Rename a bucket.
+Rename a bucket or replace its file-access policy. Policy-bearing updates return 403 when file access is disabled; enabled temporary failures return 503 with Retry-After.
 </dd>
 </dl>
 </dd>
@@ -1381,7 +1521,7 @@ Rename a bucket.
 <dd>
 
 ```typescript
-await client.buckets.update(1, {
+await client.buckets.update(7, {
     newName: "your_bucket_name"
 });
 
@@ -1471,6 +1611,80 @@ await client.buckets.delete(1);
 <dd>
 
 **bucketId:** `number` — The bucketId of the bucket being deleted.
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `BucketsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.buckets.<a href="/src/api/resources/buckets/client/Client.ts">fileUpload</a>(bucketId, { ...params }) -> GroundX.FileUploadResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Return a storage-signed PUT link for a public or protected bucket, valid for at most 900 seconds. Complete PUT before it expires. A private upload reservation also requires ingest submission before that deadline; an unreserved public source remains ingestible after PUT expiry. Available even when file-access protection is disabled. Uses this deployment and its configured storage. Include the requested per-file fileAccess policy so it is checked before upload; non-null policies return 403 when protection is disabled. Returns 503 with Retry-After for temporary verification failures.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.buckets.fileUpload(1234, {
+    fileName: "invoice.pdf",
+    fileType: "pdf"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**bucketId:** `number` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `GroundX.FileUploadRequest` 
     
 </dd>
 </dl>
@@ -2094,7 +2308,7 @@ await client.workflows.create({});
 <dl>
 <dd>
 
-Validate a workflow definition without creating or modifying anything — a distinct operation from create/update. Accepts the same request body as workflow create, including the `yaml` field (authored workflow YAML source, compiled server-side). Returns the compiled workflow; validation failures return the same structured errors as create.
+Validate a workflow without saving changes. Accepts the workflow-create request body, including authored YAML in yaml. Returns the compiled workflow or the same structured validation errors as create.
 </dd>
 </dl>
 </dd>
@@ -2542,7 +2756,7 @@ await client.workflows.get(1, {
 <dl>
 <dd>
 
-Update an existing workflow. The request body is the desired custom overlay relative to GroundX defaults, not a delta against the currently stored custom workflow. Omitted steps and omitted step config fields return to defaults. Step null disables or clears that default step. For step configs, omitted prompt and prompt: {} use the default prompt group; prompt: null intentionally uses no prompt group. A name-only update is not metadata-only; include custom processing settings again if they should remain in effect.
+Replace an existing workflow's custom settings relative to GroundX defaults. Omitted steps and step settings return to defaults. A null step disables or clears it. For step settings, omit prompt or send prompt: {} to use default prompts; prompt: null removes the prompt group. A name-only request also resets custom processing settings. Include every custom setting you want to keep.
 </dd>
 </dl>
 </dd>
@@ -2720,6 +2934,75 @@ await client.customer.get();
 </dl>
 </details>
 
+<details><summary><code>client.customer.<a href="/src/api/resources/customer/client/Client.ts">update</a>({ ...params }) -> GroundX.CustomerResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Replace or clear your account's file-access settings. Include fileAccessRevision. Invalid or missing input returns 400; disabled or forbidden access returns 403; a stale revision returns 409. If settings or ownership cannot be verified, returns 503 with Retry-After. After an uncertain outcome, read the applied settings before retrying. Protected stable links require X-API-Key on every read.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.customer.update({
+    fileAccess: {
+        mode: "protected",
+        urlTtlSeconds: 300
+    },
+    fileAccessRevision: 0
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `GroundX.FileAccessUpdate` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CustomerClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.customer.<a href="/src/api/resources/customer/client/Client.ts">getUsage</a>({ ...params }) -> GroundX.CustomerUsageResponse</code></summary>
 <dl>
 <dd>
@@ -2732,9 +3015,7 @@ await client.customer.get();
 <dl>
 <dd>
 
-Get aggregate usage for the authenticated customer over a requested time period.
-
-The API resolves the account subscription and usage meter from the authenticated account. Do not provide customer ids, subscription ids, or meter ids. `startTime` is inclusive, `endTime` is exclusive, and both timestamps must be RFC3339 values aligned to minute boundaries. Timestamps are normalized to UTC. `endTime` cannot be in the future, windows longer than 366 days are rejected, and `usageAsOf` reflects the latest usage summary available to GroundX.
+Get usage for the authenticated account over a time period. GroundX selects its subscription and usage meter; do not supply their IDs or a customer ID. startTime is inclusive and endTime is exclusive. Both must be RFC3339 timestamps on minute boundaries and are converted to UTC. endTime cannot be in the future. The window cannot exceed 366 days. usageAsOf identifies the latest usage summary available to GroundX.
 </dd>
 </dl>
 </dd>

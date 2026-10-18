@@ -6,6 +6,7 @@ export * as customer from "./customer/index.js";
 export * from "./customer/types/index.js";
 export * from "./documents/client/requests/index.js";
 export * as documents from "./documents/index.js";
+export * from "./documents/types/index.js";
 export * from "./groups/client/requests/index.js";
 export * as groups from "./groups/index.js";
 export * as health from "./health/index.js";

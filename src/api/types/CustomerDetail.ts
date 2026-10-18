@@ -6,6 +6,11 @@ import type * as GroundX from "../index.js";
  * Account information for the user
  */
 export interface CustomerDetail {
+    /** Applied settings for this resource. Null means it inherits settings. Deployments without file access omit this field. Pending changes are not returned. */
+    fileAccess?: (GroundX.FileAccessPolicy | null) | undefined;
+    /** Current settings revision. Include it when updating fileAccess. A stale revision returns 409. */
+    fileAccessRevision?: number | undefined;
+    effectiveFileAccess?: GroundX.EffectivePolicy | undefined;
     /** Email associated with the account */
     email?: string | undefined;
     /** Given name associated with the account, if known */

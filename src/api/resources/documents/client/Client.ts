@@ -23,7 +23,7 @@ export class DocumentsClient {
     }
 
     /**
-     * copy documents from one bucket to another
+     * Copy documents from one bucket to another.
      *
      * @param {GroundX.DocumentCopyRequest} request
      * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -94,6 +94,8 @@ export class DocumentsClient {
      *
      * @throws {@link GroundX.BadRequestError}
      * @throws {@link GroundX.UnauthorizedError}
+     * @throws {@link GroundX.ForbiddenError}
+     * @throws {@link GroundX.ServiceUnavailableError}
      *
      * @example
      *     await client.documents.ingestRemote({
@@ -151,6 +153,10 @@ export class DocumentsClient {
                     throw new GroundX.BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
                     throw new GroundX.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new GroundX.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 503:
+                    throw new GroundX.ServiceUnavailableError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.GroundXError({
                         statusCode: _response.error.statusCode,
@@ -173,6 +179,10 @@ export class DocumentsClient {
      *
      * @throws {@link GroundX.BadRequestError}
      * @throws {@link GroundX.UnauthorizedError}
+     * @throws {@link GroundX.ForbiddenError}
+     * @throws {@link GroundX.NotFoundError}
+     * @throws {@link GroundX.ConflictError}
+     * @throws {@link GroundX.ServiceUnavailableError}
      *
      * @example
      *     await client.documents.ingestLocal([{
@@ -230,6 +240,14 @@ export class DocumentsClient {
                     throw new GroundX.BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
                     throw new GroundX.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new GroundX.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new GroundX.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new GroundX.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                case 503:
+                    throw new GroundX.ServiceUnavailableError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.GroundXError({
                         statusCode: _response.error.statusCode,
@@ -243,18 +261,15 @@ export class DocumentsClient {
     }
 
     /**
-     * Upload the content of a publicly accessible website for ingestion into a GroundX bucket. This is done by following links within a specified URL, recursively, up to a specified depth or number of pages.
-     *
-     * Note1: This endpoint is currently not supported for on-prem deployments.
-     * Note2: The `source_url` must include the protocol, http:// or https://.
-     *
-     * [Supported Document Types and Ingest Capacities](https://docs.eyelevel.ai/documentation/fundamentals/document-types-and-ingest-capacities)
+     * Ingest a public website by following links from a starting URL, up to the requested depth or page limit. The source_url must start with http:// or https://. Website crawling is not supported on-prem. [Supported Document Types and Ingest Capacities](https://docs.eyelevel.ai/documentation/fundamentals/document-types-and-ingest-capacities)
      *
      * @param {GroundX.WebsiteCrawlRequest} request
      * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link GroundX.BadRequestError}
      * @throws {@link GroundX.UnauthorizedError}
+     * @throws {@link GroundX.ForbiddenError}
+     * @throws {@link GroundX.ServiceUnavailableError}
      *
      * @example
      *     await client.documents.crawlWebsite({
@@ -315,6 +330,10 @@ export class DocumentsClient {
                     throw new GroundX.BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
                     throw new GroundX.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new GroundX.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 503:
+                    throw new GroundX.ServiceUnavailableError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.GroundXError({
                         statusCode: _response.error.statusCode,
@@ -358,9 +377,9 @@ export class DocumentsClient {
         const _queryParams: Record<string, unknown> = {
             n,
             filter,
-            sort: sort != null ? sort : undefined,
-            sortOrder: sortOrder != null ? sortOrder : undefined,
-            status: status != null ? status : undefined,
+            sort: sort !== undefined ? sort : undefined,
+            sortOrder: sortOrder !== undefined ? sortOrder : undefined,
+            status: status !== undefined ? status : undefined,
             nextToken,
         };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
@@ -406,12 +425,18 @@ export class DocumentsClient {
 
     /**
      * Update the attributes of documents that have been uploaded to GroundX.
+     * Policy-bearing updates return 403 when file access is disabled; enabled
+     * temporary failures return 503 with Retry-After.
      *
      * @param {GroundX.DocumentUpdateRequest} request
      * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link GroundX.BadRequestError}
      * @throws {@link GroundX.UnauthorizedError}
+     * @throws {@link GroundX.ForbiddenError}
+     * @throws {@link GroundX.NotFoundError}
+     * @throws {@link GroundX.ConflictError}
+     * @throws {@link GroundX.ServiceUnavailableError}
      *
      * @example
      *     await client.documents.update({
@@ -466,6 +491,14 @@ export class DocumentsClient {
                     throw new GroundX.BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
                     throw new GroundX.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new GroundX.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new GroundX.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new GroundX.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                case 503:
+                    throw new GroundX.ServiceUnavailableError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.GroundXError({
                         statusCode: _response.error.statusCode,
@@ -727,9 +760,9 @@ export class DocumentsClient {
         const _queryParams: Record<string, unknown> = {
             n,
             filter,
-            sort: sort != null ? sort : undefined,
-            sortOrder: sortOrder != null ? sortOrder : undefined,
-            status: status != null ? status : undefined,
+            sort: sort !== undefined ? sort : undefined,
+            sortOrder: sortOrder !== undefined ? sortOrder : undefined,
+            status: status !== undefined ? status : undefined,
             nextToken,
         };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
@@ -925,6 +958,84 @@ export class DocumentsClient {
     }
 
     /**
+     * Retry a failed HTTP callback using its saved output and settings. No request body is needed. Post-processing and manual retries must be enabled. Active or successfully delivered documents and other failed stages return 409. A 202 response confirms acceptance; get the document to check deliveryStatus. An earlier unconfirmed delivery may already have reached the receiver.
+     *
+     * @param {string} documentId
+     * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link GroundX.BadRequestError}
+     * @throws {@link GroundX.UnauthorizedError}
+     * @throws {@link GroundX.ConflictError}
+     * @throws {@link GroundX.ServiceUnavailableError}
+     *
+     * @example
+     *     await client.documents.retryFailedStage("documentId")
+     */
+    public retryFailedStage(
+        documentId: string,
+        requestOptions?: DocumentsClient.RequestOptions,
+    ): core.HttpResponsePromise<GroundX.RetryFailedStageResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__retryFailedStage(documentId, requestOptions));
+    }
+
+    private async __retryFailedStage(
+        documentId: string,
+        requestOptions?: DocumentsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<GroundX.RetryFailedStageResponse>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.GroundXEnvironment.Default,
+                `v1/ingest/document/${core.url.encodePathParam(documentId)}/retry`,
+            ),
+            method: "POST",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as GroundX.RetryFailedStageResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new GroundX.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new GroundX.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new GroundX.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                case 503:
+                    throw new GroundX.ServiceUnavailableError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "POST",
+            "/v1/ingest/document/{documentId}/retry",
+        );
+    }
+
+    /**
      * Look up extractions for an existing document by documentId.
      *
      * @param {string} documentId - The documentId of the document for which GroundX extract has extracted information.
@@ -939,14 +1050,14 @@ export class DocumentsClient {
     public getExtract(
         documentId: string,
         requestOptions?: DocumentsClient.RequestOptions,
-    ): core.HttpResponsePromise<Record<string, unknown>> {
+    ): core.HttpResponsePromise<GroundX.DocumentsGetExtractResponse> {
         return core.HttpResponsePromise.fromPromise(this.__getExtract(documentId, requestOptions));
     }
 
     private async __getExtract(
         documentId: string,
         requestOptions?: DocumentsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<Record<string, unknown>>> {
+    ): Promise<core.WithRawResponse<GroundX.DocumentsGetExtractResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -970,7 +1081,7 @@ export class DocumentsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as Record<string, unknown>, rawResponse: _response.rawResponse };
+            return { data: _response.body as GroundX.DocumentsGetExtractResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -1094,7 +1205,7 @@ export class DocumentsClient {
         const { n, status } = request;
         const _queryParams: Record<string, unknown> = {
             n,
-            status: status != null ? status : undefined,
+            status: status !== undefined ? status : undefined,
         };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -1135,5 +1246,102 @@ export class DocumentsClient {
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v1/ingest");
+    }
+
+    /**
+     * Create a storage-signed download link for a saved asset you own. Anyone with the link can use or forward it until expiresAt. Revoking an API key or changing policy does not cancel issued links. The URL contains no GroundX API key. Returns 404 if file access is disabled, or 503 with Retry-After for temporary file-access failures.
+     *
+     * @param {string} documentId
+     * @param {GroundX.FileLinkRequest} request
+     * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link GroundX.BadRequestError}
+     * @throws {@link GroundX.UnauthorizedError}
+     * @throws {@link GroundX.ForbiddenError}
+     * @throws {@link GroundX.NotFoundError}
+     * @throws {@link GroundX.ConflictError}
+     * @throws {@link GroundX.ServiceUnavailableError}
+     *
+     * @example
+     *     await client.documents.fileLink("11111111-1111-4111-8111-111111111111", {
+     *         asset: {
+     *             kind: "page",
+     *             pageNumber: 1,
+     *             corrected: false
+     *         },
+     *         expiresInSeconds: 120
+     *     })
+     */
+    public fileLink(
+        documentId: string,
+        request: GroundX.FileLinkRequest,
+        requestOptions?: DocumentsClient.RequestOptions,
+    ): core.HttpResponsePromise<GroundX.FileLinkResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__fileLink(documentId, request, requestOptions));
+    }
+
+    private async __fileLink(
+        documentId: string,
+        request: GroundX.FileLinkRequest,
+        requestOptions?: DocumentsClient.RequestOptions,
+    ): Promise<core.WithRawResponse<GroundX.FileLinkResponse>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.GroundXEnvironment.Default,
+                `v1/ingest/document/${core.url.encodePathParam(documentId)}/file-link`,
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: request,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as GroundX.FileLinkResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new GroundX.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new GroundX.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new GroundX.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new GroundX.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new GroundX.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                case 503:
+                    throw new GroundX.ServiceUnavailableError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "POST",
+            "/v1/ingest/document/{documentId}/file-link",
+        );
     }
 }

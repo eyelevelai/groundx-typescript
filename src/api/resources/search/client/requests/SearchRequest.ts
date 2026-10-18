@@ -11,14 +11,14 @@
  */
 export interface SearchRequest {
     /** The maximum number of returned search results. Accepts 1-100 with a default of 20. */
-    n?: number;
-    /** A token for pagination. If the number of search results for a given query is larger than n, the response will include a "nextToken" value. That token can be included in this field to retrieve the next batch of n search results. */
-    nextToken?: string;
-    /** The amount of data returned with each search result. 0 == no search results, only the recommended context. 1 == search results but no searchData. 2 == search results and searchData. */
-    verbosity?: number;
-    /** The search query to be used to find relevant documentation. */
+    n?: number | null;
+    /** Pass nextToken from the previous response to get the next page of up to n search results. */
+    nextToken?: string | null;
+    /** Response detail: 0 returns only recommended context; 1 adds search results without searchData; 2 includes searchData. */
+    verbosity?: number | null;
+    /** Search query. */
     query: string;
-    /** A dictionary of key-value pairs that can be used to pre-filter documents prior to a search. */
+    /** Key-value metadata used to filter documents before searching. */
     filter?: Record<string, unknown>;
     /** The minimum search relevance score required to include the result. By default, this is 10.0. */
     relevance?: number;

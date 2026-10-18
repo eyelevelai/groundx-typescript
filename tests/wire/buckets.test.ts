@@ -12,6 +12,8 @@ describe("BucketsClient", () => {
         const rawResponseBody = {
             buckets: [
                 {
+                    fileAccessRevision: 1,
+                    effectiveFileAccess: { mode: "public", urlTtlSeconds: 1 },
                     bucketId: 1,
                     created: "2023-10-03T08:59:39Z",
                     fileCount: 1,
@@ -37,17 +39,8 @@ describe("BucketsClient", () => {
     test("create (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "your_bucket_name" };
-        const rawResponseBody = {
-            bucket: {
-                bucketId: 1,
-                created: "2023-10-03T08:59:39Z",
-                fileCount: 1,
-                fileSize: "3.1GB",
-                name: "name",
-                updated: "2023-10-03T08:59:39Z",
-            },
-        };
+        const rawRequestBody = { name: "private-documents", fileAccess: { mode: "protected", urlTtlSeconds: 300 } };
+        const rawResponseBody = { bucket: { bucketId: 1234, name: "private-documents" } };
 
         server
             .mockEndpoint()
@@ -59,7 +52,11 @@ describe("BucketsClient", () => {
             .build();
 
         const response = await client.buckets.create({
-            name: "your_bucket_name",
+            name: "private-documents",
+            fileAccess: {
+                mode: "protected",
+                urlTtlSeconds: 300,
+            },
         });
         expect(response).toEqual(rawResponseBody);
     });
@@ -86,12 +83,81 @@ describe("BucketsClient", () => {
         }).rejects.toThrow(GroundX.BadRequestError);
     });
 
+    test("create (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: "name" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/bucket")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.buckets.create({
+                name: "name",
+            });
+        }).rejects.toThrow(GroundX.ForbiddenError);
+    });
+
+    test("create (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: "name" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/bucket")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.buckets.create({
+                name: "name",
+            });
+        }).rejects.toThrow(GroundX.NotFoundError);
+    });
+
+    test("create (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: "name" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/bucket")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(503)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.buckets.create({
+                name: "name",
+            });
+        }).rejects.toThrow(GroundX.ServiceUnavailableError);
+    });
+
     test("get (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             bucket: {
+                fileAccess: { mode: "public", urlTtlSeconds: 1 },
+                fileAccessRevision: 1,
+                effectiveFileAccess: { mode: "public", urlTtlSeconds: 1 },
                 bucketId: 1,
                 created: "2023-10-03T08:59:39Z",
                 fileCount: 1,
@@ -137,18 +203,18 @@ describe("BucketsClient", () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { newName: "your_bucket_name" };
-        const rawResponseBody = { bucket: { bucketId: 1, name: "name" } };
+        const rawResponseBody = { bucket: { bucketId: 7, name: "your_bucket_name" } };
 
         server
             .mockEndpoint()
-            .put("/v1/bucket/1")
+            .put("/v1/bucket/7")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.buckets.update(1, {
+        const response = await client.buckets.update(7, {
             newName: "your_bucket_name",
         });
         expect(response).toEqual(rawResponseBody);
@@ -157,7 +223,68 @@ describe("BucketsClient", () => {
     test("update (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
-        const rawRequestBody = { newName: "newName" };
+        const rawRequestBody = { fileAccess: { mode: "protected", urlTtlSeconds: 300 }, fileAccessRevision: 0 };
+        const rawResponseBody = {
+            bucket: {
+                bucketId: 7,
+                name: "your_bucket_name",
+                fileAccess: { mode: "protected", urlTtlSeconds: 300 },
+                fileAccessRevision: 1,
+                effectiveFileAccess: { mode: "protected", urlTtlSeconds: 300 },
+            },
+        };
+
+        server
+            .mockEndpoint()
+            .put("/v1/bucket/7")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.buckets.update(7, {
+            fileAccess: {
+                mode: "protected",
+                urlTtlSeconds: 300,
+            },
+            fileAccessRevision: 0,
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("update (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { fileAccessRevision: 1 };
+        const rawResponseBody = {
+            bucket: {
+                bucketId: 7,
+                name: "your_bucket_name",
+                fileAccessRevision: 2,
+                effectiveFileAccess: { mode: "public", urlTtlSeconds: 300 },
+            },
+        };
+
+        server
+            .mockEndpoint()
+            .put("/v1/bucket/7")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.buckets.update(7, {
+            fileAccessRevision: 1,
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("update (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
 
         server
@@ -170,16 +297,14 @@ describe("BucketsClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.buckets.update(1, {
-                newName: "newName",
-            });
+            return await client.buckets.update(1);
         }).rejects.toThrow(GroundX.BadRequestError);
     });
 
-    test("update (3)", async () => {
+    test("update (5)", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
-        const rawRequestBody = { newName: "newName" };
+        const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
 
         server
@@ -192,10 +317,88 @@ describe("BucketsClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.buckets.update(1, {
-                newName: "newName",
-            });
+            return await client.buckets.update(1);
         }).rejects.toThrow(GroundX.UnauthorizedError);
+    });
+
+    test("update (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {};
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/v1/bucket/1")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.buckets.update(1);
+        }).rejects.toThrow(GroundX.ForbiddenError);
+    });
+
+    test("update (7)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {};
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/v1/bucket/1")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.buckets.update(1);
+        }).rejects.toThrow(GroundX.NotFoundError);
+    });
+
+    test("update (8)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {};
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/v1/bucket/1")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.buckets.update(1);
+        }).rejects.toThrow(GroundX.ConflictError);
+    });
+
+    test("update (9)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {};
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/v1/bucket/1")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(503)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.buckets.update(1);
+        }).rejects.toThrow(GroundX.ServiceUnavailableError);
     });
 
     test("delete (1)", async () => {
@@ -234,5 +437,172 @@ describe("BucketsClient", () => {
         await expect(async () => {
             return await client.buckets.delete(1);
         }).rejects.toThrow(GroundX.UnauthorizedError);
+    });
+
+    test("fileUpload (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { fileName: "invoice.pdf", fileType: "pdf" };
+        const rawResponseBody = {
+            uploadId: "11111111-1111-4111-8111-111111111111",
+            uploadUrl: "https://storage.example/private/upload.pdf?signature=example",
+            hostedUrl: "https://files.example/file/owner/upload.pdf",
+            expiresAt: "2026-10-16T12:15:00Z",
+            method: "PUT",
+            headers: { "Content-Type": "application/pdf" },
+        };
+
+        server
+            .mockEndpoint()
+            .post("/v1/bucket/1234/file-upload")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.buckets.fileUpload(1234, {
+            fileName: "invoice.pdf",
+            fileType: "pdf",
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("fileUpload (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { fileName: "x", fileType: "bmp" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/bucket/1/file-upload")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.buckets.fileUpload(1, {
+                fileName: "x",
+                fileType: "bmp",
+            });
+        }).rejects.toThrow(GroundX.BadRequestError);
+    });
+
+    test("fileUpload (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { fileName: "x", fileType: "bmp" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/bucket/1/file-upload")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.buckets.fileUpload(1, {
+                fileName: "x",
+                fileType: "bmp",
+            });
+        }).rejects.toThrow(GroundX.UnauthorizedError);
+    });
+
+    test("fileUpload (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { fileName: "x", fileType: "bmp" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/bucket/1/file-upload")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.buckets.fileUpload(1, {
+                fileName: "x",
+                fileType: "bmp",
+            });
+        }).rejects.toThrow(GroundX.ForbiddenError);
+    });
+
+    test("fileUpload (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { fileName: "x", fileType: "bmp" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/bucket/1/file-upload")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.buckets.fileUpload(1, {
+                fileName: "x",
+                fileType: "bmp",
+            });
+        }).rejects.toThrow(GroundX.NotFoundError);
+    });
+
+    test("fileUpload (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { fileName: "x", fileType: "bmp" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/bucket/1/file-upload")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.buckets.fileUpload(1, {
+                fileName: "x",
+                fileType: "bmp",
+            });
+        }).rejects.toThrow(GroundX.ConflictError);
+    });
+
+    test("fileUpload (7)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { fileName: "x", fileType: "bmp" };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/bucket/1/file-upload")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(503)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.buckets.fileUpload(1, {
+                fileName: "x",
+                fileType: "bmp",
+            });
+        }).rejects.toThrow(GroundX.ServiceUnavailableError);
     });
 });

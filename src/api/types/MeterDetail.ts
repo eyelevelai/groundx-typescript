@@ -6,7 +6,7 @@
 export interface MeterDetail {
     /** Maximum limit for the current billing period */
     max?: number | undefined;
-    /** Unique system generated ID for the meteric */
+    /** Unique usage metric ID. */
     meterId?: string | undefined;
     /** Current usage for the current billing period */
     value?: number | undefined;

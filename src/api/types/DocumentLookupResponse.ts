@@ -7,7 +7,7 @@ export interface DocumentLookupResponse {
     count?: number | undefined;
     documents?: GroundX.DocumentDetail[] | undefined;
     nextToken?: string | undefined;
-    /** The number of results that have not been returned yet. Will be null if there are no remaining results. */
+    /** Number of results not yet returned, or null if none remain. */
     remaining?: number | undefined;
     /** The total number of results found */
     total?: number | undefined;

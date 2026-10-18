@@ -6,7 +6,7 @@ export interface BucketListResponse {
     buckets?: GroundX.BucketDetail[] | undefined;
     /** The number of buckets returned in the current response */
     count?: number | undefined;
-    /** The number of buckets that have not been returned yet, will be null if there are no remaining buckets */
+    /** Number of buckets not yet returned, or null if none remain. */
     remaining?: number | undefined;
     /** The total number of buckets found */
     total?: number | undefined;

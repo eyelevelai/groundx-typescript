@@ -75,9 +75,100 @@ export class CustomerClient {
     }
 
     /**
-     * Get aggregate usage for the authenticated customer over a requested time period.
+     * Replace or clear your account's file-access settings. Include fileAccessRevision. Invalid or missing input returns 400; disabled or forbidden access returns 403; a stale revision returns 409. If settings or ownership cannot be verified, returns 503 with Retry-After. After an uncertain outcome, read the applied settings before retrying. Protected stable links require X-API-Key on every read.
      *
-     * The API resolves the account subscription and usage meter from the authenticated account. Do not provide customer ids, subscription ids, or meter ids. `startTime` is inclusive, `endTime` is exclusive, and both timestamps must be RFC3339 values aligned to minute boundaries. Timestamps are normalized to UTC. `endTime` cannot be in the future, windows longer than 366 days are rejected, and `usageAsOf` reflects the latest usage summary available to GroundX.
+     * @param {GroundX.FileAccessUpdate} request
+     * @param {CustomerClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link GroundX.BadRequestError}
+     * @throws {@link GroundX.UnauthorizedError}
+     * @throws {@link GroundX.ForbiddenError}
+     * @throws {@link GroundX.NotFoundError}
+     * @throws {@link GroundX.ConflictError}
+     * @throws {@link GroundX.ServiceUnavailableError}
+     *
+     * @example
+     *     await client.customer.update({
+     *         fileAccess: {
+     *             mode: "protected",
+     *             urlTtlSeconds: 300
+     *         },
+     *         fileAccessRevision: 0
+     *     })
+     *
+     * @example
+     *     await client.customer.update({
+     *         fileAccessRevision: 1
+     *     })
+     */
+    public update(
+        request: GroundX.FileAccessUpdate,
+        requestOptions?: CustomerClient.RequestOptions,
+    ): core.HttpResponsePromise<GroundX.CustomerResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
+    }
+
+    private async __update(
+        request: GroundX.FileAccessUpdate,
+        requestOptions?: CustomerClient.RequestOptions,
+    ): Promise<core.WithRawResponse<GroundX.CustomerResponse>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.GroundXEnvironment.Default,
+                "v1/customer",
+            ),
+            method: "PUT",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: request,
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as GroundX.CustomerResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new GroundX.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 401:
+                    throw new GroundX.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new GroundX.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new GroundX.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new GroundX.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                case 503:
+                    throw new GroundX.ServiceUnavailableError(_response.error.body as unknown, _response.rawResponse);
+                default:
+                    throw new errors.GroundXError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "PUT", "/v1/customer");
+    }
+
+    /**
+     * Get usage for the authenticated account over a time period. GroundX selects its subscription and usage meter; do not supply their IDs or a customer ID. startTime is inclusive and endTime is exclusive. Both must be RFC3339 timestamps on minute boundaries and are converted to UTC. endTime cannot be in the future. The window cannot exceed 366 days. usageAsOf identifies the latest usage summary available to GroundX.
      *
      * @param {GroundX.CustomerGetUsageRequest} request
      * @param {CustomerClient.RequestOptions} requestOptions - Request-specific configuration.

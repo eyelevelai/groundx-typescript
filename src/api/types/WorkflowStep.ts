@@ -3,7 +3,7 @@
 import type * as GroundX from "../index.js";
 
 /**
- * Configurations for an agent, including LLM information and prompts
+ * Agent settings, including its LLM and prompts.
  */
 export interface WorkflowStep {
     all?: GroundX.WorkflowStepConfig | undefined;

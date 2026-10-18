@@ -189,6 +189,78 @@ describe("DocumentsClient", () => {
         }).rejects.toThrow(GroundX.UnauthorizedError);
     });
 
+    test("ingestRemote (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            documents: [
+                { bucketId: 1, sourceUrl: "sourceUrl" },
+                { bucketId: 1, sourceUrl: "sourceUrl" },
+            ],
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/ingest/documents/remote")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.ingestRemote({
+                documents: [
+                    {
+                        bucketId: 1,
+                        sourceUrl: "sourceUrl",
+                    },
+                    {
+                        bucketId: 1,
+                        sourceUrl: "sourceUrl",
+                    },
+                ],
+            });
+        }).rejects.toThrow(GroundX.ForbiddenError);
+    });
+
+    test("ingestRemote (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            documents: [
+                { bucketId: 1, sourceUrl: "sourceUrl" },
+                { bucketId: 1, sourceUrl: "sourceUrl" },
+            ],
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/ingest/documents/remote")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(503)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.ingestRemote({
+                documents: [
+                    {
+                        bucketId: 1,
+                        sourceUrl: "sourceUrl",
+                    },
+                    {
+                        bucketId: 1,
+                        sourceUrl: "sourceUrl",
+                    },
+                ],
+            });
+        }).rejects.toThrow(GroundX.ServiceUnavailableError);
+    });
+
     test("ingestLocal (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
@@ -281,6 +353,134 @@ describe("DocumentsClient", () => {
                 },
             ]);
         }).rejects.toThrow(GroundX.UnauthorizedError);
+    });
+
+    test("ingestLocal (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = [
+            { blob: "blob", metadata: {} },
+            { blob: "blob", metadata: {} },
+        ];
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/ingest/documents/local")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.ingestLocal([
+                {
+                    blob: "blob",
+                    metadata: {},
+                },
+                {
+                    blob: "blob",
+                    metadata: {},
+                },
+            ]);
+        }).rejects.toThrow(GroundX.ForbiddenError);
+    });
+
+    test("ingestLocal (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = [
+            { blob: "blob", metadata: {} },
+            { blob: "blob", metadata: {} },
+        ];
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/ingest/documents/local")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.ingestLocal([
+                {
+                    blob: "blob",
+                    metadata: {},
+                },
+                {
+                    blob: "blob",
+                    metadata: {},
+                },
+            ]);
+        }).rejects.toThrow(GroundX.NotFoundError);
+    });
+
+    test("ingestLocal (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = [
+            { blob: "blob", metadata: {} },
+            { blob: "blob", metadata: {} },
+        ];
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/ingest/documents/local")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.ingestLocal([
+                {
+                    blob: "blob",
+                    metadata: {},
+                },
+                {
+                    blob: "blob",
+                    metadata: {},
+                },
+            ]);
+        }).rejects.toThrow(GroundX.ConflictError);
+    });
+
+    test("ingestLocal (7)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = [
+            { blob: "blob", metadata: {} },
+            { blob: "blob", metadata: {} },
+        ];
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/ingest/documents/local")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(503)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.ingestLocal([
+                {
+                    blob: "blob",
+                    metadata: {},
+                },
+                {
+                    blob: "blob",
+                    metadata: {},
+                },
+            ]);
+        }).rejects.toThrow(GroundX.ServiceUnavailableError);
     });
 
     test("crawlWebsite (1)", async () => {
@@ -396,6 +596,78 @@ describe("DocumentsClient", () => {
         }).rejects.toThrow(GroundX.UnauthorizedError);
     });
 
+    test("crawlWebsite (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            websites: [
+                { bucketId: 1, sourceUrl: "sourceUrl" },
+                { bucketId: 1, sourceUrl: "sourceUrl" },
+            ],
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/ingest/documents/website")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.crawlWebsite({
+                websites: [
+                    {
+                        bucketId: 1,
+                        sourceUrl: "sourceUrl",
+                    },
+                    {
+                        bucketId: 1,
+                        sourceUrl: "sourceUrl",
+                    },
+                ],
+            });
+        }).rejects.toThrow(GroundX.ForbiddenError);
+    });
+
+    test("crawlWebsite (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            websites: [
+                { bucketId: 1, sourceUrl: "sourceUrl" },
+                { bucketId: 1, sourceUrl: "sourceUrl" },
+            ],
+        };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/ingest/documents/website")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(503)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.crawlWebsite({
+                websites: [
+                    {
+                        bucketId: 1,
+                        sourceUrl: "sourceUrl",
+                    },
+                    {
+                        bucketId: 1,
+                        sourceUrl: "sourceUrl",
+                    },
+                ],
+            });
+        }).rejects.toThrow(GroundX.ServiceUnavailableError);
+    });
+
     test("list", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
@@ -403,8 +675,14 @@ describe("DocumentsClient", () => {
         const rawResponseBody = {
             documents: [
                 {
+                    fileAccessRevision: 1,
+                    effectiveFileAccess: { mode: "public", urlTtlSeconds: 1 },
                     bucketId: 1,
+                    created: "2024-01-15T09:30:00Z",
+                    deliveryStatus: "not_configured",
                     documentId: "documentId",
+                    extractionReady: true,
+                    retryAvailable: true,
                     fileName: "fileName",
                     fileSize: "1.4MB",
                     fileType: "bmp",
@@ -413,6 +691,7 @@ describe("DocumentsClient", () => {
                     processLevel: "none",
                     searchData: { key: "value" },
                     sourceUrl: "sourceUrl",
+                    hostedSourceUrl: "hostedSourceUrl",
                     status: "queued",
                     statusMessage: "statusMessage",
                     textUrl: "textUrl",
@@ -576,6 +855,122 @@ describe("DocumentsClient", () => {
                 ],
             });
         }).rejects.toThrow(GroundX.UnauthorizedError);
+    });
+
+    test("update (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { documents: [{ documentId: "documentId" }, { documentId: "documentId" }] };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/v1/ingest/documents")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.update({
+                documents: [
+                    {
+                        documentId: "documentId",
+                    },
+                    {
+                        documentId: "documentId",
+                    },
+                ],
+            });
+        }).rejects.toThrow(GroundX.ForbiddenError);
+    });
+
+    test("update (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { documents: [{ documentId: "documentId" }, { documentId: "documentId" }] };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/v1/ingest/documents")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.update({
+                documents: [
+                    {
+                        documentId: "documentId",
+                    },
+                    {
+                        documentId: "documentId",
+                    },
+                ],
+            });
+        }).rejects.toThrow(GroundX.NotFoundError);
+    });
+
+    test("update (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { documents: [{ documentId: "documentId" }, { documentId: "documentId" }] };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/v1/ingest/documents")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.update({
+                documents: [
+                    {
+                        documentId: "documentId",
+                    },
+                    {
+                        documentId: "documentId",
+                    },
+                ],
+            });
+        }).rejects.toThrow(GroundX.ConflictError);
+    });
+
+    test("update (7)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { documents: [{ documentId: "documentId" }, { documentId: "documentId" }] };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .put("/v1/ingest/documents")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(503)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.update({
+                documents: [
+                    {
+                        documentId: "documentId",
+                    },
+                    {
+                        documentId: "documentId",
+                    },
+                ],
+            });
+        }).rejects.toThrow(GroundX.ServiceUnavailableError);
     });
 
     test("delete (1)", async () => {
@@ -864,8 +1259,14 @@ describe("DocumentsClient", () => {
             count: 20,
             documents: [
                 {
+                    fileAccessRevision: 1,
+                    effectiveFileAccess: { mode: "public", urlTtlSeconds: 1 },
                     bucketId: 1,
+                    created: "2024-01-15T09:30:00Z",
+                    deliveryStatus: "not_configured",
                     documentId: "documentId",
+                    extractionReady: true,
+                    retryAvailable: true,
                     fileName: "fileName",
                     fileSize: "1.4MB",
                     fileType: "bmp",
@@ -874,6 +1275,7 @@ describe("DocumentsClient", () => {
                     processLevel: "none",
                     searchData: { key: "value" },
                     sourceUrl: "sourceUrl",
+                    hostedSourceUrl: "hostedSourceUrl",
                     status: "queued",
                     statusMessage: "statusMessage",
                     textUrl: "textUrl",
@@ -948,8 +1350,22 @@ describe("DocumentsClient", () => {
 
         const rawResponseBody = {
             document: {
+                fileAccess: { mode: "public", urlTtlSeconds: 1 },
+                fileAccessRevision: 1,
+                effectiveFileAccess: { mode: "public", urlTtlSeconds: 1 },
                 bucketId: 1,
+                created: "2024-01-15T09:30:00Z",
+                deliveryStatus: "not_configured",
                 documentId: "documentId",
+                extractionProvenance: {
+                    artifactRevision: "artifactRevision",
+                    runtimeBuildIds: ["runtimeBuildIds"],
+                    schemaHash: "schemaHash",
+                    workflowId: "workflowId",
+                    workflowVersion: "workflowVersion",
+                },
+                extractionReady: true,
+                retryAvailable: true,
                 fileName: "fileName",
                 fileSize: "1.4MB",
                 fileType: "bmp",
@@ -958,6 +1374,7 @@ describe("DocumentsClient", () => {
                 processLevel: "none",
                 searchData: { key: "value" },
                 sourceUrl: "sourceUrl",
+                hostedSourceUrl: "hostedSourceUrl",
                 status: "queued",
                 statusMessage: "statusMessage",
                 textUrl: "textUrl",
@@ -1125,6 +1542,100 @@ describe("DocumentsClient", () => {
         }).rejects.toThrow(GroundX.UnauthorizedError);
     });
 
+    test("retryFailedStage (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { documentId: "documentId", status: "processing" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/ingest/document/documentId/retry")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.documents.retryFailedStage("documentId");
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("retryFailedStage (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/ingest/document/documentId/retry")
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.retryFailedStage("documentId");
+        }).rejects.toThrow(GroundX.BadRequestError);
+    });
+
+    test("retryFailedStage (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/ingest/document/documentId/retry")
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.retryFailedStage("documentId");
+        }).rejects.toThrow(GroundX.UnauthorizedError);
+    });
+
+    test("retryFailedStage (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/ingest/document/documentId/retry")
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.retryFailedStage("documentId");
+        }).rejects.toThrow(GroundX.ConflictError);
+    });
+
+    test("retryFailedStage (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/ingest/document/documentId/retry")
+            .respondWith()
+            .statusCode(503)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.retryFailedStage("documentId");
+        }).rejects.toThrow(GroundX.ServiceUnavailableError);
+    });
+
     test("getExtract (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
@@ -1258,5 +1769,178 @@ describe("DocumentsClient", () => {
             status: "queued",
         });
         expect(response).toEqual(rawResponseBody);
+    });
+
+    test("fileLink (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { asset: { kind: "page", pageNumber: 1, corrected: false }, expiresInSeconds: 120 };
+        const rawResponseBody = {
+            url: "https://storage.example/page/1.png?signature=example",
+            expiresAt: "2026-10-16T12:02:00Z",
+        };
+
+        server
+            .mockEndpoint()
+            .post("/v1/ingest/document/11111111-1111-4111-8111-111111111111/file-link")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.documents.fileLink("11111111-1111-4111-8111-111111111111", {
+            asset: {
+                kind: "page",
+                pageNumber: 1,
+                corrected: false,
+            },
+            expiresInSeconds: 120,
+        });
+        expect(response).toEqual(rawResponseBody);
+    });
+
+    test("fileLink (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { asset: { kind: "source" } };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/ingest/document/documentId/file-link")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(400)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.fileLink("documentId", {
+                asset: {
+                    kind: "source",
+                },
+            });
+        }).rejects.toThrow(GroundX.BadRequestError);
+    });
+
+    test("fileLink (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { asset: { kind: "source" } };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/ingest/document/documentId/file-link")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(401)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.fileLink("documentId", {
+                asset: {
+                    kind: "source",
+                },
+            });
+        }).rejects.toThrow(GroundX.UnauthorizedError);
+    });
+
+    test("fileLink (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { asset: { kind: "source" } };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/ingest/document/documentId/file-link")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(403)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.fileLink("documentId", {
+                asset: {
+                    kind: "source",
+                },
+            });
+        }).rejects.toThrow(GroundX.ForbiddenError);
+    });
+
+    test("fileLink (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { asset: { kind: "source" } };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/ingest/document/documentId/file-link")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.fileLink("documentId", {
+                asset: {
+                    kind: "source",
+                },
+            });
+        }).rejects.toThrow(GroundX.NotFoundError);
+    });
+
+    test("fileLink (6)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { asset: { kind: "source" } };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/ingest/document/documentId/file-link")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.fileLink("documentId", {
+                asset: {
+                    kind: "source",
+                },
+            });
+        }).rejects.toThrow(GroundX.ConflictError);
+    });
+
+    test("fileLink (7)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { asset: { kind: "source" } };
+        const rawResponseBody = { key: "value" };
+
+        server
+            .mockEndpoint()
+            .post("/v1/ingest/document/documentId/file-link")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(503)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.documents.fileLink("documentId", {
+                asset: {
+                    kind: "source",
+                },
+            });
+        }).rejects.toThrow(GroundX.ServiceUnavailableError);
     });
 });
