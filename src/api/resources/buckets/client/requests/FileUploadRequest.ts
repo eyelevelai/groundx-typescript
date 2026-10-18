@@ -10,6 +10,8 @@ import type * as GroundX from "../../../../index.js";
  *     }
  */
 export interface FileUploadRequest {
+    /** Requested initial file policy, also sent during ingest. Omit or send null to inherit. Validated before an upload URL is issued. Non-null policies return 403 when file protection is disabled, so a protected upload cannot be staged publicly. */
+    fileAccess?: GroundX.FileAccessPolicy | null;
     fileName: string;
     fileType: GroundX.DocumentType;
 }

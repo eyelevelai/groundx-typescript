@@ -142,8 +142,7 @@ export class GroundXClient extends FernClient {
                 else headers[key] = String(header);
             }
         } else {
-            const request = { fileName, fileType, fileAccess: document.fileAccess };
-            const grant = await this.buckets.fileUpload(document.bucketId, request, requestOptions);
+            const grant = await this.buckets.fileUpload(document.bucketId, { fileName, fileType, fileAccess: document.fileAccess }, requestOptions);
             const expiry = Date.parse(grant.expiresAt);
             if (!Number.isFinite(expiry) || expiry <= Date.now()) {
                 throw new Error("Upload reservation has expired.");

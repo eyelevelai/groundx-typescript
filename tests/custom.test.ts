@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GroundXClient } from "../src/Wrapper";
-import { ConflictError, ForbiddenError, NotFoundError, ServiceUnavailableError, type FileUploadResponse } from "../src/api";
+import { ConflictError, ForbiddenError, NotFoundError, ServiceUnavailableError, type FileUploadResponse, type FileUploadRequest } from "../src/api";
 
 const reservation: FileUploadResponse = {
     uploadId: "reservation",
@@ -124,6 +124,13 @@ describe("ingest file policies", () => {
         uploadResponse.headers = { ...uploadResponse.headers, "X-API-Key": "must-not-leave" };
         await expect(client.ingest([{ bucketId: 7, filePath }])).rejects.toThrow(/header/i);
         expect(calls.some((call) => call.url.startsWith("https://storage.test"))).toBe(false);
+    });
+
+    it("accepts initial protection through the generated upload request type", async () => {
+        const request: FileUploadRequest = { fileName: "private.pdf", fileType: "pdf", fileAccess: { mode: "protected", urlTtlSeconds: 120 } };
+        expect(await client.buckets.fileUpload(7, request)).toEqual(reservation);
+        expect(calls.map(call => call.url)).toEqual(["https://api.test/v1/bucket/7/file-upload"]);
+        expect(JSON.parse(String(calls[0].init.body))).toEqual(request);
     });
 
     it("sends initial protection to admission and stops before bytes when unavailable", async () => {
