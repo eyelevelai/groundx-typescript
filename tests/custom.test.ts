@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GroundXClient } from "../src/Wrapper";
-import type { FileUploadResponse } from "../src/api";
+import { ConflictError, ForbiddenError, NotFoundError, ServiceUnavailableError, type FileUploadResponse } from "../src/api";
 
 const reservation: FileUploadResponse = {
     uploadId: "reservation",
@@ -190,4 +190,110 @@ describe("ingest file policies", () => {
         expect(calls.filter(call => call.url.startsWith("https://storage.test/"))).toHaveLength(count);
         expect(timedGrants).toBe(mode === "public" ? 0 : mode === "mixed" ? 16 : count);
     });
+});
+
+const policyOperations = [
+    {
+        name: "customer.update",
+        statuses: [403, 404, 409, 503],
+        call: (client: GroundXClient) =>
+            client.customer.update({ fileAccess: null, fileAccessRevision: 7 }, { maxRetries: 0 }),
+    },
+    {
+        name: "buckets.update",
+        statuses: [403, 404, 409, 503],
+        call: (client: GroundXClient) =>
+            client.buckets.update(7, { fileAccess: null, fileAccessRevision: 7 }, { maxRetries: 0 }),
+    },
+    {
+        name: "documents.update",
+        statuses: [403, 404, 409, 503],
+        call: (client: GroundXClient) =>
+            client.documents.update(
+                { documents: [{ documentId: "document", fileAccess: null, fileAccessRevision: 7 }] },
+                { maxRetries: 0 },
+            ),
+    },
+    {
+        name: "buckets.create",
+        statuses: [403, 404, 503],
+        call: (client: GroundXClient) =>
+            client.buckets.create({ name: "private", fileAccess: { mode: "protected" } }, { maxRetries: 0 }),
+    },
+    {
+        name: "documents.ingestRemote",
+        statuses: [403, 503],
+        call: (client: GroundXClient) =>
+            client.documents.ingestRemote(
+                {
+                    documents: [
+                        { bucketId: 7, sourceUrl: "https://source.test/a.pdf", fileAccess: { mode: "protected" } },
+                    ],
+                },
+                { maxRetries: 0 },
+            ),
+    },
+    {
+        name: "documents.ingestLocal",
+        statuses: [403, 404, 409, 503],
+        call: (client: GroundXClient) =>
+            client.documents.ingestLocal(
+                [{ blob: "test", metadata: { bucketId: 7, fileName: "a.pdf", fileAccess: { mode: "protected" } } }],
+                { maxRetries: 0 },
+            ),
+    },
+    {
+        name: "documents.crawlWebsite",
+        statuses: [403, 503],
+        call: (client: GroundXClient) =>
+            client.documents.crawlWebsite(
+                { websites: [{ bucketId: 7, sourceUrl: "https://source.test", fileAccess: { mode: "protected" } }] },
+                { maxRetries: 0 },
+            ),
+    },
+];
+
+describe("policy error dispatch", () => {
+    for (const { name, call, statuses } of policyOperations) {
+        it.each(statuses)(`${name} raises the typed %i error`, async (status) => {
+            const errors = {
+                403: ForbiddenError,
+                404: NotFoundError,
+                409: ConflictError,
+                503: ServiceUnavailableError,
+            };
+            const requests: RequestInit[] = [];
+            const body = { message: "policy request rejected" };
+            const client = new GroundXClient({
+                apiKey: "test",
+                environment: "https://api.test",
+                fetch: async (_url, init = {}) => {
+                    requests.push(init);
+                    return Response.json(body, { status, headers: { "Retry-After": "1" } });
+                },
+            });
+            const error: unknown = await call(client).catch((error: unknown) => error);
+            expect(error).toBeInstanceOf(errors[status as keyof typeof errors]);
+            if (
+                !(
+                    error instanceof ForbiddenError ||
+                    error instanceof NotFoundError ||
+                    error instanceof ConflictError ||
+                    error instanceof ServiceUnavailableError
+                )
+            )
+                throw error;
+            expect(error.statusCode).toBe(status);
+            expect(error.body).toEqual(body);
+            expect(error.rawResponse?.headers.get("Retry-After")).toBe("1");
+            expect(requests).toHaveLength(1);
+            if (name.endsWith("update")) {
+                const sent = JSON.parse(String(requests[0].body));
+                expect(name.startsWith("documents") ? sent.documents[0] : sent).toMatchObject({
+                    fileAccess: null,
+                    fileAccessRevision: 7,
+                });
+            }
+        });
+    }
 });

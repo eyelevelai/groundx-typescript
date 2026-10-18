@@ -94,6 +94,8 @@ export class DocumentsClient {
      *
      * @throws {@link GroundX.BadRequestError}
      * @throws {@link GroundX.UnauthorizedError}
+     * @throws {@link GroundX.ForbiddenError}
+     * @throws {@link GroundX.ServiceUnavailableError}
      *
      * @example
      *     await client.documents.ingestRemote({
@@ -151,6 +153,10 @@ export class DocumentsClient {
                     throw new GroundX.BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
                     throw new GroundX.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new GroundX.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 503:
+                    throw new GroundX.ServiceUnavailableError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.GroundXError({
                         statusCode: _response.error.statusCode,
@@ -173,6 +179,10 @@ export class DocumentsClient {
      *
      * @throws {@link GroundX.BadRequestError}
      * @throws {@link GroundX.UnauthorizedError}
+     * @throws {@link GroundX.ForbiddenError}
+     * @throws {@link GroundX.NotFoundError}
+     * @throws {@link GroundX.ConflictError}
+     * @throws {@link GroundX.ServiceUnavailableError}
      *
      * @example
      *     await client.documents.ingestLocal([{
@@ -230,6 +240,14 @@ export class DocumentsClient {
                     throw new GroundX.BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
                     throw new GroundX.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new GroundX.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new GroundX.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new GroundX.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                case 503:
+                    throw new GroundX.ServiceUnavailableError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.GroundXError({
                         statusCode: _response.error.statusCode,
@@ -255,6 +273,8 @@ export class DocumentsClient {
      *
      * @throws {@link GroundX.BadRequestError}
      * @throws {@link GroundX.UnauthorizedError}
+     * @throws {@link GroundX.ForbiddenError}
+     * @throws {@link GroundX.ServiceUnavailableError}
      *
      * @example
      *     await client.documents.crawlWebsite({
@@ -315,6 +335,10 @@ export class DocumentsClient {
                     throw new GroundX.BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
                     throw new GroundX.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new GroundX.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 503:
+                    throw new GroundX.ServiceUnavailableError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.GroundXError({
                         statusCode: _response.error.statusCode,
@@ -406,12 +430,18 @@ export class DocumentsClient {
 
     /**
      * Update the attributes of documents that have been uploaded to GroundX.
+     * Policy-bearing updates return 403 when file access is disabled; enabled
+     * temporary failures return 503 with Retry-After.
      *
      * @param {GroundX.DocumentUpdateRequest} request
      * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link GroundX.BadRequestError}
      * @throws {@link GroundX.UnauthorizedError}
+     * @throws {@link GroundX.ForbiddenError}
+     * @throws {@link GroundX.NotFoundError}
+     * @throws {@link GroundX.ConflictError}
+     * @throws {@link GroundX.ServiceUnavailableError}
      *
      * @example
      *     await client.documents.update({
@@ -466,6 +496,14 @@ export class DocumentsClient {
                     throw new GroundX.BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
                     throw new GroundX.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new GroundX.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new GroundX.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new GroundX.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                case 503:
+                    throw new GroundX.ServiceUnavailableError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.GroundXError({
                         statusCode: _response.error.statusCode,
@@ -1216,7 +1254,7 @@ export class DocumentsClient {
     }
 
     /**
-     * Issue a native storage GET link for a saved owned asset. The bearer can reuse or forward it until expiresAt. Key revocation and policy changes do not revoke existing native grants. No GroundX key is carried in the URL.
+     * Issue a native storage GET link for a saved owned asset. Returns 404 when file access is disabled; enabled temporary failures return 503 with Retry-After. The bearer can reuse or forward it until expiresAt. Key revocation and policy changes do not revoke existing native grants. No GroundX key is carried in the URL.
      *
      * @param {string} documentId
      * @param {GroundX.FileLinkRequest} request

@@ -98,6 +98,9 @@ export class BucketsClient {
      * @param {BucketsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link GroundX.BadRequestError}
+     * @throws {@link GroundX.ForbiddenError}
+     * @throws {@link GroundX.NotFoundError}
+     * @throws {@link GroundX.ServiceUnavailableError}
      *
      * @example
      *     await client.buckets.create({
@@ -152,6 +155,12 @@ export class BucketsClient {
             switch (_response.error.statusCode) {
                 case 400:
                     throw new GroundX.BadRequestError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new GroundX.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new GroundX.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 503:
+                    throw new GroundX.ServiceUnavailableError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.GroundXError({
                         statusCode: _response.error.statusCode,
@@ -232,7 +241,7 @@ export class BucketsClient {
     }
 
     /**
-     * Rename a bucket.
+     * Rename a bucket or replace its file-access policy. Policy-bearing updates return 403 when file access is disabled; enabled temporary failures return 503 with Retry-After.
      *
      * @param {number} bucketId - The bucketId of the bucket being updated.
      * @param {GroundX.BucketUpdateRequest} request
@@ -240,6 +249,10 @@ export class BucketsClient {
      *
      * @throws {@link GroundX.BadRequestError}
      * @throws {@link GroundX.UnauthorizedError}
+     * @throws {@link GroundX.ForbiddenError}
+     * @throws {@link GroundX.NotFoundError}
+     * @throws {@link GroundX.ConflictError}
+     * @throws {@link GroundX.ServiceUnavailableError}
      *
      * @example
      *     await client.buckets.update(7, {
@@ -308,6 +321,14 @@ export class BucketsClient {
                     throw new GroundX.BadRequestError(_response.error.body as unknown, _response.rawResponse);
                 case 401:
                     throw new GroundX.UnauthorizedError(_response.error.body as unknown, _response.rawResponse);
+                case 403:
+                    throw new GroundX.ForbiddenError(_response.error.body as unknown, _response.rawResponse);
+                case 404:
+                    throw new GroundX.NotFoundError(_response.error.body as unknown, _response.rawResponse);
+                case 409:
+                    throw new GroundX.ConflictError(_response.error.body as unknown, _response.rawResponse);
+                case 503:
+                    throw new GroundX.ServiceUnavailableError(_response.error.body as unknown, _response.rawResponse);
                 default:
                     throw new errors.GroundXError({
                         statusCode: _response.error.statusCode,
@@ -388,7 +409,7 @@ export class BucketsClient {
     }
 
     /**
-     * Reserve a private bucket-owned source before issuing a native PUT grant, lasting at most 900 seconds. Use hostedUrl with the existing ingest operation.
+     * Reserve a private bucket-owned source before issuing a native PUT grant, lasting at most 900 seconds. Use hostedUrl with the existing ingest operation. Returns 404 when file access is disabled; enabled temporary failures return 503 with Retry-After.
      *
      * @param {number} bucketId
      * @param {GroundX.FileUploadRequest} request
