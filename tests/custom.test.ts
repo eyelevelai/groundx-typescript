@@ -18,8 +18,7 @@ describe("ingest file policies", () => {
     let directory: string;
     let filePath: string;
     let bucketMode: "public" | "protected";
-    let lookupStatus: number;
-    let protectAfterPublicUpload: boolean;
+    let issuanceStatus: number;
     let uploadResponse: typeof reservation;
     let calls: { url: string; init: RequestInit }[];
     let client: GroundXClient;
@@ -31,8 +30,7 @@ describe("ingest file policies", () => {
         filePath = path.join(directory, "invoice.pdf");
         fs.writeFileSync(filePath, "private source bytes");
         bucketMode = "protected";
-        lookupStatus = 200;
-        protectAfterPublicUpload = false;
+        issuanceStatus = 201;
         uploadResponse = structuredClone(reservation);
         calls = [];
         nativeUploadMs = 0;
@@ -41,25 +39,22 @@ describe("ingest file policies", () => {
             const url = String(input);
             calls.push({ url, init });
             if (url === "https://api.test/v1/bucket/7") {
-                return Response.json(lookupStatus === 200
-                    ? { bucket: { bucketId: 7, effectiveFileAccess: { mode: bucketMode, urlTtlSeconds: 300 } } }
-                    : { error: "unavailable" }, { status: lookupStatus });
+                return Response.json({ bucket: { bucketId: 7, effectiveFileAccess: { mode: bucketMode, urlTtlSeconds: 300 } } });
             }
             if (url === "https://api.test/v1/bucket/7/file-upload") {
                 if (nativeUploadMs) {
                     const id = ++timedGrants;
                     uploadResponse = { ...uploadResponse, uploadUrl: `https://storage.test/${id}?X-Amz-Signature=exact`, hostedUrl: `https://files.test/${id}.pdf`, expiresAt: new Date(Date.now() + 900000).toISOString() };
                 }
-                return Response.json(uploadResponse, { status: 201 });
+                return Response.json(issuanceStatus === 201 ? uploadResponse : { error: "unavailable" }, { status: issuanceStatus });
             }
-            if (url.startsWith("https://api.eyelevel.ai/upload/file?")) {
+            if (url.startsWith("https://legacy.test/upload?")) {
                 return Response.json({ URL: "https://storage.test/public.pdf?signature=public", Method: "PUT", Header: {
                     "Content-Type": ["application/pdf"], "Gx-Hosted-Url": ["https://files.test/public.pdf"],
                 } });
             }
             if (url.startsWith("https://storage.test/")) {
                 if (nativeUploadMs) vi.setSystemTime(Date.now() + nativeUploadMs);
-                if (protectAfterPublicUpload) bucketMode = "protected";
                 return new Response(null, { status: 200 });
             }
             if (url === "https://api.test/v1/ingest/documents/remote") {
@@ -86,10 +81,10 @@ describe("ingest file policies", () => {
     it("uses a bucket-owned private grant before uploading inherited protected bytes", async () => {
         await client.ingest([{ bucketId: 7, filePath, fileType: "pdf" }]);
         expect(calls.map((call) => call.url)).toEqual([
-            "https://api.test/v1/bucket/7", "https://api.test/v1/bucket/7/file-upload",
+            "https://api.test/v1/bucket/7/file-upload",
             reservation.uploadUrl, "https://api.test/v1/ingest/documents/remote",
         ]);
-        const native = calls[2];
+        const native = calls[1];
         expect(native.init.method).toBe("PUT");
         expect(native.init.headers).toEqual(reservation.headers);
         expect(native.init.redirect).toBe("error");
@@ -109,10 +104,10 @@ describe("ingest file policies", () => {
         expect(documents.find((doc) => doc.sourceUrl === "https://files.test/other.pdf")?.fileAccess).toEqual({ urlTtlSeconds: 300 });
     });
 
-    it("fails before sending bytes when destination policy cannot be read", async () => {
-        lookupStatus = 503;
+    it("fails before sending bytes when upload issuance fails", async () => {
+        issuanceStatus = 503;
         await expect(client.ingest([{ bucketId: 7, filePath }])).rejects.toThrow();
-        expect(calls.map((call) => call.url)).toEqual(["https://api.test/v1/bucket/7"]);
+        expect(calls.map((call) => call.url)).toEqual(["https://api.test/v1/bucket/7/file-upload"]);
     });
 
     it("rejects an expired private reservation without public fallback", async () => {
@@ -128,13 +123,11 @@ describe("ingest file policies", () => {
         expect(calls.some((call) => call.url.startsWith("https://storage.test"))).toBe(false);
     });
 
-    it("checks destination policy again before uploading the next local file", async () => {
+    it("requests each upload from the configured API without reading policy", async () => {
         bucketMode = "public";
-        protectAfterPublicUpload = true;
         await client.ingest([{ bucketId: 7, filePath }, { bucketId: 7, filePath }]);
-        expect(calls.filter((call) => call.url === "https://api.test/v1/bucket/7")).toHaveLength(2);
-        expect(calls.filter((call) => call.url.includes("api.eyelevel.ai/upload/file?"))).toHaveLength(1);
-        expect(calls.filter((call) => call.url.endsWith("/file-upload"))).toHaveLength(1);
+        expect(calls.filter((call) => call.url === "https://api.test/v1/bucket/7")).toHaveLength(0);
+        expect(calls.filter((call) => call.url.endsWith("/file-upload"))).toHaveLength(2);
     });
 
     it("keeps delegated selection on API calls and excludes it from native PUT", async () => {
@@ -156,18 +149,45 @@ describe("ingest file policies", () => {
         expect(JSON.parse(String(submitted?.init.body))).toMatchObject({ callbackUrl: "https://callback.test", callbackData: "callback-data" });
     });
 
-    it("keeps the ordinary public broker path and explicit null inheritance", async () => {
+    it("uses the local signer for ordinary public uploads and preserves null inheritance", async () => {
         bucketMode = "public";
         await client.ingest([{ bucketId: 7, filePath, fileAccess: null }]);
-        expect(calls.some((call) => call.url.includes("api.eyelevel.ai/upload/file?"))).toBe(true);
-        expect(calls.some((call) => call.url.endsWith("/file-upload"))).toBe(false);
+        expect(calls.some((call) => call.url.includes("api.eyelevel.ai"))).toBe(false);
+        expect(calls.some((call) => call.url.endsWith("/file-upload"))).toBe(true);
         expect(submittedDocuments()[0].fileAccess).toBeNull();
+    });
+
+    it("preserves an explicit public legacy endpoint without forwarding hosted metadata", async () => {
+        bucketMode = "public";
+        await client.ingest([{ bucketId: 7, filePath, fileName: "renamed.txt" }], undefined, undefined, undefined, "https://legacy.test/upload");
+        const legacy = calls.find(call => call.url.startsWith("https://legacy.test/upload?"));
+        expect(new URL(legacy?.url ?? "https://missing.test").searchParams.get("name")).toBe("invoice.pdf");
+        expect(new URL(legacy?.url ?? "https://missing.test").searchParams.get("type")).toBe("pdf");
+        expect(submittedDocuments()[0].fileName).toBe("renamed.txt");
+        expect(calls.some(call => call.url.endsWith("/file-upload"))).toBe(false);
+        expect(submittedDocuments()[0].sourceUrl).toBe("https://files.test/public.pdf");
+        expect(new Headers(calls.find(call => call.url.startsWith("https://storage.test/"))?.init.headers).has("gx-hosted-url")).toBe(false);
+    });
+
+    it.each(["inherited", "initial"])("rejects explicit legacy staging for %s protection", async (mode) => {
+        bucketMode = mode === "inherited" ? "protected" : "public";
+        await expect(client.ingest([{ bucketId: 7, filePath, fileAccess: mode === "initial" ? { mode: "protected" } : undefined }], undefined, undefined, undefined, "https://legacy.test/upload")).rejects.toThrow(/without an uploadApi override/);
+        expect(calls.map(call => call.url)).toEqual(["https://api.test/v1/bucket/7"]);
+    });
+
+    it("accepts local HTTP S3-compatible storage without sending API credentials", async () => {
+        uploadResponse.uploadUrl = "http://storage.test/local.pdf?signature=exact";
+        const nativeFetch = vi.fn(async () => new Response(null, { status: 200 }));
+        client = new GroundXClient({ apiKey: "test-key", baseUrl: "https://api.test", fetch: async (input, init) => String(input).startsWith("http://storage.test/") ? nativeFetch() : fetch(input, init), maxRetries: 0 });
+        await client.ingest([{ bucketId: 7, filePath }]);
+        expect(nativeFetch).toHaveBeenCalledOnce();
+        expect(submittedDocuments()[0].sourceUrl).toBe(reservation.hostedUrl);
     });
 
     it.each([
         { mode: "protected", count: 29, reject: false },
         { mode: "protected", count: 30, reject: true },
-        { mode: "public", count: 30, reject: false },
+        { mode: "public", count: 30, reject: true },
         { mode: "mixed", count: 29, reject: false },
         { mode: "mixed", count: 30, reject: true },
     ])("checks $mode batch expiry immediately before ingest ($count files)", async ({ mode, count, reject }) => {
@@ -193,7 +213,7 @@ describe("ingest file policies", () => {
             expect(JSON.parse(String(submitted?.init.body))).toMatchObject({ callbackUrl: "https://callback.test", callbackData: "callback-data" });
         }
         expect(calls.filter(call => call.url.startsWith("https://storage.test/"))).toHaveLength(count);
-        expect(timedGrants).toBe(mode === "public" ? 0 : mode === "mixed" ? 16 : count);
+        expect(timedGrants).toBe(count);
     });
 });
 

@@ -183,7 +183,7 @@ On the other hand, contributions to the README are always very welcome!
 
 These features require an SDK release with file-access models/operations and a compatible deployment with the file gateway and private origins enabled. Confirm support before uploading protected content.
 
-`client.ingest()` reads the destination bucket's effective policy before uploading each local file. It uses the bucket-owned private upload operation when the inherited policy or the input file's initial override is protected, including protected files in public buckets. Lookup or private-upload failures stop the request without falling back to public staging. Public/default files retain the existing broker path. The lookup adds one API request per local file.
+`client.ingest()` requests upload URLs from the configured GroundX API for every local file, public or protected. On-prem uploads use that installation's storage without contacting the hosted upload service. Upload failures stop ingestion without a public fallback. Deploy the bucket upload endpoint before adopting this helper. Explicit `uploadApi` overrides retain the legacy broker protocol for public files after a bucket policy check; overrides are rejected for inherited or requested protection.
 
 ```typescript
 await client.ingest([
@@ -194,6 +194,6 @@ await client.ingest([
 
 Each item keeps its own policy in ingest submission. Omitted or null initial `fileAccess` inherits; creation needs no previous revision. Later policy changes use the existing resource update with the current `fileAccessRevision`. This wrapper does not split files or ingest directories; callers preparing multiple files must preserve the originating policy on every derived item.
 
-Private reservations last at most fifteen minutes. `ingest()` rejects the batch before submission if any private reservation has expired. Retry with fewer files per call. The wrapper does not renew or partially submit the batch, and its local check does not extend the deadline.
+Upload grants last at most fifteen minutes. `ingest()` rejects the batch before submission if any grant has expired. Retry with fewer files per call. The wrapper does not renew or partially submit the batch, and its local check does not extend the deadline.
 
-Use `client.buckets.fileUpload()` for a native private PUT reservation and `client.documents.fileLink()` for a finite recipient GET grant. Follow the returned method, required headers and expiry exactly; never forward GroundX credentials to native storage. Stable protected hosted URLs need owner authentication on every read. Refresh expired search links through authorized search or link issuance. See [File Access and Sharing](https://docs.groundx.ai/documentation/fundamentals/file-access-and-sharing) for inheritance, X-Ray presentation and on-prem prerequisites.
+Use `client.buckets.fileUpload()` for a native PUT grant and `client.documents.fileLink()` for a finite recipient GET grant. Follow the returned method, required headers and expiry exactly; never forward GroundX credentials to native storage. Stable protected hosted URLs need owner authentication on every read. Refresh expired search links through authorized search or link issuance. See [File Access and Sharing](https://docs.groundx.ai/documentation/fundamentals/file-access-and-sharing) for inheritance, X-Ray presentation and on-prem prerequisites.

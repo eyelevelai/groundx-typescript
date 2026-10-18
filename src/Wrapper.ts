@@ -18,7 +18,7 @@ export class GroundXClient extends FernClient {
         callbackUrl?: string,
         callbackData?: string,
         requestOptions?: FernClient.RequestOptions,
-        uploadApi: string = "https://api.eyelevel.ai/upload/file"
+        uploadApi?: string
     ): Promise<GroundX.IngestResponse> {
         if (documents.length === 0) {
             throw new Error("No documents provided for ingestion.");
@@ -26,7 +26,7 @@ export class GroundXClient extends FernClient {
 
         const localDocuments: GroundX.Document[] = [];
         const remoteDocuments: GroundX.IngestRemoteDocument[] = [];
-        const privateUploadExpiries: number[] = [];
+        const uploadExpiries: number[] = [];
 
         for (const document of documents) {
             if (!document.filePath) {
@@ -51,11 +51,11 @@ export class GroundXClient extends FernClient {
             }
         }
 
-        const uploadedLocalDocuments = await this.processLocalDocuments(localDocuments, uploadApi, requestOptions, privateUploadExpiries);
+        const uploadedLocalDocuments = await this.processLocalDocuments(localDocuments, uploadApi, requestOptions, uploadExpiries);
         remoteDocuments.push(...uploadedLocalDocuments);
 
-        if (privateUploadExpiries.some(expiry => expiry <= Date.now())) {
-            throw new Error("Private upload reservation expired before submission. Retry with a smaller batch.");
+        if (uploadExpiries.some(expiry => expiry <= Date.now())) {
+            throw new Error("Upload reservation expired before submission. Retry with a smaller batch.");
         }
         return this.documents.ingestRemote(
             {
@@ -115,92 +115,74 @@ export class GroundXClient extends FernClient {
         return DOCUMENT_TYPE_ALIASES[extension] ?? extension;
     }
 
-    private async uploadFile(endpoint: string, filePath: string): Promise<string> {
-        const expandedPath = this.expandedPath(filePath);
-        const fileName = this.getFileName(expandedPath);
-        if (!fileName) {
-            throw new Error(`Invalid file path: ${filePath}`);
-        }
-
-        const fileExtension = this.getFileExtension(fileName);
-        const presignedInfo = await this.getPresignedUrl(endpoint, fileName, fileExtension);
-
-        const uploadUrl = presignedInfo["URL"];
-        const headerData = presignedInfo["Header"] ?? {};
-        const method = String(presignedInfo["Method"] ?? "PUT").toUpperCase();
-
-        const headers: Record<string, string> = {};
-        for (const [key, value] of Object.entries(headerData)) {
-            if (Array.isArray(value) && value.length > 0) {
-                headers[key.toUpperCase()] = String(value[0]);
-            } else if (typeof value === "string") {
-                headers[key.toUpperCase()] = value;
-            }
-        }
-
-        if (method !== "PUT") {
-            throw new Error(`Unsupported HTTP method: ${method}`);
-        }
-
-        const uploadResponse = await fetch(uploadUrl, {
-            method: "PUT",
-            headers,
-            body: new Uint8Array(this.readFile(filePath)),
-        });
-
-        if (!uploadResponse.ok) {
-            throw new Error(`Upload failed: ${uploadResponse.status} - ${await uploadResponse.text()}`);
-        }
-
-        if (headers["GX-HOSTED-URL"]) {
-            return headers["GX-HOSTED-URL"];
-        }
-
-        return this.stripQueryParams(uploadUrl);
-    }
-
-    private async uploadPrivateFile(
+    private async uploadFile(
         document: GroundX.Document,
         fileType: GroundX.DocumentType,
-        privateUploadExpiries: number[],
-        requestOptions?: FernClient.RequestOptions
+        uploadExpiries: number[],
+        requestOptions?: FernClient.RequestOptions,
+        uploadApi?: string
     ): Promise<string> {
-        const reservation = await this.buckets.fileUpload(document.bucketId, {
-            fileName: document.fileName ?? this.getFileName(this.expandedPath(document.filePath)) ?? "document",
-            fileType,
-        }, requestOptions);
-        const expiry = Date.parse(reservation.expiresAt);
-        if (!Number.isFinite(expiry) || expiry <= Date.now()) {
-            throw new Error("Private upload reservation has expired.");
-        }
-        privateUploadExpiries.push(expiry);
-        const target = new URL(reservation.uploadUrl);
-        if (reservation.method !== "PUT" || target.protocol !== "https:" || target.username || target.password) {
-            throw new Error("Invalid private upload target.");
-        }
-        for (const name of Object.keys(reservation.headers)) {
-            if (["x-api-key", "x-customer-key", "authorization", "proxy-authorization", "cookie", "gx-hosted-url", "host"].includes(name.toLowerCase())) {
-                throw new Error("Unexpected credential or metadata header on private upload.");
+        const fileName = document.fileName ?? this.getFileName(this.expandedPath(document.filePath));
+        if (!fileName) throw new Error(`Invalid file path: ${document.filePath}`);
+        let uploadUrl: string;
+        let hostedUrl: string | undefined;
+        let headers: Record<string, string>;
+        if (uploadApi !== undefined) {
+            const bucket = (await this.buckets.get(document.bucketId, requestOptions)).bucket;
+            const inherited = bucket.effectiveFileAccess?.mode ?? bucket.fileAccess?.mode;
+            if (inherited === "protected" || document.fileAccess?.mode === "protected") {
+                throw new Error("Protected uploads require the configured GroundX API, without an uploadApi override.");
             }
+            const legacyName = this.getFileName(this.expandedPath(document.filePath)) ?? fileName;
+            const grant = await this.getPresignedUrl(uploadApi, legacyName, this.getFileExtension(legacyName));
+            if (String(grant.Method ?? "PUT").toUpperCase() !== "PUT") {
+                throw new Error(`Unsupported HTTP method: ${grant.Method}`);
+            }
+            uploadUrl = grant.URL;
+            headers = {};
+            for (const [key, value] of Object.entries(grant.Header ?? {})) {
+                const header = Array.isArray(value) ? value[0] : value;
+                if (header === undefined) continue;
+                if (key.toLowerCase() === "gx-hosted-url") hostedUrl = String(header);
+                else headers[key] = String(header);
+            }
+        } else {
+            const grant = await this.buckets.fileUpload(document.bucketId, { fileName, fileType }, requestOptions);
+            const expiry = Date.parse(grant.expiresAt);
+            if (!Number.isFinite(expiry) || expiry <= Date.now()) {
+                throw new Error("Upload reservation has expired.");
+            }
+            uploadExpiries.push(expiry);
+            if (grant.method !== "PUT") throw new Error(`Unsupported HTTP method: ${grant.method}`);
+            for (const name of Object.keys(grant.headers)) {
+                if (["x-api-key", "x-customer-key", "authorization", "proxy-authorization", "cookie", "gx-hosted-url", "host"].includes(name.toLowerCase())) {
+                    throw new Error("Unexpected credential or metadata header on upload.");
+                }
+            }
+            uploadUrl = grant.uploadUrl;
+            hostedUrl = grant.hostedUrl;
+            headers = grant.headers;
         }
-        const response = await (this._options.fetch ?? fetch)(reservation.uploadUrl, {
+        const target = new URL(uploadUrl);
+        if (!["http:", "https:"].includes(target.protocol) || target.username || target.password) {
+            throw new Error("Invalid upload target.");
+        }
+        const response = await (this._options.fetch ?? fetch)(uploadUrl, {
             method: "PUT",
-            headers: reservation.headers,
+            headers,
             body: new Uint8Array(this.readFile(document.filePath)),
             redirect: "error",
             signal: requestOptions?.abortSignal,
         });
-        if (!response.ok) {
-            throw new Error(`Private upload failed: ${response.status}`);
-        }
-        return reservation.hostedUrl;
+        if (!response.ok) throw new Error(`Upload failed: ${response.status}`);
+        return hostedUrl ?? this.stripQueryParams(uploadUrl);
     }
 
     private async processLocalDocuments(
         localDocuments: GroundX.Document[],
-        uploadApi: string,
+        uploadApi: string | undefined,
         requestOptions?: FernClient.RequestOptions,
-        privateUploadExpiries: number[] = []
+        uploadExpiries: number[] = []
     ): Promise<GroundX.IngestRemoteDocument[]> {
         const remoteDocuments: GroundX.IngestRemoteDocument[] = [];
 
@@ -223,15 +205,7 @@ export class GroundXClient extends FernClient {
                 );
             }
 
-            const bucket = (await this.buckets.get(document.bucketId, requestOptions)).bucket;
-            const inherited = bucket.effectiveFileAccess?.mode ?? bucket.fileAccess?.mode;
-            if (inherited !== undefined && inherited !== "public" && inherited !== "protected") {
-                throw new Error("Invalid destination file access policy.");
-            }
-            const privateUpload = inherited === "protected" || document.fileAccess?.mode === "protected";
-            const sourceUrl = privateUpload
-                ? await this.uploadPrivateFile(document, fileType, privateUploadExpiries, requestOptions)
-                : await this.uploadFile(uploadApi, document.filePath);
+            const sourceUrl = await this.uploadFile(document, fileType, uploadExpiries, requestOptions, uploadApi);
 
             remoteDocuments.push({
                 bucketId: document.bucketId,
