@@ -13,7 +13,7 @@ import type * as GroundX from "../../../../index.js";
  *     }
  */
 export interface BucketCreateRequest {
-    /** Initial settings for this resource. Omit or send null to inherit. Creation needs no fileAccessRevision. These settings cannot make a protected parent public or exceed its sharing time limit. Use private staging before uploading a protected file, even in a public bucket. Returns 403 if file access is disabled. */
+    /** Initial settings for this resource. Omit or send null to inherit. Explicit settings take priority over the same account or bucket settings; omitted fields use broader values. Use private staging before uploading a protected file, even in a public bucket. Returns 403 if file access is disabled. */
     fileAccess?: GroundX.FileAccessPolicy | null;
     name: string;
 }

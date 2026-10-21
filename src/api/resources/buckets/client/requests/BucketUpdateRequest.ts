@@ -13,18 +13,16 @@ import type * as GroundX from "../../../../index.js";
  *         fileAccess: {
  *             mode: "protected",
  *             urlTtlSeconds: 300
- *         },
- *         fileAccessRevision: 0
+ *         }
  *     }
  *
  * @example
- *     {
- *         fileAccessRevision: 1
- *     }
+ *     {}
  */
 export interface BucketUpdateRequest {
     /** The new name of the bucket being renamed. */
     newName?: string;
     fileAccess?: GroundX.FileAccessPolicy | null;
+    /** Legacy compatibility field. Not required or checked when changing file access. */
     fileAccessRevision?: number;
 }

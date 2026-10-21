@@ -12,7 +12,6 @@ describe("BucketsClient", () => {
         const rawResponseBody = {
             buckets: [
                 {
-                    fileAccessRevision: 1,
                     effectiveFileAccess: { mode: "public", urlTtlSeconds: 1 },
                     bucketId: 1,
                     created: "2023-10-03T08:59:39Z",
@@ -156,7 +155,6 @@ describe("BucketsClient", () => {
         const rawResponseBody = {
             bucket: {
                 fileAccess: { mode: "public", urlTtlSeconds: 1 },
-                fileAccessRevision: 1,
                 effectiveFileAccess: { mode: "public", urlTtlSeconds: 1 },
                 bucketId: 1,
                 created: "2023-10-03T08:59:39Z",
@@ -223,13 +221,12 @@ describe("BucketsClient", () => {
     test("update (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
-        const rawRequestBody = { fileAccess: { mode: "protected", urlTtlSeconds: 300 }, fileAccessRevision: 0 };
+        const rawRequestBody = { fileAccess: { mode: "protected", urlTtlSeconds: 300 } };
         const rawResponseBody = {
             bucket: {
                 bucketId: 7,
                 name: "your_bucket_name",
                 fileAccess: { mode: "protected", urlTtlSeconds: 300 },
-                fileAccessRevision: 1,
                 effectiveFileAccess: { mode: "protected", urlTtlSeconds: 300 },
             },
         };
@@ -248,7 +245,6 @@ describe("BucketsClient", () => {
                 mode: "protected",
                 urlTtlSeconds: 300,
             },
-            fileAccessRevision: 0,
         });
         expect(response).toEqual(rawResponseBody);
     });
@@ -256,12 +252,11 @@ describe("BucketsClient", () => {
     test("update (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
-        const rawRequestBody = { fileAccessRevision: 1 };
+        const rawRequestBody = {};
         const rawResponseBody = {
             bucket: {
                 bucketId: 7,
                 name: "your_bucket_name",
-                fileAccessRevision: 2,
                 effectiveFileAccess: { mode: "public", urlTtlSeconds: 300 },
             },
         };
@@ -275,9 +270,7 @@ describe("BucketsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.buckets.update(7, {
-            fileAccessRevision: 1,
-        });
+        const response = await client.buckets.update(7);
         expect(response).toEqual(rawResponseBody);
     });
 

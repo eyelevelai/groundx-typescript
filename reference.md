@@ -2946,7 +2946,7 @@ await client.customer.get();
 <dl>
 <dd>
 
-Replace or clear your account's file-access settings. Include fileAccessRevision. Invalid or missing input returns 400; disabled or forbidden access returns 403; a stale revision returns 409. If settings or ownership cannot be verified, returns 503 with Retry-After. After an uncertain outcome, read the applied settings before retrying. Protected stable links require X-API-Key on every read.
+Replace or clear your account's file-access settings. Send only fileAccess; the latest successful update takes effect. Invalid or missing input returns 400; disabled or forbidden access returns 403; ownership or source conflicts return 409. If settings or ownership cannot be verified, returns 503 with Retry-After. After an uncertain outcome, read the applied settings before retrying. Protected stable links require X-API-Key on every read.
 </dd>
 </dl>
 </dd>
@@ -2965,8 +2965,7 @@ await client.customer.update({
     fileAccess: {
         mode: "protected",
         urlTtlSeconds: 300
-    },
-    fileAccessRevision: 0
+    }
 });
 
 ```

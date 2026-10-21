@@ -3,7 +3,7 @@
 import type * as GroundX from "../index.js";
 
 export interface Document {
-    /** Initial file settings, preserved by SDK batching and splitting. Omit or send null to inherit. New files need no policy revision. Use private staging before uploading a protected file. Returns 403 if file access is disabled. */
+    /** Initial file settings, preserved by SDK batching and splitting. Omit or send null to inherit. Use private staging before uploading a protected file. Returns 403 if file access is disabled. */
     fileAccess?: (GroundX.FileAccessPolicy | null) | undefined;
     /** The bucketId of the bucket which this file will be ingested into. */
     bucketId: number;

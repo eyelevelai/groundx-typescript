@@ -264,14 +264,11 @@ export class BucketsClient {
      *         fileAccess: {
      *             mode: "protected",
      *             urlTtlSeconds: 300
-     *         },
-     *         fileAccessRevision: 0
+     *         }
      *     })
      *
      * @example
-     *     await client.buckets.update(7, {
-     *         fileAccessRevision: 1
-     *     })
+     *     await client.buckets.update(7)
      */
     public update(
         bucketId: number,

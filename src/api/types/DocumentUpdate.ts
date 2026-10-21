@@ -12,5 +12,6 @@ export interface DocumentUpdate {
     /** A dictionary of key-value pairs that will replace the existing searchData. */
     searchData?: Record<string, unknown> | undefined;
     fileAccess?: (GroundX.FileAccessPolicy | null) | undefined;
+    /** Legacy compatibility field. Not required or checked when changing file access. */
     fileAccessRevision?: number | undefined;
 }

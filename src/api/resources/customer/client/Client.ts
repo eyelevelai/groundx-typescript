@@ -75,7 +75,7 @@ export class CustomerClient {
     }
 
     /**
-     * Replace or clear your account's file-access settings. Include fileAccessRevision. Invalid or missing input returns 400; disabled or forbidden access returns 403; a stale revision returns 409. If settings or ownership cannot be verified, returns 503 with Retry-After. After an uncertain outcome, read the applied settings before retrying. Protected stable links require X-API-Key on every read.
+     * Replace or clear your account's file-access settings. Send only fileAccess; the latest successful update takes effect. Invalid or missing input returns 400; disabled or forbidden access returns 403; ownership or source conflicts return 409. If settings or ownership cannot be verified, returns 503 with Retry-After. After an uncertain outcome, read the applied settings before retrying. Protected stable links require X-API-Key on every read.
      *
      * @param {GroundX.FileAccessUpdate} request
      * @param {CustomerClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -92,24 +92,21 @@ export class CustomerClient {
      *         fileAccess: {
      *             mode: "protected",
      *             urlTtlSeconds: 300
-     *         },
-     *         fileAccessRevision: 0
+     *         }
      *     })
      *
      * @example
-     *     await client.customer.update({
-     *         fileAccessRevision: 1
-     *     })
+     *     await client.customer.update()
      */
     public update(
-        request: GroundX.FileAccessUpdate,
+        request: GroundX.FileAccessUpdate = {},
         requestOptions?: CustomerClient.RequestOptions,
     ): core.HttpResponsePromise<GroundX.CustomerResponse> {
         return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
     private async __update(
-        request: GroundX.FileAccessUpdate,
+        request: GroundX.FileAccessUpdate = {},
         requestOptions?: CustomerClient.RequestOptions,
     ): Promise<core.WithRawResponse<GroundX.CustomerResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();

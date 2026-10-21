@@ -8,7 +8,7 @@ import type * as GroundX from "../index.js";
 export interface CustomerDetail {
     /** Applied settings for this resource. Null means it inherits settings. Deployments without file access omit this field. Pending changes are not returned. */
     fileAccess?: (GroundX.FileAccessPolicy | null) | undefined;
-    /** Current settings revision. Include it when updating fileAccess. A stale revision returns 409. */
+    /** Legacy compatibility field. Not required or checked when changing file access. */
     fileAccessRevision?: number | undefined;
     effectiveFileAccess?: GroundX.EffectivePolicy | undefined;
     /** Email associated with the account */

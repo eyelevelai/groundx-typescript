@@ -675,7 +675,6 @@ describe("DocumentsClient", () => {
         const rawResponseBody = {
             documents: [
                 {
-                    fileAccessRevision: 1,
                     effectiveFileAccess: { mode: "public", urlTtlSeconds: 1 },
                     bucketId: 1,
                     created: "2024-01-15T09:30:00Z",
@@ -1259,7 +1258,6 @@ describe("DocumentsClient", () => {
             count: 20,
             documents: [
                 {
-                    fileAccessRevision: 1,
                     effectiveFileAccess: { mode: "public", urlTtlSeconds: 1 },
                     bucketId: 1,
                     created: "2024-01-15T09:30:00Z",
@@ -1351,7 +1349,6 @@ describe("DocumentsClient", () => {
         const rawResponseBody = {
             document: {
                 fileAccess: { mode: "public", urlTtlSeconds: 1 },
-                fileAccessRevision: 1,
                 effectiveFileAccess: { mode: "public", urlTtlSeconds: 1 },
                 bucketId: 1,
                 created: "2024-01-15T09:30:00Z",

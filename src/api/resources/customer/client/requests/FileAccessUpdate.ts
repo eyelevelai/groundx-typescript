@@ -8,16 +8,14 @@ import type * as GroundX from "../../../../index.js";
  *         fileAccess: {
  *             mode: "protected",
  *             urlTtlSeconds: 300
- *         },
- *         fileAccessRevision: 0
+ *         }
  *     }
  *
  * @example
- *     {
- *         fileAccessRevision: 1
- *     }
+ *     {}
  */
 export interface FileAccessUpdate {
     fileAccess?: GroundX.FileAccessPolicy | null;
-    fileAccessRevision: number;
+    /** Legacy compatibility field. Not required or checked when changing file access. */
+    fileAccessRevision?: number;
 }
