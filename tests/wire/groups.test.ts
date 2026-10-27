@@ -163,7 +163,7 @@ describe("GroupsClient", () => {
     test("update (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
-        const rawRequestBody = { newName: "your_group_name" };
+        const rawRequestBody = {};
         const rawResponseBody = {
             group: {
                 buckets: [
@@ -193,16 +193,14 @@ describe("GroupsClient", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.groups.update(1, {
-            newName: "your_group_name",
-        });
+        const response = await client.groups.update(1);
         expect(response).toEqual(rawResponseBody);
     });
 
     test("update (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
-        const rawRequestBody = { newName: "newName" };
+        const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
 
         server
@@ -215,16 +213,14 @@ describe("GroupsClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.groups.update(1, {
-                newName: "newName",
-            });
+            return await client.groups.update(1);
         }).rejects.toThrow(GroundX.BadRequestError);
     });
 
     test("update (3)", async () => {
         const server = mockServerPool.createServer();
         const client = new GroundXClient({ maxRetries: 0, apiKey: "test", environment: server.baseUrl });
-        const rawRequestBody = { newName: "newName" };
+        const rawRequestBody = {};
         const rawResponseBody = { key: "value" };
 
         server
@@ -237,9 +233,7 @@ describe("GroupsClient", () => {
             .build();
 
         await expect(async () => {
-            return await client.groups.update(1, {
-                newName: "newName",
-            });
+            return await client.groups.update(1);
         }).rejects.toThrow(GroundX.UnauthorizedError);
     });
 

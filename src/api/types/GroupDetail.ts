@@ -13,7 +13,7 @@ export interface GroupDetail {
     fileSize?: string | undefined;
     groupId: number;
     name?: string | undefined;
-    /** The group chat prompt stored in settings, when configured. */
+    /** Optional prompt text. */
     prompt?: string | undefined;
     /** The data time when the group was last updated, in RFC3339 format */
     updated?: string | undefined;

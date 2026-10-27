@@ -238,13 +238,11 @@ export class GroupsClient {
      * @throws {@link GroundX.UnauthorizedError}
      *
      * @example
-     *     await client.groups.update(1, {
-     *         newName: "your_group_name"
-     *     })
+     *     await client.groups.update(1)
      */
     public update(
         groupId: number,
-        request: GroundX.GroupUpdateRequest,
+        request: GroundX.GroupUpdateRequest = {},
         requestOptions?: GroupsClient.RequestOptions,
     ): core.HttpResponsePromise<GroundX.GroupResponse> {
         return core.HttpResponsePromise.fromPromise(this.__update(groupId, request, requestOptions));
@@ -252,7 +250,7 @@ export class GroupsClient {
 
     private async __update(
         groupId: number,
-        request: GroundX.GroupUpdateRequest,
+        request: GroundX.GroupUpdateRequest = {},
         requestOptions?: GroupsClient.RequestOptions,
     ): Promise<core.WithRawResponse<GroundX.GroupResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();

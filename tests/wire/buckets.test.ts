@@ -12,6 +12,7 @@ describe("BucketsClient", () => {
         const rawResponseBody = {
             buckets: [
                 {
+                    prompt: "prompt",
                     effectiveFileAccess: { mode: "public", urlTtlSeconds: 1 },
                     bucketId: 1,
                     created: "2023-10-03T08:59:39Z",
@@ -154,6 +155,7 @@ describe("BucketsClient", () => {
 
         const rawResponseBody = {
             bucket: {
+                prompt: "prompt",
                 fileAccess: { mode: "public", urlTtlSeconds: 1 },
                 effectiveFileAccess: { mode: "public", urlTtlSeconds: 1 },
                 bucketId: 1,

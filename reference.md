@@ -1926,9 +1926,7 @@ Rename a group
 <dd>
 
 ```typescript
-await client.groups.update(1, {
-    newName: "your_group_name"
-});
+await client.groups.update(1);
 
 ```
 </dd>

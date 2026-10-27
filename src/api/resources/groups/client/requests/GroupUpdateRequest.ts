@@ -2,11 +2,11 @@
 
 /**
  * @example
- *     {
- *         newName: "your_group_name"
- *     }
+ *     {}
  */
 export interface GroupUpdateRequest {
+    /** Optional prompt text. */
+    prompt?: string | null;
     /** The new name of the group being renamed. */
-    newName: string;
+    newName?: string;
 }

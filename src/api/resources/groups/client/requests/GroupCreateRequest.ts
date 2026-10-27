@@ -7,6 +7,8 @@
  *     }
  */
 export interface GroupCreateRequest {
+    /** Optional prompt text. */
+    prompt?: string | null;
     /** The name of the group being created. */
     name: string;
     /** Specify bucketName to automatically create a bucket, by the name specified, and add it to the created group. */

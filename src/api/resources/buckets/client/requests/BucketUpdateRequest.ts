@@ -20,6 +20,8 @@ import type * as GroundX from "../../../../index.js";
  *     {}
  */
 export interface BucketUpdateRequest {
+    /** Optional prompt text. */
+    prompt?: string | null;
     /** The new name of the bucket being renamed. */
     newName?: string;
     fileAccess?: GroundX.FileAccessPolicy | null;
