@@ -3,7 +3,7 @@
 import type * as GroundX from "../index.js";
 
 export interface IngestRemoteDocument {
-    /** Settings for the new document. Each supplied value overrides the bucket and account settings. Omit or send null to use those settings. For a protected upload, pass these settings when requesting the upload URL, before sending bytes. */
+    /** Initial settings for this resource. Omit or send null to inherit. Explicit settings take priority over the same account or bucket settings; omitted fields use broader values. Use private staging before uploading a protected file, even in a public bucket. Returns 403 if file access is disabled. */
     fileAccess?: (GroundX.FileAccessPolicy | null) | undefined;
     /** The bucketId of the bucket which this remote file will be ingested into. */
     bucketId: number;

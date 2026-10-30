@@ -6,9 +6,9 @@ import type * as GroundX from "../index.js";
  * Account information for the user
  */
 export interface CustomerDetail {
-    /** Settings saved on this account. Null means use the system defaults. Omitted when file protection is disabled. */
+    /** Applied settings for this resource. Null means it inherits settings. Deployments without file access omit this field. Pending changes are not returned. */
     fileAccess?: (GroundX.FileAccessPolicy | null) | undefined;
-    /** Deprecated. Not needed and ignored when updating file-access settings. */
+    /** Legacy compatibility field. Not required or checked when changing file access. */
     fileAccessRevision?: number | undefined;
     effectiveFileAccess?: GroundX.EffectivePolicy | undefined;
     /** Email associated with the account */

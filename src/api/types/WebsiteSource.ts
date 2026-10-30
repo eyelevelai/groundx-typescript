@@ -3,7 +3,7 @@
 import type * as GroundX from "../index.js";
 
 export interface WebsiteSource {
-    /** Settings for documents created by this crawl. Each supplied value overrides the bucket and account settings. Omit or send null to use those settings. */
+    /** Initial settings for this resource. Omit or send null to inherit. Explicit settings take priority over the same account or bucket settings; omitted fields use broader values. Use private staging before uploading a protected file, even in a public bucket. Returns 403 if file access is disabled. */
     fileAccess?: (GroundX.FileAccessPolicy | null) | undefined;
     /** The bucketId of the bucket which this website will be ingested into. */
     bucketId: number;

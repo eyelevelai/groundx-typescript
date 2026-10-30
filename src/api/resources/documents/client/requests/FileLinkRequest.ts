@@ -14,9 +14,6 @@ import type * as GroundX from "../../../../index.js";
  *     }
  */
 export interface FileLinkRequest {
-    /** True requires the owning account's API key in X-API-Key. False lets anyone with the link read the file. Both links expire at expiresAt. Omit to create a storage-signed link that needs no GroundX key. */
-    requireAuthentication?: boolean;
     asset: GroundX.AssetSelector;
-    /** Link lifetime in seconds. Cannot exceed the effective policy's urlTtlSeconds. Omit to use that maximum. */
     expiresInSeconds?: number;
 }

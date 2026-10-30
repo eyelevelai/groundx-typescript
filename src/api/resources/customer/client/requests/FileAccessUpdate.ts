@@ -16,6 +16,6 @@ import type * as GroundX from "../../../../index.js";
  */
 export interface FileAccessUpdate {
     fileAccess?: GroundX.FileAccessPolicy | null;
-    /** Deprecated. Not needed and ignored when updating file-access settings. */
+    /** Legacy compatibility field. Not required or checked when changing file access. */
     fileAccessRevision?: number;
 }

@@ -241,7 +241,7 @@ export class BucketsClient {
     }
 
     /**
-     * Rename a bucket or change its file-access settings. Send fileAccess to replace the settings, null to remove them, or omit it to keep them.
+     * Rename a bucket or replace its file-access policy. Policy-bearing updates return 403 when file access is disabled; enabled temporary failures return 503 with Retry-After.
      *
      * @param {number} bucketId - The bucketId of the bucket being updated.
      * @param {GroundX.BucketUpdateRequest} request
@@ -406,7 +406,7 @@ export class BucketsClient {
     }
 
     /**
-     * Get upload instructions for a public or protected file. Upload the bytes using the returned method and headers before expiresAt, at most 900 seconds later. Then ingest hostedUrl into the same bucket with the same fileAccess settings. For protected files, submit ingest before expiresAt; public uploads can be ingested later. Uploads without a policy also work when file protection is disabled.
+     * Return a storage-signed PUT link for a public or protected bucket, valid for at most 900 seconds. Complete PUT before it expires. A private upload reservation also requires ingest submission before that deadline; an unreserved public source remains ingestible after PUT expiry. Available even when file-access protection is disabled. Uses this deployment and its configured storage. Include the requested per-file fileAccess policy so it is checked before upload; non-null policies return 403 when protection is disabled. Returns 503 with Retry-After for temporary verification failures.
      *
      * @param {number} bucketId
      * @param {GroundX.FileUploadRequest} request
