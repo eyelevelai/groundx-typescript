@@ -151,8 +151,8 @@ Public file-access changes require the same-change assessment of Fern schemas/hu
 
 Check upload expiry before PUT. Do not treat a completed public upload as expired when its PUT grant expires. Existing server ingest admission enforces protected reservation deadlines; preserve its status and body. Preserve explicit legacy transport, per-file policies, callbacks and the existing ingest request without renewal or automatic splitting.
 
-The generated file-link request accepts optional `requireAuthentication`. Omission
-keeps native sharing; explicit false or true uses the gateway's common expiry check.
-True also requires current GroundX headers when reading the URL. Keep those headers
-on a trusted backend. Expiry affects one URL, not its file or other URLs. The
-field and client must be regenerated from Fern; do not patch generated code.
+`requireAuthentication` is an optional file-link argument. True requires an API
+key from the owning account; false does not. Both links expire. Leaving out the
+argument keeps existing storage-signed sharing. Expiry affects that URL only.
+Keep keys on the backend, never in browser code or URLs. Change the Fern source
+and regenerate the request/client; do not edit generated files by hand.
