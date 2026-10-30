@@ -25,6 +25,6 @@ export interface BucketUpdateRequest {
     /** The new name of the bucket being renamed. */
     newName?: string;
     fileAccess?: GroundX.FileAccessPolicy | null;
-    /** Legacy compatibility field. Not required or checked when changing file access. */
+    /** Deprecated. Not needed and ignored when updating file-access settings. */
     fileAccessRevision?: number;
 }

@@ -364,9 +364,7 @@ await client.documents.list({
 <dl>
 <dd>
 
-Update the attributes of documents that have been uploaded to GroundX.
-Policy-bearing updates return 403 when file access is disabled; enabled
-temporary failures return 503 with Retry-After.
+Update document metadata or file-access settings. Change one document policy per request, without other attribute changes. Policy updates do not rerun processing.
 </dd>
 </dl>
 </dd>
@@ -1083,7 +1081,7 @@ await client.documents.getProcesses({
 <dl>
 <dd>
 
-Create a storage-signed download link for a saved asset you own. Anyone with the link can use or forward it until expiresAt. Revoking an API key or changing policy does not cancel issued links. The URL contains no GroundX API key. Returns 404 if file access is disabled, or 503 with Retry-After for temporary file-access failures.
+Create a temporary download link for a file, page, crop, X-Ray or extraction output you own. The link stops working at expiresAt without changing the file's policy or other URLs. The recipient may also need an API key, depending on requireAuthentication. Storage-signed links remain valid until expiry even if a policy or API key changes.
 </dd>
 </dl>
 </dd>
@@ -1506,7 +1504,7 @@ await client.buckets.get(1);
 <dl>
 <dd>
 
-Rename a bucket or replace its file-access policy. Policy-bearing updates return 403 when file access is disabled; enabled temporary failures return 503 with Retry-After.
+Rename a bucket or change its file-access settings. Send fileAccess to replace the settings, null to remove them, or omit it to keep them.
 </dd>
 </dl>
 </dd>
@@ -1642,7 +1640,7 @@ await client.buckets.delete(1);
 <dl>
 <dd>
 
-Return a storage-signed PUT link for a public or protected bucket, valid for at most 900 seconds. Complete PUT before it expires. A private upload reservation also requires ingest submission before that deadline; an unreserved public source remains ingestible after PUT expiry. Available even when file-access protection is disabled. Uses this deployment and its configured storage. Include the requested per-file fileAccess policy so it is checked before upload; non-null policies return 403 when protection is disabled. Returns 503 with Retry-After for temporary verification failures.
+Get upload instructions for a public or protected file. Upload the bytes using the returned method and headers before expiresAt, at most 900 seconds later. Then ingest hostedUrl into the same bucket with the same fileAccess settings. For protected files, submit ingest before expiresAt; public uploads can be ingested later. Uploads without a policy also work when file protection is disabled.
 </dd>
 </dl>
 </dd>
@@ -2944,7 +2942,7 @@ await client.customer.get();
 <dl>
 <dd>
 
-Replace or clear your account's file-access settings. Send only fileAccess; the latest successful update takes effect. Invalid or missing input returns 400; disabled or forbidden access returns 403; ownership or source conflicts return 409. If settings or ownership cannot be verified, returns 503 with Retry-After. After an uncertain outcome, read the applied settings before retrying. Protected stable links require X-API-Key on every read.
+Set the account's file-access defaults. Send fileAccess to replace the settings or null to remove them. Bucket and document settings take precedence. If an update times out, read the settings before retrying.
 </dd>
 </dl>
 </dd>
