@@ -378,3 +378,14 @@ describe("legacy bucket responses", () => {
         expect(JSON.parse(String(requests[0].init.body))).toEqual({ name: "your_bucket_name" });
     });
 });
+
+it.each([undefined, false, true])("serializes the temporary-link authentication choice %s", async (requireAuthentication) => {
+    const calls: Record<string, unknown>[] = [];
+    const fetcher = vi.fn(async (_url: unknown, init: RequestInit = {}) => {
+        calls.push(JSON.parse(String(init.body)));
+        return Response.json({ url: "https://files.test/_groundx/file-link/token", expiresAt: "2099-01-01T00:00:00Z" });
+    });
+    const client = new GroundXClient({ apiKey: "test-key", baseUrl: "https://api.test", fetch: fetcher, maxRetries: 0 });
+    await client.documents.fileLink("doc", { asset: { kind: "source" }, ...(requireAuthentication === undefined ? {} : { requireAuthentication }) });
+    expect(calls).toEqual([{ asset: { kind: "source" }, ...(requireAuthentication === undefined ? {} : { requireAuthentication }) }]);
+});

@@ -150,3 +150,9 @@ Local regeneration must request a full project with Fern's configured `groundx` 
 Public file-access changes require the same-change assessment of Fern schemas/human documentation, installed API/MCP guidance and downstream consumers. Use the configured API's bucket upload operation for all local files. Pass each document's initial policy through the generated upload request's optional `fileAccess` field; the server validates protection before bytes. Regenerate request types and clients from Fern rather than editing them by hand. Do not read policy to choose a signer or fall back to a hosted endpoint. Explicit legacy `uploadApi` overrides remain available for public destinations, after an ownership/policy lookup; reject them for inherited or requested protection. Keep API credentials out of native storage requests. Package release and deployed acceptance are separate from local generation and transport tests.
 
 Check upload expiry before PUT. Do not treat a completed public upload as expired when its PUT grant expires. Existing server ingest admission enforces protected reservation deadlines; preserve its status and body. Preserve explicit legacy transport, per-file policies, callbacks and the existing ingest request without renewal or automatic splitting.
+
+The generated file-link request accepts optional `requireAuthentication`. Omission
+keeps native sharing; explicit false or true uses the gateway's common expiry check.
+True also requires current GroundX headers when reading the URL. Keep those headers
+on a trusted backend. Expiry affects one URL, not its file or other URLs. The
+field and client must be regenerated from Fern; do not patch generated code.
