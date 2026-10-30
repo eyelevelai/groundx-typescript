@@ -14,8 +14,9 @@ import type * as GroundX from "../../../../index.js";
  *     }
  */
 export interface FileLinkRequest {
-    /** Require current GroundX API-key access when true. Explicit false creates an anonymous gateway link. Both expire at expiresAt. Omit to retain native storage sharing. Gateway links require a configured signing key; otherwise this mode returns 404. */
+    /** True requires the owning account's API key in X-API-Key. False lets anyone with the link read the file. Both links expire at expiresAt. Omit to create a storage-signed link that needs no GroundX key. */
     requireAuthentication?: boolean;
     asset: GroundX.AssetSelector;
+    /** Link lifetime in seconds. Cannot exceed the effective policy's urlTtlSeconds. Omit to use that maximum. */
     expiresInSeconds?: number;
 }

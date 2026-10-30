@@ -3,7 +3,7 @@
 import type * as GroundX from "../index.js";
 
 export interface FileUploadResponse {
-    /** Policy used when issuing this upload. Only protected uploads have a private ingest deadline. Missing policy metadata should retain existing protected-upload checks. */
+    /** Settings used for this upload. If mode is protected, submit ingest before expiresAt. Public uploads can be ingested later. */
     effectiveFileAccess?: GroundX.EffectivePolicy | undefined;
     uploadId: string;
     uploadUrl: string;

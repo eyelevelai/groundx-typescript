@@ -424,9 +424,7 @@ export class DocumentsClient {
     }
 
     /**
-     * Update the attributes of documents that have been uploaded to GroundX.
-     * Policy-bearing updates return 403 when file access is disabled; enabled
-     * temporary failures return 503 with Retry-After.
+     * Update document metadata or file-access settings. Change one document policy per request, without other attribute changes. Policy updates do not rerun processing.
      *
      * @param {GroundX.DocumentUpdateRequest} request
      * @param {DocumentsClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -1249,7 +1247,7 @@ export class DocumentsClient {
     }
 
     /**
-     * Create a temporary download link for a saved asset you own. Omit requireAuthentication for existing anonymous storage sharing. Explicit false or true uses the file gateway, with the same expiry check; true also requires current GroundX API-key access on every read. Expiry affects only this URL. No URL contains a GroundX API key. Returns 404 if file access or the requested link mode is unavailable, or 503 with Retry-After for temporary failures.
+     * Create a temporary download link for a file, page, crop, X-Ray or extraction output you own. The link stops working at expiresAt without changing the file's policy or other URLs. The recipient may also need an API key, depending on requireAuthentication. Storage-signed links remain valid until expiry even if a policy or API key changes.
      *
      * @param {string} documentId
      * @param {GroundX.FileLinkRequest} request

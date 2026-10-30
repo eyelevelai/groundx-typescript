@@ -5,9 +5,9 @@ import type * as GroundX from "../index.js";
 export interface BucketDetail {
     /** Optional prompt text. */
     prompt?: string | undefined;
-    /** Applied settings for this resource. Null means it inherits settings. Deployments without file access omit this field. Pending changes are not returned. */
+    /** Settings saved on this bucket. Null means use the account settings. Omitted when file protection is disabled. */
     fileAccess?: (GroundX.FileAccessPolicy | null) | undefined;
-    /** Legacy compatibility field. Not required or checked when changing file access. */
+    /** Deprecated. Not needed and ignored when updating file-access settings. */
     fileAccessRevision?: number | undefined;
     effectiveFileAccess?: GroundX.EffectivePolicy | undefined;
     bucketId: number;

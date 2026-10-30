@@ -15,9 +15,9 @@ export interface SearchResultItem {
     fileName?: string | undefined;
     /** System-generated summary of the source document */
     fileSummary?: string | undefined;
-    /** Image of a table or figure. Protected images use storage-signed links that expire within the applied policy time limit. Keep documentId and chunkId; use documents.fileLink with a crop selector to refresh the link. Public stable links do not expire. */
+    /** Image of a table or figure. For protected files, this is a temporary link. Use documentId and chunkId with documents.fileLink to request another. Normal public URLs do not expire. */
     multimodalUrl?: string | undefined;
-    /** Page image URLs for this chunk. Protected images use storage-signed links that expire within the applied policy time limit. Keep documentId and the page number; use documents.fileLink with a page selector to refresh the link. Public stable links do not expire. */
+    /** Page image URLs for this chunk. For protected files, these are temporary links. Use documentId and the page number with documents.fileLink to request another. Normal public URLs do not expire. */
     pageImages?: string[] | undefined;
     pages?: SearchResultItem.Pages.Item[] | undefined;
     /** Unique system generated ID for the ingest process that included this document */
@@ -28,7 +28,7 @@ export interface SearchResultItem {
     searchData?: Record<string, unknown> | undefined;
     /** System-generated summary of the document section containing this result */
     sectionSummary?: string | undefined;
-    /** Source document URL. Protected GroundX-hosted sources use storage-signed links that expire within the applied policy time limit. Keep documentId; use documents.fileLink with a source selector to refresh the link. Public stable links do not expire. */
+    /** Source document URL. For protected GroundX files, this is a temporary link. Request another with documents.fileLink and a source selector when it expires. Normal public URLs do not expire. */
     sourceUrl?: string | undefined;
     /** System-generated text, re-written for LLM completions */
     suggestedText?: string | undefined;
@@ -43,7 +43,7 @@ export namespace SearchResultItem {
         export interface Item {
             /** The height of the page image */
             height?: number | undefined;
-            /** JPEG of the page containing this chunk. Protected images use storage-signed links that expire within the applied policy time limit. Keep documentId and this page number; use documents.fileLink with a page selector to refresh the link. Public stable links do not expire. */
+            /** JPEG of this page. For protected files, this is a temporary link. Use documentId and this page number with documents.fileLink to request another. Normal public URLs do not expire. */
             imageUrl?: string | undefined;
             /** The page number */
             number?: number | undefined;
